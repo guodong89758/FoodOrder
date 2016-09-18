@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_loading"
+    android:gravity="center"
+    android:minHeight="93.3333dip"
+    android:minWidth="100dip"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <com.foodorder.widget.ProgressBarCircular
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@color/white" />
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/def_data_loading"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

@@ -3,4 +3,31 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="white_90">#e6ffffff</color>
+    <color name="white_80">#ccffffff</color>
+    <color name="white_60">#99ffffff</color>
+    <color name="white_50">#80ffffff</color>
+    <color name="white_40">#66ffffff</color>
+    <color name="white_10">#1affffff</color>
+    <color name="black">#000000</color>
+    <color name="black_90">#e6000000</color>
+    <color name="black_80">#cc000000</color>
+    <color name="black_60">#99000000</color>
+    <color name="black_50">#80000000</color>
+    <color name="black_40">#66000000</color>
+    <color name="black_30">#4D000000</color>
+    <color name="black_20">#33000000</color>
+    <color name="black_15">#26000000</color>
+    <color name="black_10">#1A000000</color>
+
+    <color name="progressbar_color">#99000000</color>
+
+    <!-- 下拉刷新进度条颜色 -->
+    <color name="refresh_progress_red">#FFC93437</color>
+    <color name="refresh_progress_blue">#FF375BF1</color>
+    <color name="refresh_progress_yellow">#FFF7D23E</color>
+    <color name="refresh_progress_green">#FF34A350</color>
 </resources>
