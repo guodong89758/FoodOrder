@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.nextjoy.library.dialog.LoadingDialog;
-import com.umeng.analytics.MobclickAgent;
+import com.foodorder.dialog.LoadingDialog;
+
 
 /**
  * Created by guodong on 2016/6/28 11:57.
@@ -16,13 +16,11 @@ public class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart(getClass().getName());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd(getClass().getName());
     }
 
     protected void showLoadingDialog() {

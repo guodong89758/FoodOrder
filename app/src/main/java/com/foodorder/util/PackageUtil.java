@@ -5,8 +5,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.text.TextUtils;
 
-import com.nextjoy.library.log.DLOG;
+import com.foodorder.log.DLOG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class PackageUtil {
     }
 
     public static boolean isInstallApk(Context context, String packageName) {
-        if (StringUtil.isEmpty(packageName)) {
+        if (TextUtils.isEmpty(packageName)) {
             return false;
         }
         PackageInfo packageInfo;
@@ -86,6 +87,7 @@ public class PackageUtil {
 
     /**
      * 获取application 中meta—data的属性
+     *
      * @param context
      * @param dataName
      * @return

@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.nextjoy.library.dialog.LoadingDialog;
-import com.nextjoy.library.runtime.ActivityManager;
-import com.umeng.analytics.MobclickAgent;
+import com.foodorder.dialog.LoadingDialog;
+import com.foodorder.runtime.ActivityManager;
+
 
 /**
  * Created by guodong on 2016/6/28 11:56.
@@ -71,14 +71,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPageStart(getClass().getName());
-        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageEnd(getClass().getName());
-        MobclickAgent.onResume(this);
     }
 }
