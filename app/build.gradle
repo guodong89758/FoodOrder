@@ -19,14 +19,12 @@ android {
         }
     }
 
+    greendao {
+        schemaVersion 1
+        targetGenDir 'src/main/java'
+        daoPackage 'com.foodorder.db'
+    }
 }
-
-greendao {
-    schemaVersion 1
-    targetGenDir 'src/main/java'
-    daoPackage 'com.foodorder.db'
-}
-
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
