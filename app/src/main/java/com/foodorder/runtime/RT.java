@@ -1,9 +1,12 @@
 package com.foodorder.runtime;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Environment;
 
+import com.foodorder.db.DaoMaster;
+import com.foodorder.db.DaoSession;
 import com.foodorder.log.DLOG;
 import com.lzy.okhttputils.OkHttpUtils;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
@@ -45,6 +48,11 @@ public class RT {
      * The default root path.
      */
     public static String defaultRootPath = mLocalExternalPath.concat("/").concat(ROOT);
+
+    private DaoMaster.DevOpenHelper mHelper;
+    private SQLiteDatabase db;
+    private DaoMaster mDaoMaster;
+    private DaoSession mDaoSession;
 
     static {
         try {
@@ -116,6 +124,7 @@ public class RT {
                 try {
                     DLOG.init(DEBUG);
                     mkdirs();
+//                    initDatabase();
                     initOkHttp();
                     initBitmap();
                 } catch (Exception e) {
@@ -133,6 +142,21 @@ public class RT {
             }
         }
 
+    }
+
+    private void initDatabase() {
+        mHelper = new DaoMaster.DevOpenHelper(application, "foodoreder", null);
+        db = mHelper.getWritableDatabase();
+        mDaoMaster = new DaoMaster(db);
+        mDaoSession = mDaoMaster.newSession();
+    }
+
+    public DaoSession getDaoSession() {
+        return mDaoSession;
+    }
+
+    public SQLiteDatabase getDb() {
+        return db;
     }
 
     private void initOkHttp() {
