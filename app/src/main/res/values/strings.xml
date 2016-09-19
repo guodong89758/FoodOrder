@@ -11,4 +11,7 @@
     <string name="action_ok">确定</string>
     <string name="action_cancel">取消</string>
     <string name="prompt">提示</string>
+
+    <!-- login -->
+    <string name="login_title">登陆</string>
 </resources>
