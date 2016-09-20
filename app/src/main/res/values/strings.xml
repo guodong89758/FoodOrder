@@ -14,4 +14,8 @@
 
     <!-- login -->
     <string name="login_title">登陆</string>
+
+
+    <!-- error -->
+    <string name="error_http_request">网络不给力</string>
 </resources>
