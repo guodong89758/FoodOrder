@@ -30,8 +30,9 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
         public final static Property Id_product = new Property(1, String.class, "id_product", false, "ID_PRODUCT");
         public final static Property Id_product_attribute = new Property(2, String.class, "id_product_attribute", false, "ID_PRODUCT_ATTRIBUTE");
-        public final static Property Name = new Property(3, String.class, "name", false, "NAME");
-        public final static Property Value = new Property(4, String.class, "value", false, "VALUE");
+        public final static Property Zh_name = new Property(3, String.class, "zh_name", false, "ZH_NAME");
+        public final static Property Fr_name = new Property(4, String.class, "fr_name", false, "FR_NAME");
+        public final static Property Value = new Property(5, String.class, "value", false, "VALUE");
     }
 
     private Query<Attribute> good_AttributeListQuery;
@@ -51,8 +52,9 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
                 "\"ID_PRODUCT\" TEXT," + // 1: id_product
                 "\"ID_PRODUCT_ATTRIBUTE\" TEXT," + // 2: id_product_attribute
-                "\"NAME\" TEXT," + // 3: name
-                "\"VALUE\" TEXT);"); // 4: value
+                "\"ZH_NAME\" TEXT," + // 3: zh_name
+                "\"FR_NAME\" TEXT," + // 4: fr_name
+                "\"VALUE\" TEXT);"); // 5: value
     }
 
     /** Drops the underlying database table. */
@@ -76,14 +78,19 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
             stmt.bindString(3, id_product_attribute);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(4, name);
+        String zh_name = entity.getZh_name();
+        if (zh_name != null) {
+            stmt.bindString(4, zh_name);
+        }
+ 
+        String fr_name = entity.getFr_name();
+        if (fr_name != null) {
+            stmt.bindString(5, fr_name);
         }
  
         String value = entity.getValue();
         if (value != null) {
-            stmt.bindString(5, value);
+            stmt.bindString(6, value);
         }
     }
 
@@ -102,14 +109,19 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
             stmt.bindString(3, id_product_attribute);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(4, name);
+        String zh_name = entity.getZh_name();
+        if (zh_name != null) {
+            stmt.bindString(4, zh_name);
+        }
+ 
+        String fr_name = entity.getFr_name();
+        if (fr_name != null) {
+            stmt.bindString(5, fr_name);
         }
  
         String value = entity.getValue();
         if (value != null) {
-            stmt.bindString(5, value);
+            stmt.bindString(6, value);
         }
     }
 
@@ -124,8 +136,9 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
             cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // id_product
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // id_product_attribute
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // value
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // zh_name
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // fr_name
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // value
         );
         return entity;
     }
@@ -135,8 +148,9 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
         entity.setId(cursor.getLong(offset + 0));
         entity.setId_product(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setId_product_attribute(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setValue(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setZh_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setFr_name(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setValue(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override

@@ -17,16 +17,19 @@ public class Attribute {
     @Property
     private String id_product_attribute;
     @Property
-    private String name;
+    private String zh_name;
+    @Property
+    private String fr_name;
     @Property
     private String value;
-    @Generated(hash = 2053077576)
+    @Generated(hash = 1652412708)
     public Attribute(long id, String id_product, String id_product_attribute,
-            String name, String value) {
+            String zh_name, String fr_name, String value) {
         this.id = id;
         this.id_product = id_product;
         this.id_product_attribute = id_product_attribute;
-        this.name = name;
+        this.zh_name = zh_name;
+        this.fr_name = fr_name;
         this.value = value;
     }
     @Generated(hash = 959577406)
@@ -50,11 +53,17 @@ public class Attribute {
     public void setId_product_attribute(String id_product_attribute) {
         this.id_product_attribute = id_product_attribute;
     }
-    public String getName() {
-        return this.name;
+    public String getZh_name() {
+        return this.zh_name;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setZh_name(String zh_name) {
+        this.zh_name = zh_name;
+    }
+    public String getFr_name() {
+        return this.fr_name;
+    }
+    public void setFr_name(String fr_name) {
+        this.fr_name = fr_name;
     }
     public String getValue() {
         return this.value;

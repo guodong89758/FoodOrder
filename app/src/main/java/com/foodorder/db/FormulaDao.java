@@ -30,11 +30,15 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
         public final static Property Id_product = new Property(1, String.class, "id_product", false, "ID_PRODUCT");
         public final static Property Id_product_formula = new Property(2, String.class, "id_product_formula", false, "ID_PRODUCT_FORMULA");
-        public final static Property Name = new Property(3, String.class, "name", false, "NAME");
-        public final static Property Max_choose = new Property(4, String.class, "max_choose", false, "MAX_CHOOSE");
-        public final static Property Id_product_formula_item = new Property(5, String.class, "id_product_formula_item", false, "ID_PRODUCT_FORMULA_ITEM");
-        public final static Property Id_product_item = new Property(6, String.class, "id_product_item", false, "ID_PRODUCT_ITEM");
-        public final static Property Position = new Property(7, int.class, "position", false, "POSITION");
+        public final static Property Zh_type_name = new Property(3, String.class, "zh_type_name", false, "ZH_TYPE_NAME");
+        public final static Property Fr_type_name = new Property(4, String.class, "fr_type_name", false, "FR_TYPE_NAME");
+        public final static Property Max_choose = new Property(5, String.class, "max_choose", false, "MAX_CHOOSE");
+        public final static Property Id_product_formula_item = new Property(6, String.class, "id_product_formula_item", false, "ID_PRODUCT_FORMULA_ITEM");
+        public final static Property Id_product_item = new Property(7, String.class, "id_product_item", false, "ID_PRODUCT_ITEM");
+        public final static Property Position = new Property(8, int.class, "position", false, "POSITION");
+        public final static Property Zh_name = new Property(9, String.class, "zh_name", false, "ZH_NAME");
+        public final static Property Fr_name = new Property(10, String.class, "fr_name", false, "FR_NAME");
+        public final static Property Image_url = new Property(11, String.class, "image_url", false, "IMAGE_URL");
     }
 
     private Query<Formula> good_FormulaListQuery;
@@ -54,11 +58,15 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
                 "\"ID_PRODUCT\" TEXT," + // 1: id_product
                 "\"ID_PRODUCT_FORMULA\" TEXT," + // 2: id_product_formula
-                "\"NAME\" TEXT," + // 3: name
-                "\"MAX_CHOOSE\" TEXT," + // 4: max_choose
-                "\"ID_PRODUCT_FORMULA_ITEM\" TEXT," + // 5: id_product_formula_item
-                "\"ID_PRODUCT_ITEM\" TEXT," + // 6: id_product_item
-                "\"POSITION\" INTEGER NOT NULL );"); // 7: position
+                "\"ZH_TYPE_NAME\" TEXT," + // 3: zh_type_name
+                "\"FR_TYPE_NAME\" TEXT," + // 4: fr_type_name
+                "\"MAX_CHOOSE\" TEXT," + // 5: max_choose
+                "\"ID_PRODUCT_FORMULA_ITEM\" TEXT," + // 6: id_product_formula_item
+                "\"ID_PRODUCT_ITEM\" TEXT," + // 7: id_product_item
+                "\"POSITION\" INTEGER NOT NULL ," + // 8: position
+                "\"ZH_NAME\" TEXT," + // 9: zh_name
+                "\"FR_NAME\" TEXT," + // 10: fr_name
+                "\"IMAGE_URL\" TEXT);"); // 11: image_url
     }
 
     /** Drops the underlying database table. */
@@ -82,26 +90,46 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
             stmt.bindString(3, id_product_formula);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(4, name);
+        String zh_type_name = entity.getZh_type_name();
+        if (zh_type_name != null) {
+            stmt.bindString(4, zh_type_name);
+        }
+ 
+        String fr_type_name = entity.getFr_type_name();
+        if (fr_type_name != null) {
+            stmt.bindString(5, fr_type_name);
         }
  
         String max_choose = entity.getMax_choose();
         if (max_choose != null) {
-            stmt.bindString(5, max_choose);
+            stmt.bindString(6, max_choose);
         }
  
         String id_product_formula_item = entity.getId_product_formula_item();
         if (id_product_formula_item != null) {
-            stmt.bindString(6, id_product_formula_item);
+            stmt.bindString(7, id_product_formula_item);
         }
  
         String id_product_item = entity.getId_product_item();
         if (id_product_item != null) {
-            stmt.bindString(7, id_product_item);
+            stmt.bindString(8, id_product_item);
         }
-        stmt.bindLong(8, entity.getPosition());
+        stmt.bindLong(9, entity.getPosition());
+ 
+        String zh_name = entity.getZh_name();
+        if (zh_name != null) {
+            stmt.bindString(10, zh_name);
+        }
+ 
+        String fr_name = entity.getFr_name();
+        if (fr_name != null) {
+            stmt.bindString(11, fr_name);
+        }
+ 
+        String image_url = entity.getImage_url();
+        if (image_url != null) {
+            stmt.bindString(12, image_url);
+        }
     }
 
     @Override
@@ -119,26 +147,46 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
             stmt.bindString(3, id_product_formula);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(4, name);
+        String zh_type_name = entity.getZh_type_name();
+        if (zh_type_name != null) {
+            stmt.bindString(4, zh_type_name);
+        }
+ 
+        String fr_type_name = entity.getFr_type_name();
+        if (fr_type_name != null) {
+            stmt.bindString(5, fr_type_name);
         }
  
         String max_choose = entity.getMax_choose();
         if (max_choose != null) {
-            stmt.bindString(5, max_choose);
+            stmt.bindString(6, max_choose);
         }
  
         String id_product_formula_item = entity.getId_product_formula_item();
         if (id_product_formula_item != null) {
-            stmt.bindString(6, id_product_formula_item);
+            stmt.bindString(7, id_product_formula_item);
         }
  
         String id_product_item = entity.getId_product_item();
         if (id_product_item != null) {
-            stmt.bindString(7, id_product_item);
+            stmt.bindString(8, id_product_item);
         }
-        stmt.bindLong(8, entity.getPosition());
+        stmt.bindLong(9, entity.getPosition());
+ 
+        String zh_name = entity.getZh_name();
+        if (zh_name != null) {
+            stmt.bindString(10, zh_name);
+        }
+ 
+        String fr_name = entity.getFr_name();
+        if (fr_name != null) {
+            stmt.bindString(11, fr_name);
+        }
+ 
+        String image_url = entity.getImage_url();
+        if (image_url != null) {
+            stmt.bindString(12, image_url);
+        }
     }
 
     @Override
@@ -152,11 +200,15 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
             cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // id_product
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // id_product_formula
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // max_choose
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // id_product_formula_item
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // id_product_item
-            cursor.getInt(offset + 7) // position
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // zh_type_name
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // fr_type_name
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // max_choose
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // id_product_formula_item
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // id_product_item
+            cursor.getInt(offset + 8), // position
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // zh_name
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // fr_name
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // image_url
         );
         return entity;
     }
@@ -166,11 +218,15 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
         entity.setId(cursor.getLong(offset + 0));
         entity.setId_product(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setId_product_formula(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setMax_choose(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setId_product_formula_item(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setId_product_item(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setPosition(cursor.getInt(offset + 7));
+        entity.setZh_type_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setFr_type_name(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setMax_choose(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setId_product_formula_item(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setId_product_item(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setPosition(cursor.getInt(offset + 8));
+        entity.setZh_name(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setFr_name(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setImage_url(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
      }
     
     @Override
