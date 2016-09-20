@@ -4,6 +4,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 /**
  * Created by guodong on 2016/9/19 16:33.
@@ -22,6 +23,8 @@ public class Attribute {
     private String fr_name;
     @Property
     private String value;
+    @Transient
+    private int count;
     @Generated(hash = 1652412708)
     public Attribute(long id, String id_product, String id_product_attribute,
             String zh_name, String fr_name, String value) {

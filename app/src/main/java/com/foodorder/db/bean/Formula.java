@@ -22,7 +22,7 @@ public class Formula {
     @Property
     private String fr_type_name;
     @Property
-    private String max_choose;
+    private int max_choose;
     @Property
     private String id_product_formula_item;
     @Property
@@ -39,7 +39,7 @@ public class Formula {
     private int count;
     @Generated(hash = 1747633380)
     public Formula(long id, String id_product, String id_product_formula,
-            String zh_type_name, String fr_type_name, String max_choose,
+            String zh_type_name, String fr_type_name, int max_choose,
             String id_product_formula_item, String id_product_item, int position,
             String zh_name, String fr_name, String image_url) {
         this.id = id;
@@ -88,10 +88,10 @@ public class Formula {
     public void setFr_type_name(String fr_type_name) {
         this.fr_type_name = fr_type_name;
     }
-    public String getMax_choose() {
+    public int getMax_choose() {
         return this.max_choose;
     }
-    public void setMax_choose(String max_choose) {
+    public void setMax_choose(int max_choose) {
         this.max_choose = max_choose;
     }
     public String getId_product_formula_item() {

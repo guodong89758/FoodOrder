@@ -2,7 +2,7 @@ package com.foodorder.server.callback;
 
 import android.text.TextUtils;
 
-import com.nextjoy.library.log.DLOG;
+import com.foodorder.log.DLOG;
 
 import org.json.JSONException;
 import org.json.JSONObject;

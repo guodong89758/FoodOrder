@@ -26,9 +26,10 @@ public class GoodTypeDao extends AbstractDao<GoodType, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
         public final static Property Id_category = new Property(1, String.class, "id_category", false, "ID_CATEGORY");
-        public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Position = new Property(3, int.class, "position", false, "POSITION");
-        public final static Property Active = new Property(4, boolean.class, "active", false, "ACTIVE");
+        public final static Property Zh_name = new Property(2, String.class, "zh_name", false, "ZH_NAME");
+        public final static Property Fr_name = new Property(3, String.class, "fr_name", false, "FR_NAME");
+        public final static Property Position = new Property(4, int.class, "position", false, "POSITION");
+        public final static Property Active = new Property(5, boolean.class, "active", false, "ACTIVE");
     }
 
 
@@ -46,9 +47,10 @@ public class GoodTypeDao extends AbstractDao<GoodType, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"GOOD_TYPE\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
                 "\"ID_CATEGORY\" TEXT," + // 1: id_category
-                "\"NAME\" TEXT," + // 2: name
-                "\"POSITION\" INTEGER NOT NULL ," + // 3: position
-                "\"ACTIVE\" INTEGER NOT NULL );"); // 4: active
+                "\"ZH_NAME\" TEXT," + // 2: zh_name
+                "\"FR_NAME\" TEXT," + // 3: fr_name
+                "\"POSITION\" INTEGER NOT NULL ," + // 4: position
+                "\"ACTIVE\" INTEGER NOT NULL );"); // 5: active
     }
 
     /** Drops the underlying database table. */
@@ -67,12 +69,17 @@ public class GoodTypeDao extends AbstractDao<GoodType, Long> {
             stmt.bindString(2, id_category);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(3, name);
+        String zh_name = entity.getZh_name();
+        if (zh_name != null) {
+            stmt.bindString(3, zh_name);
         }
-        stmt.bindLong(4, entity.getPosition());
-        stmt.bindLong(5, entity.getActive() ? 1L: 0L);
+ 
+        String fr_name = entity.getFr_name();
+        if (fr_name != null) {
+            stmt.bindString(4, fr_name);
+        }
+        stmt.bindLong(5, entity.getPosition());
+        stmt.bindLong(6, entity.getActive() ? 1L: 0L);
     }
 
     @Override
@@ -85,12 +92,17 @@ public class GoodTypeDao extends AbstractDao<GoodType, Long> {
             stmt.bindString(2, id_category);
         }
  
-        String name = entity.getName();
-        if (name != null) {
-            stmt.bindString(3, name);
+        String zh_name = entity.getZh_name();
+        if (zh_name != null) {
+            stmt.bindString(3, zh_name);
         }
-        stmt.bindLong(4, entity.getPosition());
-        stmt.bindLong(5, entity.getActive() ? 1L: 0L);
+ 
+        String fr_name = entity.getFr_name();
+        if (fr_name != null) {
+            stmt.bindString(4, fr_name);
+        }
+        stmt.bindLong(5, entity.getPosition());
+        stmt.bindLong(6, entity.getActive() ? 1L: 0L);
     }
 
     @Override
@@ -103,9 +115,10 @@ public class GoodTypeDao extends AbstractDao<GoodType, Long> {
         GoodType entity = new GoodType( //
             cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // id_category
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.getInt(offset + 3), // position
-            cursor.getShort(offset + 4) != 0 // active
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // zh_name
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // fr_name
+            cursor.getInt(offset + 4), // position
+            cursor.getShort(offset + 5) != 0 // active
         );
         return entity;
     }
@@ -114,9 +127,10 @@ public class GoodTypeDao extends AbstractDao<GoodType, Long> {
     public void readEntity(Cursor cursor, GoodType entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
         entity.setId_category(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setPosition(cursor.getInt(offset + 3));
-        entity.setActive(cursor.getShort(offset + 4) != 0);
+        entity.setZh_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setFr_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setPosition(cursor.getInt(offset + 4));
+        entity.setActive(cursor.getShort(offset + 5) != 0);
      }
     
     @Override

@@ -24,6 +24,14 @@ public class Good {
     @Id(autoincrement = true)
     private long id;
     @Property
+    private String id_category;
+    @Property
+    private String zh_category_name;
+    @Property
+    private String fr_category_name;
+    @Property
+    private int position;
+    @Property
     private String search_num;
     @Property
     private String id_product;
@@ -45,6 +53,8 @@ public class Good {
     private int max_attributes_choose;
     @Property
     private String image_url;
+    @Property
+    private boolean isFormula;
     @Transient
     private int count;
     @ToMany(referencedJoinProperty = "id_product")
@@ -62,12 +72,17 @@ public class Good {
     @Generated(hash = 1249866486)
     private transient GoodDao myDao;
 
-    @Generated(hash = 1759858879)
-    public Good(long id, String search_num, String id_product, String reference,
-                String zh_name, String fr_name, int quantity, String unit,
-                double price, boolean reducable, int max_attributes_choose,
-                String image_url) {
+    @Generated(hash = 866922495)
+    public Good(long id, String id_category, String zh_category_name,
+                String fr_category_name, int position, String search_num,
+                String id_product, String reference, String zh_name, String fr_name,
+                int quantity, String unit, double price, boolean reducable,
+                int max_attributes_choose, String image_url, boolean isFormula) {
         this.id = id;
+        this.id_category = id_category;
+        this.zh_category_name = zh_category_name;
+        this.fr_category_name = fr_category_name;
+        this.position = position;
         this.search_num = search_num;
         this.id_product = id_product;
         this.reference = reference;
@@ -79,6 +94,7 @@ public class Good {
         this.reducable = reducable;
         this.max_attributes_choose = max_attributes_choose;
         this.image_url = image_url;
+        this.isFormula = isFormula;
     }
 
     @Generated(hash = 2016981037)
@@ -91,6 +107,38 @@ public class Good {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getId_category() {
+        return this.id_category;
+    }
+
+    public void setId_category(String id_category) {
+        this.id_category = id_category;
+    }
+
+    public String getZh_category_name() {
+        return this.zh_category_name;
+    }
+
+    public void setZh_category_name(String zh_category_name) {
+        this.zh_category_name = zh_category_name;
+    }
+
+    public String getFr_category_name() {
+        return this.fr_category_name;
+    }
+
+    public void setFr_category_name(String fr_category_name) {
+        this.fr_category_name = fr_category_name;
+    }
+
+    public int getPosition() {
+        return this.position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public String getSearch_num() {
@@ -179,6 +227,14 @@ public class Good {
 
     public void setImage_url(String image_url) {
         this.image_url = image_url;
+    }
+
+    public boolean getIsFormula() {
+        return this.isFormula;
+    }
+
+    public void setIsFormula(boolean isFormula) {
+        this.isFormula = isFormula;
     }
 
     /**

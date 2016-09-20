@@ -25,17 +25,22 @@ public class GoodDao extends AbstractDao<Good, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, long.class, "id", true, "_id");
-        public final static Property Search_num = new Property(1, String.class, "search_num", false, "SEARCH_NUM");
-        public final static Property Id_product = new Property(2, String.class, "id_product", false, "ID_PRODUCT");
-        public final static Property Reference = new Property(3, String.class, "reference", false, "REFERENCE");
-        public final static Property Zh_name = new Property(4, String.class, "zh_name", false, "ZH_NAME");
-        public final static Property Fr_name = new Property(5, String.class, "fr_name", false, "FR_NAME");
-        public final static Property Quantity = new Property(6, int.class, "quantity", false, "QUANTITY");
-        public final static Property Unit = new Property(7, String.class, "unit", false, "UNIT");
-        public final static Property Price = new Property(8, double.class, "price", false, "PRICE");
-        public final static Property Reducable = new Property(9, boolean.class, "reducable", false, "REDUCABLE");
-        public final static Property Max_attributes_choose = new Property(10, int.class, "max_attributes_choose", false, "MAX_ATTRIBUTES_CHOOSE");
-        public final static Property Image_url = new Property(11, String.class, "image_url", false, "IMAGE_URL");
+        public final static Property Id_category = new Property(1, String.class, "id_category", false, "ID_CATEGORY");
+        public final static Property Zh_category_name = new Property(2, String.class, "zh_category_name", false, "ZH_CATEGORY_NAME");
+        public final static Property Fr_category_name = new Property(3, String.class, "fr_category_name", false, "FR_CATEGORY_NAME");
+        public final static Property Position = new Property(4, int.class, "position", false, "POSITION");
+        public final static Property Search_num = new Property(5, String.class, "search_num", false, "SEARCH_NUM");
+        public final static Property Id_product = new Property(6, String.class, "id_product", false, "ID_PRODUCT");
+        public final static Property Reference = new Property(7, String.class, "reference", false, "REFERENCE");
+        public final static Property Zh_name = new Property(8, String.class, "zh_name", false, "ZH_NAME");
+        public final static Property Fr_name = new Property(9, String.class, "fr_name", false, "FR_NAME");
+        public final static Property Quantity = new Property(10, int.class, "quantity", false, "QUANTITY");
+        public final static Property Unit = new Property(11, String.class, "unit", false, "UNIT");
+        public final static Property Price = new Property(12, double.class, "price", false, "PRICE");
+        public final static Property Reducable = new Property(13, boolean.class, "reducable", false, "REDUCABLE");
+        public final static Property Max_attributes_choose = new Property(14, int.class, "max_attributes_choose", false, "MAX_ATTRIBUTES_CHOOSE");
+        public final static Property Image_url = new Property(15, String.class, "image_url", false, "IMAGE_URL");
+        public final static Property IsFormula = new Property(16, boolean.class, "isFormula", false, "IS_FORMULA");
     }
 
     private DaoSession daoSession;
@@ -55,17 +60,22 @@ public class GoodDao extends AbstractDao<Good, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"GOOD\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
-                "\"SEARCH_NUM\" TEXT," + // 1: search_num
-                "\"ID_PRODUCT\" TEXT," + // 2: id_product
-                "\"REFERENCE\" TEXT," + // 3: reference
-                "\"ZH_NAME\" TEXT," + // 4: zh_name
-                "\"FR_NAME\" TEXT," + // 5: fr_name
-                "\"QUANTITY\" INTEGER NOT NULL ," + // 6: quantity
-                "\"UNIT\" TEXT," + // 7: unit
-                "\"PRICE\" REAL NOT NULL ," + // 8: price
-                "\"REDUCABLE\" INTEGER NOT NULL ," + // 9: reducable
-                "\"MAX_ATTRIBUTES_CHOOSE\" INTEGER NOT NULL ," + // 10: max_attributes_choose
-                "\"IMAGE_URL\" TEXT);"); // 11: image_url
+                "\"ID_CATEGORY\" TEXT," + // 1: id_category
+                "\"ZH_CATEGORY_NAME\" TEXT," + // 2: zh_category_name
+                "\"FR_CATEGORY_NAME\" TEXT," + // 3: fr_category_name
+                "\"POSITION\" INTEGER NOT NULL ," + // 4: position
+                "\"SEARCH_NUM\" TEXT," + // 5: search_num
+                "\"ID_PRODUCT\" TEXT," + // 6: id_product
+                "\"REFERENCE\" TEXT," + // 7: reference
+                "\"ZH_NAME\" TEXT," + // 8: zh_name
+                "\"FR_NAME\" TEXT," + // 9: fr_name
+                "\"QUANTITY\" INTEGER NOT NULL ," + // 10: quantity
+                "\"UNIT\" TEXT," + // 11: unit
+                "\"PRICE\" REAL NOT NULL ," + // 12: price
+                "\"REDUCABLE\" INTEGER NOT NULL ," + // 13: reducable
+                "\"MAX_ATTRIBUTES_CHOOSE\" INTEGER NOT NULL ," + // 14: max_attributes_choose
+                "\"IMAGE_URL\" TEXT," + // 15: image_url
+                "\"IS_FORMULA\" INTEGER NOT NULL );"); // 16: isFormula
     }
 
     /** Drops the underlying database table. */
@@ -79,44 +89,61 @@ public class GoodDao extends AbstractDao<Good, Long> {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
  
+        String id_category = entity.getId_category();
+        if (id_category != null) {
+            stmt.bindString(2, id_category);
+        }
+ 
+        String zh_category_name = entity.getZh_category_name();
+        if (zh_category_name != null) {
+            stmt.bindString(3, zh_category_name);
+        }
+ 
+        String fr_category_name = entity.getFr_category_name();
+        if (fr_category_name != null) {
+            stmt.bindString(4, fr_category_name);
+        }
+        stmt.bindLong(5, entity.getPosition());
+ 
         String search_num = entity.getSearch_num();
         if (search_num != null) {
-            stmt.bindString(2, search_num);
+            stmt.bindString(6, search_num);
         }
  
         String id_product = entity.getId_product();
         if (id_product != null) {
-            stmt.bindString(3, id_product);
+            stmt.bindString(7, id_product);
         }
  
         String reference = entity.getReference();
         if (reference != null) {
-            stmt.bindString(4, reference);
+            stmt.bindString(8, reference);
         }
  
         String zh_name = entity.getZh_name();
         if (zh_name != null) {
-            stmt.bindString(5, zh_name);
+            stmt.bindString(9, zh_name);
         }
  
         String fr_name = entity.getFr_name();
         if (fr_name != null) {
-            stmt.bindString(6, fr_name);
+            stmt.bindString(10, fr_name);
         }
-        stmt.bindLong(7, entity.getQuantity());
+        stmt.bindLong(11, entity.getQuantity());
  
         String unit = entity.getUnit();
         if (unit != null) {
-            stmt.bindString(8, unit);
+            stmt.bindString(12, unit);
         }
-        stmt.bindDouble(9, entity.getPrice());
-        stmt.bindLong(10, entity.getReducable() ? 1L: 0L);
-        stmt.bindLong(11, entity.getMax_attributes_choose());
+        stmt.bindDouble(13, entity.getPrice());
+        stmt.bindLong(14, entity.getReducable() ? 1L: 0L);
+        stmt.bindLong(15, entity.getMax_attributes_choose());
  
         String image_url = entity.getImage_url();
         if (image_url != null) {
-            stmt.bindString(12, image_url);
+            stmt.bindString(16, image_url);
         }
+        stmt.bindLong(17, entity.getIsFormula() ? 1L: 0L);
     }
 
     @Override
@@ -124,44 +151,61 @@ public class GoodDao extends AbstractDao<Good, Long> {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getId());
  
+        String id_category = entity.getId_category();
+        if (id_category != null) {
+            stmt.bindString(2, id_category);
+        }
+ 
+        String zh_category_name = entity.getZh_category_name();
+        if (zh_category_name != null) {
+            stmt.bindString(3, zh_category_name);
+        }
+ 
+        String fr_category_name = entity.getFr_category_name();
+        if (fr_category_name != null) {
+            stmt.bindString(4, fr_category_name);
+        }
+        stmt.bindLong(5, entity.getPosition());
+ 
         String search_num = entity.getSearch_num();
         if (search_num != null) {
-            stmt.bindString(2, search_num);
+            stmt.bindString(6, search_num);
         }
  
         String id_product = entity.getId_product();
         if (id_product != null) {
-            stmt.bindString(3, id_product);
+            stmt.bindString(7, id_product);
         }
  
         String reference = entity.getReference();
         if (reference != null) {
-            stmt.bindString(4, reference);
+            stmt.bindString(8, reference);
         }
  
         String zh_name = entity.getZh_name();
         if (zh_name != null) {
-            stmt.bindString(5, zh_name);
+            stmt.bindString(9, zh_name);
         }
  
         String fr_name = entity.getFr_name();
         if (fr_name != null) {
-            stmt.bindString(6, fr_name);
+            stmt.bindString(10, fr_name);
         }
-        stmt.bindLong(7, entity.getQuantity());
+        stmt.bindLong(11, entity.getQuantity());
  
         String unit = entity.getUnit();
         if (unit != null) {
-            stmt.bindString(8, unit);
+            stmt.bindString(12, unit);
         }
-        stmt.bindDouble(9, entity.getPrice());
-        stmt.bindLong(10, entity.getReducable() ? 1L: 0L);
-        stmt.bindLong(11, entity.getMax_attributes_choose());
+        stmt.bindDouble(13, entity.getPrice());
+        stmt.bindLong(14, entity.getReducable() ? 1L: 0L);
+        stmt.bindLong(15, entity.getMax_attributes_choose());
  
         String image_url = entity.getImage_url();
         if (image_url != null) {
-            stmt.bindString(12, image_url);
+            stmt.bindString(16, image_url);
         }
+        stmt.bindLong(17, entity.getIsFormula() ? 1L: 0L);
     }
 
     @Override
@@ -179,17 +223,22 @@ public class GoodDao extends AbstractDao<Good, Long> {
     public Good readEntity(Cursor cursor, int offset) {
         Good entity = new Good( //
             cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // search_num
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // id_product
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // reference
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // zh_name
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // fr_name
-            cursor.getInt(offset + 6), // quantity
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // unit
-            cursor.getDouble(offset + 8), // price
-            cursor.getShort(offset + 9) != 0, // reducable
-            cursor.getInt(offset + 10), // max_attributes_choose
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // image_url
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // id_category
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // zh_category_name
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // fr_category_name
+            cursor.getInt(offset + 4), // position
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // search_num
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // id_product
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // reference
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // zh_name
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // fr_name
+            cursor.getInt(offset + 10), // quantity
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // unit
+            cursor.getDouble(offset + 12), // price
+            cursor.getShort(offset + 13) != 0, // reducable
+            cursor.getInt(offset + 14), // max_attributes_choose
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // image_url
+            cursor.getShort(offset + 16) != 0 // isFormula
         );
         return entity;
     }
@@ -197,17 +246,22 @@ public class GoodDao extends AbstractDao<Good, Long> {
     @Override
     public void readEntity(Cursor cursor, Good entity, int offset) {
         entity.setId(cursor.getLong(offset + 0));
-        entity.setSearch_num(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setId_product(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setReference(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setZh_name(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setFr_name(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setQuantity(cursor.getInt(offset + 6));
-        entity.setUnit(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setPrice(cursor.getDouble(offset + 8));
-        entity.setReducable(cursor.getShort(offset + 9) != 0);
-        entity.setMax_attributes_choose(cursor.getInt(offset + 10));
-        entity.setImage_url(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setId_category(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setZh_category_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setFr_category_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setPosition(cursor.getInt(offset + 4));
+        entity.setSearch_num(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setId_product(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setReference(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setZh_name(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setFr_name(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setQuantity(cursor.getInt(offset + 10));
+        entity.setUnit(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setPrice(cursor.getDouble(offset + 12));
+        entity.setReducable(cursor.getShort(offset + 13) != 0);
+        entity.setMax_attributes_choose(cursor.getInt(offset + 14));
+        entity.setImage_url(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setIsFormula(cursor.getShort(offset + 16) != 0);
      }
     
     @Override
