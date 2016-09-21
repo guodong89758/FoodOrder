@@ -18,4 +18,6 @@
 
     <!-- error -->
     <string name="error_http_request">网络不给力</string>
+    <!-- splash -->
+    <string name="splash_initing">初始化...</string>
 </resources>
