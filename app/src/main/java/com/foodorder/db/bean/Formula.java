@@ -37,7 +37,7 @@ public class Formula {
     private String image_url;
     @Transient
     private int count;
-    @Generated(hash = 1747633380)
+    @Generated(hash = 528546538)
     public Formula(long id, String id_product, String id_product_formula,
             String zh_type_name, String fr_type_name, int max_choose,
             String id_product_formula_item, String id_product_item, int position,
@@ -130,6 +130,5 @@ public class Formula {
     public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
-
 
 }

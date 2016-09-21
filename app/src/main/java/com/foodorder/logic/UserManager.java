@@ -30,4 +30,8 @@ public class UserManager {
     public List<String> getUserList() {
         return userList;
     }
+
+    public void addUsername(String username) {
+        userList.add(username);
+    }
 }

@@ -6,10 +6,17 @@ import android.view.View;
 
 import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
+import com.foodorder.util.SmoothSwitchScreenUtil;
 
 public class OrdersActivity extends BaseActivity {
 
     private FloatingActionButton fab_order;
+
+    @Override
+    protected void onBeforeSetContentLayout() {
+        super.onBeforeSetContentLayout();
+        SmoothSwitchScreenUtil.smoothSwitchScreen(this);
+    }
 
     @Override
     protected int getLayoutId() {

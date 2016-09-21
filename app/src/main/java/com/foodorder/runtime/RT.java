@@ -124,7 +124,7 @@ public class RT {
                 try {
                     DLOG.init(DEBUG);
                     mkdirs();
-//                    initDatabase();
+                    initDatabase();
                     initOkHttp();
                     initBitmap();
                 } catch (Exception e) {
