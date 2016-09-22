@@ -15,7 +15,7 @@ import com.foodorder.util.PhoneUtil;
 import java.util.List;
 
 public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
-    public int selectTypeId;
+    public int selectTypeId = 0;
     public GoodListActivity activity;
     public List<GoodType> dataList;
 

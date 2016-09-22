@@ -4,7 +4,6 @@ import com.foodorder.db.bean.Attribute;
 import com.foodorder.db.bean.Formula;
 import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
-import com.foodorder.log.DLOG;
 import com.foodorder.logic.UserManager;
 import com.foodorder.runtime.RT;
 
@@ -149,7 +148,6 @@ public class AppInitParse {
                                     JSONArray formulaArray = formulas.optJSONArray("Formula");
                                     if (formulaArray != null && formulaArray.length() > 0) {
                                         for (int m = 0; m < formulaArray.length(); m++) {
-                                            DLOG.d("套餐" + m);
                                             JSONObject formula = formulaArray.optJSONObject(m);
                                             String id_product_formula = formula.optString("id_product_formula");
                                             String fr_formula_name = formula.optString("name");

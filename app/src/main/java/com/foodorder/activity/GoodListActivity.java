@@ -28,7 +28,6 @@ import com.foodorder.adapter.TypeAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
-import com.foodorder.entry.GoodsItem;
 import com.foodorder.log.DLOG;
 import com.foodorder.runtime.RT;
 import com.foodorder.widget.DividerDecoration;
@@ -98,7 +97,7 @@ public class GoodListActivity extends BaseActivity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 Good item = goodList.get(firstVisibleItem);
-                if (typeAdapter.selectTypeId != item.getPosition()) {
+                if (typeAdapter != null && typeAdapter.selectTypeId != item.getPosition()) {
                     typeAdapter.selectTypeId = item.getPosition();
                     typeAdapter.notifyDataSetChanged();
                     rvType.smoothScrollToPosition(getSelectedGroupPosition(item.getPosition()));
@@ -126,6 +125,7 @@ public class GoodListActivity extends BaseActivity {
             public void call(Subscriber<? super Object> subscriber) {
                 goodTypeList = RT.ins().getDaoSession().getGoodTypeDao().loadAll();
                 goodList = RT.ins().getDaoSession().getGoodDao().loadAll();
+                subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -249,7 +249,7 @@ public class GoodListActivity extends BaseActivity {
             item.setCount(1);
             selectedList.append(item.getId().intValue(), item);
         } else {
-            temp.setCount(temp.getCount()+1);
+            temp.setCount(temp.getCount() + 1);
         }
         update(refreshGoodList);
     }
@@ -269,7 +269,8 @@ public class GoodListActivity extends BaseActivity {
             if (temp.getCount() < 2) {
                 selectedList.remove(item.getId().intValue());
             } else {
-                item.setCount(item.getCount()-1);;
+                item.setCount(item.getCount() - 1);
+                ;
             }
         }
         update(refreshGoodList);
