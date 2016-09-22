@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class Formula {
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
     @Property
     private String id_product;
     @Property
@@ -37,8 +37,8 @@ public class Formula {
     private String image_url;
     @Transient
     private int count;
-    @Generated(hash = 528546538)
-    public Formula(long id, String id_product, String id_product_formula,
+    @Generated(hash = 1316504733)
+    public Formula(Long id, String id_product, String id_product_formula,
             String zh_type_name, String fr_type_name, int max_choose,
             String id_product_formula_item, String id_product_item, int position,
             String zh_name, String fr_name, String image_url) {
@@ -58,10 +58,10 @@ public class Formula {
     @Generated(hash = 775514140)
     public Formula() {
     }
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getId_product() {
@@ -130,5 +130,6 @@ public class Formula {
     public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
+
 
 }

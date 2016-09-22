@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Generated;
 @Entity
 public class GoodType {
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
     @Property
     private String id_category;
     @Property
@@ -25,8 +25,8 @@ public class GoodType {
     private boolean active;
     @Transient
     private int count;
-    @Generated(hash = 1847776811)
-    public GoodType(long id, String id_category, String zh_name, String fr_name,
+    @Generated(hash = 1122317434)
+    public GoodType(Long id, String id_category, String zh_name, String fr_name,
             int position, boolean active) {
         this.id = id;
         this.id_category = id_category;
@@ -38,10 +38,10 @@ public class GoodType {
     @Generated(hash = 386185201)
     public GoodType() {
     }
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getId_category() {

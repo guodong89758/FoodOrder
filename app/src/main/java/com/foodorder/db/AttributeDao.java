@@ -27,7 +27,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Id_product = new Property(1, String.class, "id_product", false, "ID_PRODUCT");
         public final static Property Id_product_attribute = new Property(2, String.class, "id_product_attribute", false, "ID_PRODUCT_ATTRIBUTE");
         public final static Property Zh_name = new Property(3, String.class, "zh_name", false, "ZH_NAME");
@@ -49,7 +49,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"ATTRIBUTE\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ID_PRODUCT\" TEXT," + // 1: id_product
                 "\"ID_PRODUCT_ATTRIBUTE\" TEXT," + // 2: id_product_attribute
                 "\"ZH_NAME\" TEXT," + // 3: zh_name
@@ -66,7 +66,11 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Attribute entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String id_product = entity.getId_product();
         if (id_product != null) {
@@ -97,7 +101,11 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Attribute entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String id_product = entity.getId_product();
         if (id_product != null) {
@@ -127,13 +135,13 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public Attribute readEntity(Cursor cursor, int offset) {
         Attribute entity = new Attribute( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // id_product
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // id_product_attribute
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // zh_name
@@ -145,7 +153,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Attribute entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setId_product(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setId_product_attribute(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setZh_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -170,7 +178,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
 
     @Override
     public boolean hasKey(Attribute entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getId() != null;
     }
 
     @Override

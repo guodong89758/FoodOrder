@@ -6,11 +6,14 @@ import android.view.View;
 
 import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
+import com.foodorder.runtime.ActivityManager;
 import com.foodorder.util.SmoothSwitchScreenUtil;
+import com.foodorder.util.ToastUtil;
 
 public class OrdersActivity extends BaseActivity {
 
     private FloatingActionButton fab_order;
+    private long last_back_time = 0;
 
     @Override
     protected void onBeforeSetContentLayout() {
@@ -42,5 +45,18 @@ public class OrdersActivity extends BaseActivity {
                 startActivity(new Intent(OrdersActivity.this, GoodListActivity.class));
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        long current_time = System.currentTimeMillis();
+        if (current_time - last_back_time > 2000) {
+            ToastUtil.showToast(getString(R.string.app_exit));
+            last_back_time = current_time;
+        } else {
+            ActivityManager.ins().AppExit(this);
+        }
+
     }
 }

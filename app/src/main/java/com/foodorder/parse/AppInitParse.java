@@ -25,9 +25,10 @@ public class AppInitParse {
         if (restaurant == null) {
             return;
         }
+        JSONObject users = restaurant.optJSONObject("Users");
         //用户信息
-        if (!restaurant.isNull("Users")) {
-            JSONArray userArray = restaurant.optJSONObject("Users").optJSONArray("User");
+        if (users != null) {
+            JSONArray userArray = users.optJSONArray("User");
             if (userArray != null && userArray.length() > 0) {
                 UserManager.getInstance().getUserList().clear();
                 for (int i = 0; i < userArray.length(); i++) {
@@ -40,7 +41,6 @@ public class AppInitParse {
                 }
             }
         }
-        DLOG.d("-------------解析菜单数据-------------");
         //菜单信息
         JSONArray categoryArray = restaurant.optJSONArray("Category");
         if (categoryArray != null && categoryArray.length() > 0) {
@@ -48,7 +48,6 @@ public class AppInitParse {
             RT.ins().getDaoSession().getGoodDao().deleteAll();
             RT.ins().getDaoSession().getAttributeDao().deleteAll();
             RT.ins().getDaoSession().getFormulaDao().deleteAll();
-            DLOG.d("总分类为" + categoryArray.length());
             for (int i = 0; i < categoryArray.length(); i++) {
                 JSONObject category = categoryArray.optJSONObject(i);
                 String id_category = category.optString("id_category");
@@ -66,16 +65,12 @@ public class AppInitParse {
                 goodType.setActive(category.optBoolean("active"));
                 goodType.setZh_name(zh_category_name);
                 //保存菜单分类数据到数据库
-//                RT.ins().getDaoSession().getGoodTypeDao().insert(goodType);
-                DLOG.d("菜品");
+                RT.ins().getDaoSession().getGoodTypeDao().insert(goodType);
                 JSONObject products = category.optJSONObject("Products");
                 if (products != null) {
                     JSONArray productArray = products.optJSONArray("Product");
-//                if (!category.isNull("Products")) {
-//                    JSONArray productArray = category.optJSONObject("Products").optJSONArray("Product");
                     if (productArray != null && productArray.length() > 0) {
                         for (int j = 0; j < productArray.length(); j++) {
-                            DLOG.d("分类" + i + "菜品" + j);
                             JSONObject product = productArray.optJSONObject(j);
                             String id_product = product.optString("id_product");
                             String reference = product.optString("reference");
@@ -91,8 +86,9 @@ public class AppInitParse {
                                 zh_product_name = product_zh.optString("name");
                             }
                             String product_image_url = "";
-                            if (!product.isNull("Images")) {
-                                JSONObject image = product.optJSONObject("Images").optJSONObject("Image");
+                            JSONObject images = product.optJSONObject("Images");
+                            if (images != null) {
+                                JSONObject image = images.optJSONObject("Image");
                                 if (image != null) {
                                     product_image_url = "/img/" + image.optString("id_image") + ".jpg";
                                 }
@@ -116,12 +112,11 @@ public class AppInitParse {
                             good.setIsFormula(product.isNull("Formulas") ? false : true);
 
                             //保存菜品信息到数据库
-//                            RT.ins().getDaoSession().getGoodDao().insert(good);
-                            DLOG.d("-------------规格");
+                            RT.ins().getDaoSession().getGoodDao().insert(good);
+
                             //规格信息
                             if (!product.isNull("Attributes")) {
                                 JSONObject attributes = product.optJSONObject("Attributes");
-                                DLOG.d("规格列表");
                                 if (attributes != null) {
                                     JSONArray attributeArray = attributes.optJSONArray("Attribute");
                                     if (attributeArray != null && attributeArray.length() > 0) {
@@ -142,54 +137,56 @@ public class AppInitParse {
                                             attr.setFr_name(fr_attribute);
                                             attr.setValue(value);
                                             //保存菜品规格信息
-//                                            RT.ins().getDaoSession().getAttributeDao().insert(attr);
+                                            RT.ins().getDaoSession().getAttributeDao().insert(attr);
                                         }
                                     }
                                 }
                             }
-                            DLOG.d("-------------套餐");
                             //套餐信息
                             if (!product.isNull("Formulas")) {
-                                JSONArray formulaArray = product.optJSONObject("Formulas").optJSONArray("Formula");
-                                DLOG.d("套餐列表");
-                                if (formulaArray != null && formulaArray.length() > 0) {
-                                    for (int m = 0; m < formulaArray.length(); m++) {
-                                        DLOG.d("套餐" + m);
-                                        JSONObject formula = formulaArray.optJSONObject(m);
-                                        String id_product_formula = formula.optString("id_product_formula");
-                                        String fr_formula_name = formula.optString("name");
-                                        int max_choose = formula.optInt("max_choose", 1);
-                                        String zh_formula_name = "";
-                                        if (!formula.isNull("zh")) {
-                                            zh_formula_name = formula.optJSONObject("zh").optString("name");
-                                        }
-                                        //套餐下菜品信息
-                                        if (!formula.isNull("FormulaItem")) {
-                                            JSONArray formulaItemArray = formula.optJSONArray("FormulaItem");
-                                            if (formulaItemArray != null && formulaItemArray.length() > 0) {
-                                                for (int n = 0; n < formulaItemArray.length(); n++) {
-                                                    JSONObject formulaItem = formulaItemArray.optJSONObject(n);
-                                                    String id_product_formula_item = formulaItem.optString("id_product_formula_item");
-                                                    String id_product_item = formulaItem.optString("id_product_item");
-                                                    int formula_item_position = formulaItem.optInt("position", 0);
+                                JSONObject formulas = product.optJSONObject("Formulas");
+                                if (formulas != null) {
+                                    JSONArray formulaArray = formulas.optJSONArray("Formula");
+                                    if (formulaArray != null && formulaArray.length() > 0) {
+                                        for (int m = 0; m < formulaArray.length(); m++) {
+                                            DLOG.d("套餐" + m);
+                                            JSONObject formula = formulaArray.optJSONObject(m);
+                                            String id_product_formula = formula.optString("id_product_formula");
+                                            String fr_formula_name = formula.optString("name");
+                                            int max_choose = formula.optInt("max_choose", 1);
+                                            String zh_formula_name = "";
+                                            JSONObject formula_zh = formula.optJSONObject("zh");
+                                            if (formula_zh != null) {
+                                                zh_formula_name = formula_zh.optString("name");
+                                            }
+                                            //套餐下菜品信息
+                                            if (!formula.isNull("FormulaItem")) {
+                                                JSONArray formulaItemArray = formula.optJSONArray("FormulaItem");
+                                                if (formulaItemArray != null && formulaItemArray.length() > 0) {
+                                                    for (int n = 0; n < formulaItemArray.length(); n++) {
+                                                        JSONObject formulaItem = formulaItemArray.optJSONObject(n);
+                                                        String id_product_formula_item = formulaItem.optString("id_product_formula_item");
+                                                        String id_product_item = formulaItem.optString("id_product_item");
+                                                        int formula_item_position = formulaItem.optInt("position", 0);
 
-                                                    Formula formulaBean = new Formula();
-                                                    formulaBean.setId_product(id_product);
-                                                    formulaBean.setId_product_formula(id_product_formula);
-                                                    formulaBean.setZh_type_name(zh_formula_name);
-                                                    formulaBean.setFr_type_name(fr_formula_name);
-                                                    formulaBean.setMax_choose(max_choose);
-                                                    formulaBean.setId_product_formula_item(id_product_formula_item);
-                                                    formulaBean.setId_product_item(id_product_item);
-                                                    formulaBean.setPosition(formula_item_position);
+                                                        Formula formulaBean = new Formula();
+                                                        formulaBean.setId_product(id_product);
+                                                        formulaBean.setId_product_formula(id_product_formula);
+                                                        formulaBean.setZh_type_name(zh_formula_name);
+                                                        formulaBean.setFr_type_name(fr_formula_name);
+                                                        formulaBean.setMax_choose(max_choose);
+                                                        formulaBean.setId_product_formula_item(id_product_formula_item);
+                                                        formulaBean.setId_product_item(id_product_item);
+                                                        formulaBean.setPosition(formula_item_position);
 
-                                                    //保存套餐菜品信息
-//                                                    RT.ins().getDaoSession().getFormulaDao().insert(formulaBean);
+                                                        //保存套餐菜品信息
+                                                        RT.ins().getDaoSession().getFormulaDao().insert(formulaBean);
 
+                                                    }
                                                 }
                                             }
-                                        }
 
+                                        }
                                     }
                                 }
                             }

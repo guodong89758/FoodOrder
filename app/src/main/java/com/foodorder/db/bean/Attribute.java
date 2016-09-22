@@ -3,8 +3,8 @@ package com.foodorder.db.bean;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Transient;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * Created by guodong on 2016/9/19 16:33.
@@ -12,7 +12,7 @@ import org.greenrobot.greendao.annotation.Transient;
 @Entity
 public class Attribute {
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
     @Property
     private String id_product;
     @Property
@@ -25,8 +25,8 @@ public class Attribute {
     private String value;
     @Transient
     private int count;
-    @Generated(hash = 1652412708)
-    public Attribute(long id, String id_product, String id_product_attribute,
+    @Generated(hash = 2042341528)
+    public Attribute(Long id, String id_product, String id_product_attribute,
             String zh_name, String fr_name, String value) {
         this.id = id;
         this.id_product = id_product;
@@ -38,10 +38,10 @@ public class Attribute {
     @Generated(hash = 959577406)
     public Attribute() {
     }
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getId_product() {
@@ -74,4 +74,5 @@ public class Attribute {
     public void setValue(String value) {
         this.value = value;
     }
+
 }

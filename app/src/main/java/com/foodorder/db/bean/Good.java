@@ -23,7 +23,7 @@ import java.util.List;
 public class Good {
 
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
     @Property
     private String id_category;
     @Property
@@ -62,18 +62,23 @@ public class Good {
     private List<Attribute> attributeList;
     @ToMany(referencedJoinProperty = "id_product")
     private List<Formula> formulaList;
-    /** Used to resolve relations */
+    /**
+     * Used to resolve relations
+     */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
-    /** Used for active entity operations. */
+    /**
+     * Used for active entity operations.
+     */
     @Generated(hash = 1249866486)
     private transient GoodDao myDao;
-    @Generated(hash = 866922495)
-    public Good(long id, String id_category, String zh_category_name,
-            String fr_category_name, int position, String search_num,
-            String id_product, String reference, String zh_name, String fr_name,
-            int quantity, String unit, double price, boolean reducable,
-            int max_attributes_choose, String image_url, boolean isFormula) {
+
+    @Generated(hash = 451851001)
+    public Good(Long id, String id_category, String zh_category_name,
+                String fr_category_name, int position, String search_num,
+                String id_product, String reference, String zh_name, String fr_name,
+                int quantity, String unit, double price, boolean reducable,
+                int max_attributes_choose, String image_url, boolean isFormula) {
         this.id = id;
         this.id_category = id_category;
         this.zh_category_name = zh_category_name;
@@ -92,111 +97,147 @@ public class Good {
         this.image_url = image_url;
         this.isFormula = isFormula;
     }
+
     @Generated(hash = 2016981037)
     public Good() {
     }
-    public long getId() {
+
+    public Long getId() {
         return this.id;
     }
-    public void setId(long id) {
+
+    public void setId(Long id) {
         this.id = id;
     }
+
     public String getId_category() {
         return this.id_category;
     }
+
     public void setId_category(String id_category) {
         this.id_category = id_category;
     }
+
     public String getZh_category_name() {
         return this.zh_category_name;
     }
+
     public void setZh_category_name(String zh_category_name) {
         this.zh_category_name = zh_category_name;
     }
+
     public String getFr_category_name() {
         return this.fr_category_name;
     }
+
     public void setFr_category_name(String fr_category_name) {
         this.fr_category_name = fr_category_name;
     }
+
     public int getPosition() {
         return this.position;
     }
+
     public void setPosition(int position) {
         this.position = position;
     }
+
     public String getSearch_num() {
         return this.search_num;
     }
+
     public void setSearch_num(String search_num) {
         this.search_num = search_num;
     }
+
     public String getId_product() {
         return this.id_product;
     }
+
     public void setId_product(String id_product) {
         this.id_product = id_product;
     }
+
     public String getReference() {
         return this.reference;
     }
+
     public void setReference(String reference) {
         this.reference = reference;
     }
+
     public String getZh_name() {
         return this.zh_name;
     }
+
     public void setZh_name(String zh_name) {
         this.zh_name = zh_name;
     }
+
     public String getFr_name() {
         return this.fr_name;
     }
+
     public void setFr_name(String fr_name) {
         this.fr_name = fr_name;
     }
+
     public int getQuantity() {
         return this.quantity;
     }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     public String getUnit() {
         return this.unit;
     }
+
     public void setUnit(String unit) {
         this.unit = unit;
     }
+
     public double getPrice() {
         return this.price;
     }
+
     public void setPrice(double price) {
         this.price = price;
     }
+
     public boolean getReducable() {
         return this.reducable;
     }
+
     public void setReducable(boolean reducable) {
         this.reducable = reducable;
     }
+
     public int getMax_attributes_choose() {
         return this.max_attributes_choose;
     }
+
     public void setMax_attributes_choose(int max_attributes_choose) {
         this.max_attributes_choose = max_attributes_choose;
     }
+
     public String getImage_url() {
         return this.image_url;
     }
+
     public void setImage_url(String image_url) {
         this.image_url = image_url;
     }
+
     public boolean getIsFormula() {
         return this.isFormula;
     }
+
     public void setIsFormula(boolean isFormula) {
         this.isFormula = isFormula;
     }
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -212,18 +253,22 @@ public class Good {
             AttributeDao targetDao = daoSession.getAttributeDao();
             List<Attribute> attributeListNew = targetDao._queryGood_AttributeList(id_product);
             synchronized (this) {
-                if(attributeList == null) {
+                if (attributeList == null) {
                     attributeList = attributeListNew;
                 }
             }
         }
         return attributeList;
     }
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+
+    /**
+     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     */
     @Generated(hash = 577828666)
     public synchronized void resetAttributeList() {
         attributeList = null;
     }
+
     /**
      * To-many relationship, resolved on first access (and after reset).
      * Changes to to-many relations are not persisted, make changes to the target entity.
@@ -239,18 +284,22 @@ public class Good {
             FormulaDao targetDao = daoSession.getFormulaDao();
             List<Formula> formulaListNew = targetDao._queryGood_FormulaList(id_product);
             synchronized (this) {
-                if(formulaList == null) {
+                if (formulaList == null) {
                     formulaList = formulaListNew;
                 }
             }
         }
         return formulaList;
     }
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+
+    /**
+     * Resets a to-many relationship, making the next get call to query for a fresh result.
+     */
     @Generated(hash = 1578763732)
     public synchronized void resetFormulaList() {
         formulaList = null;
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
      * Entity must attached to an entity context.
@@ -262,6 +311,7 @@ public class Good {
         }
         myDao.delete(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
      * Entity must attached to an entity context.
@@ -273,6 +323,7 @@ public class Good {
         }
         myDao.refresh(this);
     }
+
     /**
      * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
      * Entity must attached to an entity context.
@@ -284,13 +335,14 @@ public class Good {
         }
         myDao.update(this);
     }
-    /** called by internal mechanisms, do not call yourself. */
+
+    /**
+     * called by internal mechanisms, do not call yourself.
+     */
     @Generated(hash = 1127442251)
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getGoodDao() : null;
     }
-
-
 
 }

@@ -27,7 +27,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Id_product = new Property(1, String.class, "id_product", false, "ID_PRODUCT");
         public final static Property Id_product_formula = new Property(2, String.class, "id_product_formula", false, "ID_PRODUCT_FORMULA");
         public final static Property Zh_type_name = new Property(3, String.class, "zh_type_name", false, "ZH_TYPE_NAME");
@@ -55,7 +55,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"FORMULA\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ID_PRODUCT\" TEXT," + // 1: id_product
                 "\"ID_PRODUCT_FORMULA\" TEXT," + // 2: id_product_formula
                 "\"ZH_TYPE_NAME\" TEXT," + // 3: zh_type_name
@@ -78,7 +78,11 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Formula entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String id_product = entity.getId_product();
         if (id_product != null) {
@@ -131,7 +135,11 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Formula entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String id_product = entity.getId_product();
         if (id_product != null) {
@@ -183,13 +191,13 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public Formula readEntity(Cursor cursor, int offset) {
         Formula entity = new Formula( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // id_product
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // id_product_formula
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // zh_type_name
@@ -207,7 +215,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Formula entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setId_product(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setId_product_formula(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setZh_type_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -238,7 +246,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
 
     @Override
     public boolean hasKey(Formula entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getId() != null;
     }
 
     @Override

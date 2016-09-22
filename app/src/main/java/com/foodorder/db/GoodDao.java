@@ -24,7 +24,7 @@ public class GoodDao extends AbstractDao<Good, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Id_category = new Property(1, String.class, "id_category", false, "ID_CATEGORY");
         public final static Property Zh_category_name = new Property(2, String.class, "zh_category_name", false, "ZH_CATEGORY_NAME");
         public final static Property Fr_category_name = new Property(3, String.class, "fr_category_name", false, "FR_CATEGORY_NAME");
@@ -59,7 +59,7 @@ public class GoodDao extends AbstractDao<Good, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"GOOD\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"ID_CATEGORY\" TEXT," + // 1: id_category
                 "\"ZH_CATEGORY_NAME\" TEXT," + // 2: zh_category_name
                 "\"FR_CATEGORY_NAME\" TEXT," + // 3: fr_category_name
@@ -87,7 +87,11 @@ public class GoodDao extends AbstractDao<Good, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, Good entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String id_category = entity.getId_category();
         if (id_category != null) {
@@ -149,7 +153,11 @@ public class GoodDao extends AbstractDao<Good, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, Good entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String id_category = entity.getId_category();
         if (id_category != null) {
@@ -216,13 +224,13 @@ public class GoodDao extends AbstractDao<Good, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public Good readEntity(Cursor cursor, int offset) {
         Good entity = new Good( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // id_category
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // zh_category_name
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // fr_category_name
@@ -245,7 +253,7 @@ public class GoodDao extends AbstractDao<Good, Long> {
      
     @Override
     public void readEntity(Cursor cursor, Good entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setId_category(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setZh_category_name(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setFr_category_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
@@ -281,7 +289,7 @@ public class GoodDao extends AbstractDao<Good, Long> {
 
     @Override
     public boolean hasKey(Good entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getId() != null;
     }
 
     @Override

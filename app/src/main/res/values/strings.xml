@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">FoodOrder</string>
+    <string name="app_exit">再次点击退出应用</string>
 
     <!-- empty layout -->
     <string name="def_empty_data_text">没有内容</string>

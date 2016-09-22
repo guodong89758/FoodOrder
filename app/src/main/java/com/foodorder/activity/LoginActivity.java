@@ -43,6 +43,7 @@ public class LoginActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.btn_login:
                 startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
+                finish();
                 break;
         }
     }
