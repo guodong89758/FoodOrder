@@ -9,17 +9,19 @@ import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
-import com.foodorder.entry.GoodsItem;
+import com.foodorder.db.bean.Good;
+import com.foodorder.util.PhoneUtil;
 
 import java.text.NumberFormat;
 
 
-public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder>{
+public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder> {
     private GoodListActivity activity;
-    private SparseArray<GoodsItem> dataList;
+    private SparseArray<Good> dataList;
     private NumberFormat nf;
     private LayoutInflater mInflater;
-    public SelectAdapter(GoodListActivity activity, SparseArray<GoodsItem> dataList) {
+
+    public SelectAdapter(GoodListActivity activity, SparseArray<Good> dataList) {
         this.activity = activity;
         this.dataList = dataList;
         nf = NumberFormat.getCurrencyInstance();
@@ -29,27 +31,27 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_selected_goods,parent,false);
+        View view = mInflater.inflate(R.layout.item_selected_goods, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        GoodsItem item = dataList.valueAt(position);
+        Good item = dataList.valueAt(position);
         holder.bindData(item);
     }
 
     @Override
     public int getItemCount() {
-        if(dataList==null) {
+        if (dataList == null) {
             return 0;
         }
         return dataList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private GoodsItem item;
-        private TextView tvCost,tvCount,tvAdd,tvMinus,tvName;
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private Good item;
+        private TextView tvCost, tvCount, tvAdd, tvMinus, tvName;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -64,7 +66,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.tvAdd:
                     activity.add(item, true);
                     break;
@@ -76,11 +78,17 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
             }
         }
 
-        public void bindData(GoodsItem item){
+        public void bindData(Good item) {
             this.item = item;
-            tvName.setText(item.name);
-            tvCost.setText(nf.format(item.count*item.price));
-            tvCount.setText(String.valueOf(item.count));
+            String good_name = "";
+            if (PhoneUtil.isZh()) {
+                good_name = item.getZh_name();
+            } else {
+                good_name = item.getFr_name();
+            }
+            tvName.setText(good_name);
+            tvCost.setText(nf.format(item.getCount() * item.getPrice()));
+            tvCount.setText(String.valueOf(item.getCount()));
         }
     }
 }

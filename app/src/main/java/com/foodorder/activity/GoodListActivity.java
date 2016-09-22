@@ -1,8 +1,6 @@
 package com.foodorder.activity;
 
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -27,15 +25,27 @@ import com.foodorder.R;
 import com.foodorder.adapter.GoodsAdapter;
 import com.foodorder.adapter.SelectAdapter;
 import com.foodorder.adapter.TypeAdapter;
+import com.foodorder.base.BaseActivity;
+import com.foodorder.db.bean.Good;
+import com.foodorder.db.bean.GoodType;
 import com.foodorder.entry.GoodsItem;
+import com.foodorder.log.DLOG;
+import com.foodorder.runtime.RT;
 import com.foodorder.widget.DividerDecoration;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class GoodListActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class GoodListActivity extends BaseActivity {
 
     private ImageView imgCart;
     private ViewGroup anim_mask_layout;
@@ -45,9 +55,9 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
     private View bottomSheet;
     private StickyListHeadersListView listView;
 
-
-    private ArrayList<GoodsItem> dataList, typeList;
-    private SparseArray<GoodsItem> selectedList;
+    private List<GoodType> goodTypeList;
+    private List<Good> goodList;
+    private SparseArray<Good> selectedList;
     private SparseIntArray groupSelect;
 
     private GoodsAdapter myAdapter;
@@ -58,20 +68,12 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
     private Handler mHanlder;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_good_list);
-        nf = NumberFormat.getCurrencyInstance();
-        nf.setMaximumFractionDigits(2);
-        mHanlder = new Handler(getMainLooper());
-        dataList = GoodsItem.getGoodsList();
-        typeList = GoodsItem.getTypeList();
-        selectedList = new SparseArray<>();
-        groupSelect = new SparseIntArray();
-        initView();
+    protected int getLayoutId() {
+        return R.layout.activity_good_list;
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
         tvCount = (TextView) findViewById(R.id.tvCount);
         tvCost = (TextView) findViewById(R.id.tvCost);
         tvTips = (TextView) findViewById(R.id.tvTips);
@@ -85,12 +87,7 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
         listView = (StickyListHeadersListView) findViewById(R.id.itemListView);
 
         rvType.setLayoutManager(new LinearLayoutManager(this));
-        typeAdapter = new TypeAdapter(this, typeList);
-        rvType.setAdapter(typeAdapter);
         rvType.addItemDecoration(new DividerDecoration(this));
-
-        myAdapter = new GoodsAdapter(dataList, this);
-        listView.setAdapter(myAdapter);
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -100,17 +97,60 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                GoodsItem item = dataList.get(firstVisibleItem);
-                if (typeAdapter.selectTypeId != item.typeId) {
-                    typeAdapter.selectTypeId = item.typeId;
+                Good item = goodList.get(firstVisibleItem);
+                if (typeAdapter.selectTypeId != item.getPosition()) {
+                    typeAdapter.selectTypeId = item.getPosition();
                     typeAdapter.notifyDataSetChanged();
-                    rvType.smoothScrollToPosition(getSelectedGroupPosition(item.typeId));
+                    rvType.smoothScrollToPosition(getSelectedGroupPosition(item.getPosition()));
                 }
             }
         });
-
     }
 
+    @Override
+    public void initData() {
+        nf = NumberFormat.getCurrencyInstance();
+        nf.setMaximumFractionDigits(2);
+        mHanlder = new Handler(getMainLooper());
+        selectedList = new SparseArray<>();
+        groupSelect = new SparseIntArray();
+        if (goodTypeList == null) {
+            goodTypeList = new ArrayList<>();
+        }
+        if (goodList == null) {
+            goodList = new ArrayList<>();
+        }
+
+        Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber<? super Object> subscriber) {
+                goodTypeList = RT.ins().getDaoSession().getGoodTypeDao().loadAll();
+                goodList = RT.ins().getDaoSession().getGoodDao().loadAll();
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onCompleted() {
+                        typeAdapter = new TypeAdapter(GoodListActivity.this, goodTypeList);
+                        rvType.setAdapter(typeAdapter);
+
+                        myAdapter = new GoodsAdapter(goodList, GoodListActivity.this);
+                        listView.setAdapter(myAdapter);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        DLOG.e(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+
+                    }
+                });
+
+    }
 
     public void playAnimation(int[] start_location) {
         ImageView img = new ImageView(this);
@@ -195,41 +235,41 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
     }
 
     //添加商品
-    public void add(GoodsItem item, boolean refreshGoodList) {
+    public void add(Good item, boolean refreshGoodList) {
 
-        int groupCount = groupSelect.get(item.typeId);
+        int groupCount = groupSelect.get(item.getPosition());
         if (groupCount == 0) {
-            groupSelect.append(item.typeId, 1);
+            groupSelect.append(item.getPosition(), 1);
         } else {
-            groupSelect.append(item.typeId, ++groupCount);
+            groupSelect.append(item.getPosition(), ++groupCount);
         }
 
-        GoodsItem temp = selectedList.get(item.id);
+        Good temp = selectedList.get(item.getId().intValue());
         if (temp == null) {
-            item.count = 1;
-            selectedList.append(item.id, item);
+            item.setCount(1);
+            selectedList.append(item.getId().intValue(), item);
         } else {
-            temp.count++;
+            temp.setCount(temp.getCount()+1);
         }
         update(refreshGoodList);
     }
 
     //移除商品
-    public void remove(GoodsItem item, boolean refreshGoodList) {
+    public void remove(Good item, boolean refreshGoodList) {
 
-        int groupCount = groupSelect.get(item.typeId);
+        int groupCount = groupSelect.get(item.getPosition());
         if (groupCount == 1) {
-            groupSelect.delete(item.typeId);
+            groupSelect.delete(item.getPosition());
         } else if (groupCount > 1) {
-            groupSelect.append(item.typeId, --groupCount);
+            groupSelect.append(item.getPosition(), --groupCount);
         }
 
-        GoodsItem temp = selectedList.get(item.id);
+        Good temp = selectedList.get(item.getId().intValue());
         if (temp != null) {
-            if (temp.count < 2) {
-                selectedList.remove(item.id);
+            if (temp.getCount() < 2) {
+                selectedList.remove(item.getId().intValue());
             } else {
-                item.count--;
+                item.setCount(item.getCount()-1);;
             }
         }
         update(refreshGoodList);
@@ -241,9 +281,9 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
         int count = 0;
         double cost = 0;
         for (int i = 0; i < size; i++) {
-            GoodsItem item = selectedList.valueAt(i);
-            count += item.count;
-            cost += item.count * item.price;
+            Good item = selectedList.valueAt(i);
+            count += item.getCount();
+            cost += item.getCount() * item.getPrice();
         }
 
         if (count < 1) {
@@ -288,11 +328,11 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
 
     //根据商品id获取当前商品的采购数量
     public int getSelectedItemCountById(int id) {
-        GoodsItem temp = selectedList.get(id);
+        Good temp = selectedList.get(id);
         if (temp == null) {
             return 0;
         }
-        return temp.count;
+        return temp.getCount();
     }
 
     //根据类别Id获取属于当前类别的数量
@@ -302,8 +342,8 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
 
     //根据类别id获取分类的Position 用于滚动左侧的类别列表
     public int getSelectedGroupPosition(int typeId) {
-        for (int i = 0; i < typeList.size(); i++) {
-            if (typeId == typeList.get(i).typeId) {
+        for (int i = 0; i < goodTypeList.size(); i++) {
+            if (typeId == goodTypeList.get(i).getPosition()) {
                 return i;
             }
         }
@@ -316,8 +356,8 @@ public class GoodListActivity extends AppCompatActivity implements View.OnClickL
 
     private int getSelectedPosition(int typeId) {
         int position = 0;
-        for (int i = 0; i < dataList.size(); i++) {
-            if (dataList.get(i).typeId == typeId) {
+        for (int i = 0; i < goodList.size(); i++) {
+            if (goodList.get(i).getPosition() == typeId) {
                 position = i;
                 break;
             }
