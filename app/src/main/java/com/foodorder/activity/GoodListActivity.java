@@ -1,9 +1,10 @@
 package com.foodorder.activity;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,13 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.CycleInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,8 +34,10 @@ import com.foodorder.base.BaseActivity;
 import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
 import com.foodorder.log.DLOG;
+import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
-import com.foodorder.widget.DividerDecoration;
+import com.foodorder.util.PhoneUtil;
+import com.foodorder.widget.HorizontalDividerItemDecoration;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -46,17 +53,19 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class GoodListActivity extends BaseActivity {
 
-    private ImageView imgCart;
+    private ImageButton ib_back, ib_search;
+    private RelativeLayout rl_cart;
+    private ImageView imgCart, iv_cart_empty;
     private ViewGroup anim_mask_layout;
     private RecyclerView rvType, rvSelected;
-    private TextView tvCount, tvCost, tvSubmit, tvTips;
+    private TextView tvCount, tvCost;
+    private Button btn_send;
     private BottomSheetLayout bottomSheetLayout;
     private View bottomSheet;
     private StickyListHeadersListView listView;
 
     private List<GoodType> goodTypeList;
     private List<Good> goodList;
-    private SparseArray<Good> selectedList;
     private SparseIntArray groupSelect;
 
     private GoodsAdapter myAdapter;
@@ -73,20 +82,24 @@ public class GoodListActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        ib_back = (ImageButton) findViewById(R.id.ib_back);
+        ib_search = (ImageButton) findViewById(R.id.ib_search);
+        rl_cart = (RelativeLayout) findViewById(R.id.rl_cart);
+        iv_cart_empty = (ImageView) findViewById(R.id.iv_cart_empty);
         tvCount = (TextView) findViewById(R.id.tvCount);
         tvCost = (TextView) findViewById(R.id.tvCost);
-        tvTips = (TextView) findViewById(R.id.tvTips);
-        tvSubmit = (TextView) findViewById(R.id.tvSubmit);
+        btn_send = (Button) findViewById(R.id.btn_send);
         rvType = (RecyclerView) findViewById(R.id.typeRecyclerView);
-
         imgCart = (ImageView) findViewById(R.id.imgCart);
         anim_mask_layout = (RelativeLayout) findViewById(R.id.containerLayout);
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomSheetLayout);
-
         listView = (StickyListHeadersListView) findViewById(R.id.itemListView);
 
+        ib_back.setOnClickListener(this);
+        ib_search.setOnClickListener(this);
+        btn_send.setOnClickListener(this);
         rvType.setLayoutManager(new LinearLayoutManager(this));
-        rvType.addItemDecoration(new DividerDecoration(this));
+        rvType.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(getResources().getColor(R.color.black_10)).size(1).build());
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -104,6 +117,7 @@ public class GoodListActivity extends BaseActivity {
                 }
             }
         });
+        imgCart.setVisibility(View.GONE);
     }
 
     @Override
@@ -111,7 +125,6 @@ public class GoodListActivity extends BaseActivity {
         nf = NumberFormat.getCurrencyInstance();
         nf.setMaximumFractionDigits(2);
         mHanlder = new Handler(getMainLooper());
-        selectedList = new SparseArray<>();
         groupSelect = new SparseIntArray();
         if (goodTypeList == null) {
             goodTypeList = new ArrayList<>();
@@ -160,13 +173,14 @@ public class GoodListActivity extends BaseActivity {
 
     private Animation createAnim(int startX, int startY) {
         int[] des = new int[2];
-        imgCart.getLocationInWindow(des);
+        rl_cart.getLocationInWindow(des);
 
         AnimationSet set = new AnimationSet(false);
+        int offset = PhoneUtil.dipToPixel(20, this);
 
-        Animation translationX = new TranslateAnimation(0, des[0] - startX, 0, 0);
+        Animation translationX = new TranslateAnimation(0, des[0] + offset - startX, 0, 0);
         translationX.setInterpolator(new LinearInterpolator());
-        Animation translationY = new TranslateAnimation(0, 0, 0, des[1] - startY);
+        Animation translationY = new TranslateAnimation(0, 0, 0, des[1] + offset - startY);
         translationY.setInterpolator(new AccelerateInterpolator());
         Animation alpha = new AlphaAnimation(1, 0.5f);
         set.addAnimation(translationX);
@@ -175,6 +189,33 @@ public class GoodListActivity extends BaseActivity {
         set.setDuration(500);
 
         return set;
+    }
+
+    private AnimatorSet createAnimator() {
+        ObjectAnimator num_anim_x = ObjectAnimator.ofFloat(rl_cart, "scaleX", 1.0f, 0.7f);
+        num_anim_x.setDuration(100);
+        ObjectAnimator num_anim_y = ObjectAnimator.ofFloat(rl_cart, "scaleY", 1.0f, 0.7f);
+        num_anim_y.setDuration(100);
+        ObjectAnimator num_anim_x1 = ObjectAnimator.ofFloat(rl_cart, "scaleX", 0.7f, 1.0f);
+        num_anim_x1.setInterpolator(new AnticipateOvershootInterpolator());
+        num_anim_x1.setDuration(100);
+        ObjectAnimator num_anim_y1 = ObjectAnimator.ofFloat(rl_cart, "scaleY", 0.7f, 1.0f);
+        num_anim_y1.setInterpolator(new AnticipateOvershootInterpolator());
+        num_anim_y1.setDuration(100);
+        ObjectAnimator num_anim_x2 = ObjectAnimator.ofFloat(rl_cart, "scaleX", 1.0f, 1.1f);
+        num_anim_x2.setInterpolator(new CycleInterpolator(1f));
+        num_anim_x2.setDuration(100);
+        ObjectAnimator num_anim_y2 = ObjectAnimator.ofFloat(rl_cart, "scaleY", 1.0f, 1.1f);
+        num_anim_y2.setInterpolator(new CycleInterpolator(1f));
+        num_anim_y2.setDuration(100);
+
+        AnimatorSet animator = new AnimatorSet();
+        animator.play(num_anim_x).with(num_anim_y);
+        animator.play(num_anim_y).before(num_anim_x1);
+        animator.play(num_anim_x1).with(num_anim_y1);
+        animator.play(num_anim_y1).before(num_anim_x2);
+        animator.play(num_anim_x2).with(num_anim_y2);
+        return animator;
     }
 
     private void addViewToAnimLayout(final ViewGroup vg, final View view,
@@ -207,6 +248,8 @@ public class GoodListActivity extends BaseActivity {
                         anim_mask_layout.removeView(v);
                     }
                 }, 100);
+                AnimatorSet animatorSet = createAnimator();
+                animatorSet.start();
             }
 
             @Override
@@ -220,14 +263,19 @@ public class GoodListActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ib_back:
+                onBackPressed();
+                break;
+            case R.id.ib_search:
+                break;
             case R.id.bottom:
                 showBottomSheet();
                 break;
             case R.id.clear:
                 clearCart();
                 break;
-            case R.id.tvSubmit:
-                Toast.makeText(GoodListActivity.this, "结算", Toast.LENGTH_SHORT).show();
+            case R.id.btn_send:
+                Toast.makeText(GoodListActivity.this, "开始下单", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
@@ -244,10 +292,10 @@ public class GoodListActivity extends BaseActivity {
             groupSelect.append(item.getPosition(), ++groupCount);
         }
 
-        Good temp = selectedList.get(item.getId().intValue());
+        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
         if (temp == null) {
             item.setCount(1);
-            selectedList.append(item.getId().intValue(), item);
+            CartManager.ins().cartList.append(item.getId().intValue(), item);
         } else {
             temp.setCount(temp.getCount() + 1);
         }
@@ -264,13 +312,12 @@ public class GoodListActivity extends BaseActivity {
             groupSelect.append(item.getPosition(), --groupCount);
         }
 
-        Good temp = selectedList.get(item.getId().intValue());
+        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
         if (temp != null) {
             if (temp.getCount() < 2) {
-                selectedList.remove(item.getId().intValue());
+                CartManager.ins().cartList.remove(item.getId().intValue());
             } else {
                 item.setCount(item.getCount() - 1);
-                ;
             }
         }
         update(refreshGoodList);
@@ -278,30 +325,24 @@ public class GoodListActivity extends BaseActivity {
 
     //刷新布局 总价、购买数量等
     private void update(boolean refreshGoodList) {
-        int size = selectedList.size();
+        int size = CartManager.ins().cartList.size();
         int count = 0;
         double cost = 0;
         for (int i = 0; i < size; i++) {
-            Good item = selectedList.valueAt(i);
+            Good item = CartManager.ins().cartList.valueAt(i);
             count += item.getCount();
             cost += item.getCount() * item.getPrice();
         }
 
         if (count < 1) {
             tvCount.setVisibility(View.GONE);
+            imgCart.setVisibility(View.GONE);
         } else {
             tvCount.setVisibility(View.VISIBLE);
+            imgCart.setVisibility(View.VISIBLE);
         }
 
         tvCount.setText(String.valueOf(count));
-
-        if (cost > 99.99) {
-            tvTips.setVisibility(View.GONE);
-            tvSubmit.setVisibility(View.VISIBLE);
-        } else {
-            tvSubmit.setVisibility(View.GONE);
-            tvTips.setVisibility(View.VISIBLE);
-        }
 
         tvCost.setText(nf.format(cost));
 
@@ -314,14 +355,14 @@ public class GoodListActivity extends BaseActivity {
         if (typeAdapter != null) {
             typeAdapter.notifyDataSetChanged();
         }
-        if (bottomSheetLayout.isSheetShowing() && selectedList.size() < 1) {
+        if (bottomSheetLayout.isSheetShowing() && CartManager.ins().cartList.size() < 1) {
             bottomSheetLayout.dismissSheet();
         }
     }
 
     //清空购物车
     public void clearCart() {
-        selectedList.clear();
+        CartManager.ins().cartList.clear();
         groupSelect.clear();
         update(true);
 
@@ -329,7 +370,7 @@ public class GoodListActivity extends BaseActivity {
 
     //根据商品id获取当前商品的采购数量
     public int getSelectedItemCountById(int id) {
-        Good temp = selectedList.get(id);
+        Good temp = CartManager.ins().cartList.get(id);
         if (temp == null) {
             return 0;
         }
@@ -370,9 +411,10 @@ public class GoodListActivity extends BaseActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.layout_bottom_sheet, (ViewGroup) getWindow().getDecorView(), false);
         rvSelected = (RecyclerView) view.findViewById(R.id.selectRecyclerView);
         rvSelected.setLayoutManager(new LinearLayoutManager(this));
+        rvSelected.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(getResources().getColor(R.color.black_10)).size(1).build());
         TextView clear = (TextView) view.findViewById(R.id.clear);
         clear.setOnClickListener(this);
-        selectAdapter = new SelectAdapter(this, selectedList);
+        selectAdapter = new SelectAdapter(this, CartManager.ins().cartList);
         rvSelected.setAdapter(selectAdapter);
         return view;
     }
@@ -384,7 +426,7 @@ public class GoodListActivity extends BaseActivity {
         if (bottomSheetLayout.isSheetShowing()) {
             bottomSheetLayout.dismissSheet();
         } else {
-            if (selectedList.size() != 0) {
+            if (CartManager.ins().cartList.size() != 0) {
                 bottomSheetLayout.showWithSheetView(bottomSheet);
             }
         }

@@ -9,7 +9,6 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.foodorder.R;
@@ -92,17 +91,16 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
     }
 
     class ItemViewHolder implements View.OnClickListener {
-        private TextView name, price, tvAdd, tvMinus, tvCount;
+        private TextView name, price, tv_code, tvAdd, tvMinus, tvCount;
         private Good item;
-        private RatingBar ratingBar;
 
         public ItemViewHolder(View itemView) {
             name = (TextView) itemView.findViewById(R.id.tvName);
             price = (TextView) itemView.findViewById(R.id.tvPrice);
+            tv_code = (TextView) itemView.findViewById(R.id.tv_code);
             tvCount = (TextView) itemView.findViewById(R.id.count);
             tvMinus = (TextView) itemView.findViewById(R.id.tvMinus);
             tvAdd = (TextView) itemView.findViewById(R.id.tvAdd);
-            ratingBar = (RatingBar) itemView.findViewById(R.id.ratingBar);
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
         }
@@ -116,7 +114,8 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 good_name = item.getFr_name();
             }
             name.setText(good_name);
-            item.setCount(mContext.getSelectedItemCountById(item.getPosition()));
+            tv_code.setText(item.getReference());
+            item.setCount(mContext.getSelectedItemCountById(item.getId().intValue()));
             tvCount.setText(String.valueOf(item.getCount()));
             price.setText(nf.format(item.getPrice()));
             if (item.getCount() < 1) {
@@ -133,7 +132,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             GoodListActivity activity = mContext;
             switch (v.getId()) {
                 case R.id.tvAdd: {
-                    int count = activity.getSelectedItemCountById(item.getPosition());
+                    int count = activity.getSelectedItemCountById(item.getId().intValue());
                     if (count < 1) {
                         tvMinus.setAnimation(getShowAnimation());
                         tvMinus.setVisibility(View.VISIBLE);
@@ -141,6 +140,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                     }
                     activity.add(item, false);
                     count++;
+                    item.setCount(count);
                     tvCount.setText(String.valueOf(count));
                     int[] loc = new int[2];
                     v.getLocationInWindow(loc);
@@ -148,13 +148,14 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 }
                 break;
                 case R.id.tvMinus: {
-                    int count = activity.getSelectedItemCountById(item.getPosition());
+                    int count = activity.getSelectedItemCountById(item.getId().intValue());
                     if (count < 2) {
                         tvMinus.setAnimation(getHiddenAnimation());
                         tvMinus.setVisibility(View.GONE);
                         tvCount.setVisibility(View.GONE);
                     }
                     count--;
+                    item.setCount(count);
                     activity.remove(item, false);//activity.getSelectedItemCountById(item.id)
                     tvCount.setText(String.valueOf(count));
 

@@ -51,11 +51,12 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Good item;
-        private TextView tvCost, tvCount, tvAdd, tvMinus, tvName;
+        private TextView tvCost, tvCount, tvAdd, tvMinus, tvName, tvCode;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvName = (TextView) itemView.findViewById(R.id.tvName);
+            tvCode = (TextView) itemView.findViewById(R.id.tvCode);
             tvCost = (TextView) itemView.findViewById(R.id.tvCost);
             tvCount = (TextView) itemView.findViewById(R.id.count);
             tvMinus = (TextView) itemView.findViewById(R.id.tvMinus);
@@ -87,6 +88,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
                 good_name = item.getFr_name();
             }
             tvName.setText(good_name);
+            tvCode.setText(item.getReference());
             tvCost.setText(nf.format(item.getCount() * item.getPrice()));
             tvCount.setText(String.valueOf(item.getCount()));
         }

@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#ff3190e8</color>
     <color name="colorPrimaryDark">#ff237fd3</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorAccent">#ff62d879</color>
 
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
@@ -11,6 +12,7 @@
     <color name="white_60">#99ffffff</color>
     <color name="white_50">#80ffffff</color>
     <color name="white_40">#66ffffff</color>
+    <color name="white_20">#33ffffff</color>
     <color name="white_10">#1affffff</color>
     <color name="black">#000000</color>
     <color name="black_90">#e6000000</color>
@@ -23,6 +25,8 @@
     <color name="black_15">#26000000</color>
     <color name="black_10">#1A000000</color>
     <color name="blue_color">#ff3190e8</color>
+    <color name="red_color">#ffff461d</color>
+    <color name="price_color">#ffff6000</color>
 
     <color name="progressbar_color">#99000000</color>
 
@@ -34,17 +38,20 @@
 
     <color name="title_bg_color">#ff3190e8</color>
 
+    <!-- 菜单列表 -->
+    <color name="good_list_type_bg_color">#ffe0e0e0</color>
+    <color name="good_type_list_bg_color">#ffeeeeee</color>
 
+    <!-- 购物车 -->
+    <color name="cart_layout_bg">#ff424244</color>
+    <color name="cart_send_btn_bg">#ff62d879</color>
 
 
     <color name="b">#ff7fa87f</color>
     <color name="e">@color/ce</color>
     <color name="f">@color/cf</color>
     <color name="g">#ff62d879</color>
-    <color name="h">#ffff4700</color>
     <color name="k">@color/cl</color>
-    <color name="m">@color/ai</color>
-    <color name="n">@color/aq</color>
     <color name="q">#f0444444</color>
     <color name="r">#33000000</color>
     <color name="s">#ff3190e8</color>
@@ -56,52 +63,6 @@
     <color name="y">#ff3190e8</color>
     <color name="z">#ff237fd3</color>
     <color name="a0">#ff1b9dff</color>
-    <color name="a7">#ff5a595b</color>
-    <color name="a8">#ffd6d7d7</color>
-    <color name="a9">#ffececee</color>
-    <color name="ac">#ff222222</color>
-    <color name="ad">#ff333333</color>
-    <color name="ae">#ff333333</color>
-    <color name="af">#ff3e3e3e</color>
-    <color name="ag">#ff444444</color>
-    <color name="ah">#ff555555</color>
-    <color name="ai">#ff666666</color>
-    <color name="aj">#ff666666</color>
-    <color name="ak">#ff777777</color>
-    <color name="al">#ff888888</color>
-    <color name="am">#ff999999</color>
-    <color name="an">#ff999999</color>
-    <color name="ao">#ff9a9a9a</color>
-    <color name="ap">#ffaaaaaa</color>
-    <color name="aq">#ffbbbbbb</color>
-    <color name="ar">#ffcccccc</color>
-    <color name="as">#ffdddddd</color>
-    <color name="at">#ffd2d2d2</color>
-    <color name="au">#ffdcdcdc</color>
-    <color name="av">#ffdddddd</color>
-    <color name="aw">#ffeeeeee</color>
-    <color name="ax">#ffececec</color>
-    <color name="ay">#fff2f2f2</color>
-    <color name="az">#fff3f3f3</color>
-    <color name="b0">#fff5f5f5</color>
-    <color name="b1">#fff6f6f6</color>
-    <color name="b2">#fff7f7f7</color>
-    <color name="b3">#fff8f8f8</color>
-    <color name="b4">#fffafafa</color>
-    <color name="b5">#99efeff4</color>
-    <color name="b6">#ffffffff</color>
-    <color name="b7">#ffaaaaaa</color>
-    <color name="b8">#ffaaaaaa</color>
-    <color name="b9">#ffffffff</color>
-    <color name="b_">#00000000</color>
-    <color name="ba">#ffdddddd</color>
-    <color name="bc">#14000000</color>
-    <color name="bd">#44000000</color>
-    <color name="be">#0a000000</color>
-    <color name="bf">#0f000000</color>
-    <color name="bg">#1affffff</color>
-    <color name="bh">#2effffff</color>
-    <color name="bi">#ff323232</color>
     <color name="bj">#ffff6e6e</color>
     <color name="bk">#ffd50000</color>
     <color name="bl">#80bebebe</color>

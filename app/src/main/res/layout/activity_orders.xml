@@ -6,26 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".activity.OrdersActivity">
 
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        style="@style/TitleBarStyle">
+
+        <ImageButton
+            android:id="@+id/ib_search"
+            android:layout_width="@dimen/title_height_size"
+            android:layout_height="@dimen/title_height_size"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_search_white" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TitleTextStyle"
+            android:layout_centerInParent="true"
+            android:text="@string/order_title" />
+    </RelativeLayout>
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        app:tabBackground="@color/transparent"
-        app:tabIndicatorColor="@color/transparent"
-        app:tabIndicatorHeight="0dp"
+        android:layout_below="@+id/rl_title"
+        app:tabBackground="@color/white"
+        app:tabIndicatorColor="@color/blue_color"
+        app:tabIndicatorHeight="3dp"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/black_90"
         app:tabTextAppearance="@style/TabTextAppearance"
         app:tabTextColor="@color/black_40" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/live_viewpager"
+        android:id="@+id/vp_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/tab_layout" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_order"
+        android:id="@+id/fab_menu"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"

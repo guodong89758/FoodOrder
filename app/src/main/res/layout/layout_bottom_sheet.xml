@@ -1,28 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#eeeeee"
-    android:layout_height="wrap_content">
-    <RelativeLayout android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="#fff"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <TextView android:text="购物车"
-            android:textSize="18sp"
-            android:textColor="#000"
+        android:layout_height="50dp"
+        android:background="#fff"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <View
+            android:id="@+id/tip_view"
+            android:layout_width="5dp"
+            android:layout_height="15dp"
             android:layout_centerVertical="true"
+            android:background="@color/blue_color" />
+
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView android:text="清空"
-            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tip_view"
+            android:text="@string/cart_title"
+            android:textColor="@color/black_60"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/clear"
-            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_cart_clear"
+            android:drawablePadding="5dp"
+            android:text="@string/cart_clear"
+            android:textColor="@color/black_60"
+            android:textSize="12dp" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_10" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/selectRecyclerView"
         android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.foodorder.adapter;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,12 +49,13 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
+        private View sign_view;
         TextView tvCount, type;
         private GoodType item;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            sign_view = itemView.findViewById(R.id.sign_view);
             tvCount = (TextView) itemView.findViewById(R.id.tvCount);
             type = (TextView) itemView.findViewById(R.id.type);
             itemView.setOnClickListener(this);
@@ -77,8 +79,14 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
             }
             if (item.getPosition() == selectTypeId) {
                 itemView.setBackgroundColor(Color.WHITE);
+                sign_view.setVisibility(View.VISIBLE);
+                type.setTextColor(activity.getResources().getColor(R.color.black_60));
+                type.setTypeface(Typeface.DEFAULT_BOLD);
             } else {
-                itemView.setBackgroundColor(Color.TRANSPARENT);
+                itemView.setBackgroundColor(activity.getResources().getColor(R.color.good_type_list_bg_color));
+                sign_view.setVisibility(View.GONE);
+                type.setTextColor(activity.getResources().getColor(R.color.black_50));
+                type.setTypeface(Typeface.DEFAULT);
             }
 
         }
