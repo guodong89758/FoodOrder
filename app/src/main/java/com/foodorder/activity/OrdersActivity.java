@@ -10,8 +10,8 @@ import android.widget.ImageButton;
 import com.foodorder.R;
 import com.foodorder.adapter.OrderAdapter;
 import com.foodorder.base.BaseActivity;
-import com.foodorder.fragment.EatinFragment;
-import com.foodorder.fragment.PackFragment;
+import com.foodorder.fragment.EatinOrderFragment;
+import com.foodorder.fragment.PackOrderFragment;
 import com.foodorder.runtime.ActivityManager;
 import com.foodorder.util.SmoothSwitchScreenUtil;
 import com.foodorder.util.ToastUtil;
@@ -50,8 +50,8 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
     @Override
     public void initData() {
         orderAdapter = new OrderAdapter(getSupportFragmentManager());
-        orderAdapter.addFragment(new EatinFragment(), getString(R.string.order_tab_1));
-        orderAdapter.addFragment(new PackFragment(), getString(R.string.order_tab_2));
+        orderAdapter.addFragment(new EatinOrderFragment(), getString(R.string.order_tab_1));
+        orderAdapter.addFragment(new PackOrderFragment(), getString(R.string.order_tab_2));
         vp_order.setAdapter(orderAdapter);
         vp_order.setCurrentItem(0);
         tab_layout.setupWithViewPager(vp_order);

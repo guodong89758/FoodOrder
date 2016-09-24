@@ -109,11 +109,13 @@ public class GoodListActivity extends BaseActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Good item = goodList.get(firstVisibleItem);
-                if (typeAdapter != null && typeAdapter.selectTypeId != item.getPosition()) {
-                    typeAdapter.selectTypeId = item.getPosition();
-                    typeAdapter.notifyDataSetChanged();
-                    rvType.smoothScrollToPosition(getSelectedGroupPosition(item.getPosition()));
+                if (goodList != null && goodList.size() > 0) {
+                    Good item = goodList.get(firstVisibleItem);
+                    if (typeAdapter != null && typeAdapter.selectTypeId != item.getPosition()) {
+                        typeAdapter.selectTypeId = item.getPosition();
+                        typeAdapter.notifyDataSetChanged();
+                        rvType.smoothScrollToPosition(getSelectedGroupPosition(item.getPosition()));
+                    }
                 }
             }
         });

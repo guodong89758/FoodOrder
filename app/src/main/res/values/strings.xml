@@ -29,6 +29,11 @@
     <string name="cart_title">购物车</string>
     <string name="cart_clear">清空</string>
 
+    <!-- order -->
+    <string name="order_taihao_label">台号:</string>
+    <string name="order_person_num_label">人数:</string>
+    <string name="order_num_label">订单号:</string>
+
 
     <!-- error -->
     <string name="error_http_request">网络不给力</string>
