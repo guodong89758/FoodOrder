@@ -94,6 +94,7 @@ public class AppInitParse {
                             }
 
                             Good good = new Good();
+                            good.setSearch_num(String.valueOf(i) + String.valueOf(j));
                             good.setId_category(id_category);
                             good.setFr_category_name(fr_category_name);
                             good.setZh_category_name(zh_category_name);

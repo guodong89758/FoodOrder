@@ -64,6 +64,11 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_search:
+                if (vp_order.getCurrentItem() == 0) {
+                    startActivity(new Intent(this, OrderEatinSearchActivity.class));
+                } else {
+                    startActivity(new Intent(this, OrderPackSearchActivity.class));
+                }
                 break;
             case R.id.fab_menu:
                 startActivity(new Intent(OrdersActivity.this, GoodListActivity.class));

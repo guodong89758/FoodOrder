@@ -2,6 +2,7 @@ package com.foodorder.activity;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -269,6 +270,7 @@ public class GoodListActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.ib_search:
+                startActivity(new Intent(this, GoodSearchActivity.class));
                 break;
             case R.id.bottom:
                 showBottomSheet();

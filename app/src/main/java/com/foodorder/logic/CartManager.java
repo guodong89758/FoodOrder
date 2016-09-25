@@ -13,6 +13,8 @@ public class CartManager {
 
     public SparseArray<Good> cartList;
 
+    public boolean isPack = false; // 是否打包
+
     private CartManager() {
         cartList = new SparseArray<>();
     }
@@ -36,7 +38,7 @@ public class CartManager {
         cartList.put(key, good);
     }
 
-    public void remove(){
+    public void remove() {
 
     }
 

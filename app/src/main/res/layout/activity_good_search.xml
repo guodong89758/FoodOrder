@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_good_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.foodorder.activity.GoodSearchActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        style="@style/TitleBarStyle">
+
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="@dimen/title_height_size"
+            android:layout_height="@dimen/title_height_size"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_back_white" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TitleTextStyle"
+            android:layout_centerInParent="true"
+            android:text="@string/good_search_title" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/gl_keybord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/good_type_list_bg_color"
+        android:padding="5dp"
+        app:columnCount="4"
+        app:orientation="horizontal"
+        app:rowCount="4">
+
+        <Button
+            android:id="@+id/btn_1"
+            style="@style/KeyBordStyle"
+            android:text="1"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_2"
+            style="@style/KeyBordStyle"
+            android:text="2\nABC"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_3"
+            style="@style/KeyBordStyle"
+            android:text="3\nDEF"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_back"
+            style="@style/KeyBordStyle"
+            android:text="@string/action_back"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_4"
+            style="@style/KeyBordStyle"
+            android:text="4\nGHI"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_5"
+            style="@style/KeyBordStyle"
+            android:text="5\nJKL"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_6"
+            style="@style/KeyBordStyle"
+            android:text="6\nMNO"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_clear"
+            style="@style/KeyBordStyle"
+            android:text="@string/action_clear"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_7"
+            style="@style/KeyBordStyle"
+            android:text="7\nPQRS"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_8"
+            style="@style/KeyBordStyle"
+            android:text="8\nTUV"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_9"
+            style="@style/KeyBordStyle"
+            android:text="9\nWXYZ"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_send"
+            style="@style/KeyBordStyle"
+            android:text="@string/action_send"
+            app:layout_gravity="fill"
+            app:layout_rowSpan="2" />
+
+        <Button
+            android:id="@+id/btn_0"
+            style="@style/KeyBordStyle"
+            android:text="0"
+            app:layout_gravity="fill" />
+
+        <Button
+            android:id="@+id/btn_pack"
+            style="@style/KeyBordStyle"
+            android:background="@drawable/bg_pack_checked_false"
+            android:text="@string/good_check_pack_false"
+            android:textColor="@color/black_60"
+            app:layout_columnSpan="2"
+            app:layout_gravity="fill" />
+    </android.support.v7.widget.GridLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/gl_keybord"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black_10" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_code"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black_10" />
+    </LinearLayout>
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/rv_good"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:layout_above="@+id/ll_code"-->
+    <!--android:layout_below="@+id/rl_title" />-->
+
+</RelativeLayout>

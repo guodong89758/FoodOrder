@@ -11,6 +11,9 @@
     <!-- action -->
     <string name="action_ok">确定</string>
     <string name="action_cancel">取消</string>
+    <string name="action_send">发送</string>
+    <string name="action_back">后退</string>
+    <string name="action_clear">清空</string>
     <string name="prompt">提示</string>
 
     <!-- login -->
@@ -24,6 +27,8 @@
     <!-- goodlist -->
     <string name="good_title">菜单</string>
     <string name="good_check_pack">打包</string>
+    <string name="good_check_pack_false">不打包</string>
+    <string name="good_search_title">便捷点餐</string>
 
     <!-- cart -->
     <string name="cart_title">购物车</string>
