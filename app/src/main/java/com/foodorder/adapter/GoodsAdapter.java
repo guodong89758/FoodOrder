@@ -9,6 +9,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foodorder.R;
@@ -37,7 +38,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
         this.dataList = dataList;
         this.mContext = mContext;
         nf = NumberFormat.getCurrencyInstance();
-        nf.setMaximumFractionDigits(2);
+        nf.setMaximumFractionDigits(3);
         mInflater = LayoutInflater.from(mContext);
     }
 
@@ -95,10 +96,12 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
     }
 
     class ItemViewHolder implements View.OnClickListener {
+        private ImageView img;
         private TextView name, price, tv_code, tvAdd, tv_specification, tvMinus, tvCount;
         private Good item;
 
         public ItemViewHolder(View itemView) {
+            img = (ImageView) itemView.findViewById(R.id.img);
             name = (TextView) itemView.findViewById(R.id.tvName);
             price = (TextView) itemView.findViewById(R.id.tvPrice);
             tv_code = (TextView) itemView.findViewById(R.id.tv_code);
@@ -163,9 +166,9 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                         tvCount.setVisibility(View.VISIBLE);
                     }
                     CartManager.ins().add(item, false);
-                    count++;
-                    item.setCount(count);
-                    tvCount.setText(String.valueOf(count));
+//                    count++;
+//                    item.setCount(count);
+                    tvCount.setText(String.valueOf(item.getCount()));
                     int[] loc = new int[2];
                     v.getLocationInWindow(loc);
                     activity.playAnimation(loc);
@@ -178,10 +181,10 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                         tvMinus.setVisibility(View.GONE);
                         tvCount.setVisibility(View.GONE);
                     }
-                    count--;
-                    item.setCount(count);
+//                    count--;
+//                    item.setCount(count);
                     CartManager.ins().remove(item, false);//activity.getSelectedItemCountById(item.id)
-                    tvCount.setText(String.valueOf(count));
+                    tvCount.setText(String.valueOf(item.getCount()));
 
                 }
                 break;

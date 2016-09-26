@@ -8,15 +8,20 @@ import android.view.View;
 import android.widget.Button;
 
 import com.foodorder.R;
+import com.foodorder.adapter.GoodSearchAdapter;
 import com.foodorder.adapter.KeycodeAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.base.BaseRecyclerAdapter;
+import com.foodorder.contant.EventTag;
 import com.foodorder.db.GoodDao;
 import com.foodorder.db.bean.Good;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventListener;
+import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.ToastUtil;
+import com.foodorder.widget.HorizontalDividerItemDecoration;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -32,9 +37,10 @@ import rx.schedulers.Schedulers;
 public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener {
 
     private GridLayout gl_keybord;
-    private RecyclerView rv_code;
+    private RecyclerView rv_good, rv_code;
     private Button btn_pack;
     private KeycodeAdapter keycodeAdapter;
+    private GoodSearchAdapter goodAdapter;
     private List<Good> codeData;
     private String search_content = "";
 
@@ -48,6 +54,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     public void initView() {
         findViewById(R.id.ib_back).setOnClickListener(this);
         gl_keybord = (GridLayout) findViewById(R.id.gl_keybord);
+        rv_good = (RecyclerView) findViewById(R.id.rv_good);
         rv_code = (RecyclerView) findViewById(R.id.rv_code);
         btn_pack = (Button) findViewById(R.id.btn_pack);
         findViewById(R.id.btn_1).setOnClickListener(this);
@@ -65,6 +72,10 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         findViewById(R.id.btn_0).setOnClickListener(this);
         btn_pack.setOnClickListener(this);
 
+        EventManager.ins().registListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
+
+        rv_good.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rv_good.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(getResources().getColor(R.color.black_10)).size(1).build());
         rv_code.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
@@ -73,6 +84,8 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         if (codeData == null) {
             codeData = new ArrayList<>();
         }
+        goodAdapter = new GoodSearchAdapter(GoodSearchActivity.this, CartManager.ins().cartList);
+        rv_good.setAdapter(goodAdapter);
         if (CartManager.ins().isPack) {
             btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_true);
             btn_pack.setTextColor(getResources().getColor(R.color.white));
@@ -82,6 +95,12 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
             btn_pack.setTextColor(getResources().getColor(R.color.black_50));
             btn_pack.setText(getString(R.string.good_check_pack_false));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventManager.ins().removeListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
     }
 
     @Override
@@ -163,6 +182,19 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         }
     }
 
+    EventListener eventListener = new EventListener() {
+        @Override
+        public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
+            switch (what) {
+                case EventTag.GOOD_SEARCH_LIST_REFRESH:
+                    if (goodAdapter != null) {
+                        goodAdapter.notifyDataSetChanged();
+                    }
+                    break;
+            }
+        }
+    };
+
     private void search() {
         if (TextUtils.isEmpty(search_content)) {
             if (codeData != null && keycodeAdapter != null) {
@@ -183,14 +215,16 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
             public void onCompleted() {
                 if (codeData != null && codeData.size() > 0) {
 //                    if (keycodeAdapter == null) {
-                    keycodeAdapter = new KeycodeAdapter(GoodSearchActivity.this, codeData);
-                    keycodeAdapter.setOnItemClickListener(GoodSearchActivity.this);
-                    rv_code.setAdapter(keycodeAdapter);
+                        keycodeAdapter = new KeycodeAdapter(GoodSearchActivity.this, codeData);
+                        keycodeAdapter.setOnItemClickListener(GoodSearchActivity.this);
+                        rv_code.setAdapter(keycodeAdapter);
 //                    } else {
-//                        keycodeAdapter.notifyItemRangeChanged(0, codeData.size());
+//                        keycodeAdapter.notifyItemRangeChanged(0, codeData.size() - 1);
 //                    }
                 } else {
-                    keycodeAdapter.notifyDataSetChanged();
+                    if (keycodeAdapter != null) {
+                        keycodeAdapter.notifyDataSetChanged();
+                    }
                 }
                 ToastUtil.showToast(codeData.size() + "");
             }
@@ -218,7 +252,21 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     public void onItemClick(View view, int position, long id) {
         Good good = codeData.get(position);
         if (good != null) {
-            ToastUtil.showToast(good.getZh_name());
+            if ((good.getAttributeList() != null && good.getAttributeList().size() > 0) || (good.getFormulaList() != null && good.getFormulaList().size() > 0)) {
+                ToastUtil.showToast("规格");
+            } else {
+                if (CartManager.ins().cartList.get(good.getId().intValue()) != null) {
+                    good.setCount(good.getCount() + 1);
+                    goodAdapter.notifyDataSetChanged();
+                } else {
+                    CartManager.ins().add(good, false);
+                    good.setCount(1);
+                    goodAdapter.notifyItemInserted(CartManager.ins().cartList.size() - 1);
+                    rv_good.smoothScrollToPosition(CartManager.ins().cartList.size() - 1);
+                }
+
+            }
+
         }
     }
 }

@@ -6,4 +6,5 @@ package com.foodorder.contant;
 public class EventTag {
 
     public static final int GOOD_LIST_REFRESH = 0x01;
+    public static final int GOOD_SEARCH_LIST_REFRESH = 0x02;
 }

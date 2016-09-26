@@ -127,7 +127,7 @@ public class GoodListActivity extends BaseActivity {
     @Override
     public void initData() {
         nf = NumberFormat.getCurrencyInstance();
-        nf.setMaximumFractionDigits(2);
+        nf.setMaximumFractionDigits(3);
         mHanlder = new Handler(getMainLooper());
         groupSelect = new SparseIntArray();
         if (goodTypeList == null) {
