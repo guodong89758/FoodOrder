@@ -16,6 +16,7 @@ import com.foodorder.activity.GoodListActivity;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
 import com.foodorder.util.PhoneUtil;
+import com.foodorder.util.ToastUtil;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -29,6 +30,8 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
     private GoodListActivity mContext;
     private NumberFormat nf;
     private LayoutInflater mInflater;
+    private boolean hasAttribute = false;
+    private boolean hasFormula = false;
 
     public GoodsAdapter(List<Good> dataList, GoodListActivity mContext) {
         this.dataList = dataList;
@@ -92,7 +95,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
     }
 
     class ItemViewHolder implements View.OnClickListener {
-        private TextView name, price, tv_code, tvAdd, tvMinus, tvCount;
+        private TextView name, price, tv_code, tvAdd, tv_specification, tvMinus, tvCount;
         private Good item;
 
         public ItemViewHolder(View itemView) {
@@ -102,8 +105,10 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             tvCount = (TextView) itemView.findViewById(R.id.count);
             tvMinus = (TextView) itemView.findViewById(R.id.tvMinus);
             tvAdd = (TextView) itemView.findViewById(R.id.tvAdd);
+            tv_specification = (TextView) itemView.findViewById(R.id.tv_specification);
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
+            tv_specification.setOnClickListener(this);
         }
 
         public void bindData(Good item) {
@@ -126,6 +131,24 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 tvCount.setVisibility(View.VISIBLE);
                 tvMinus.setVisibility(View.VISIBLE);
             }
+            if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+                hasFormula = true;
+            } else {
+                hasFormula = false;
+            }
+            if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+                hasAttribute = true;
+            } else {
+                hasAttribute = false;
+            }
+            if (hasFormula || hasAttribute) {
+                tv_specification.setVisibility(View.VISIBLE);
+                tvAdd.setVisibility(View.GONE);
+            } else {
+                tv_specification.setVisibility(View.GONE);
+                tvAdd.setVisibility(View.VISIBLE);
+            }
+
         }
 
         @Override
@@ -162,6 +185,9 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
 
                 }
                 break;
+                case R.id.tv_specification:
+                    ToastUtil.showToast("规格");
+                    break;
                 default:
                     break;
             }
