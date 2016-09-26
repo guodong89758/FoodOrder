@@ -1,5 +1,6 @@
 package com.foodorder.activity;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -11,13 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -32,11 +29,14 @@ import com.foodorder.adapter.GoodsAdapter;
 import com.foodorder.adapter.SelectAdapter;
 import com.foodorder.adapter.TypeAdapter;
 import com.foodorder.base.BaseActivity;
+import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventListener;
+import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 
@@ -121,6 +121,7 @@ public class GoodListActivity extends BaseActivity {
             }
         });
         imgCart.setVisibility(View.GONE);
+        EventManager.ins().registListener(EventTag.GOOD_LIST_REFRESH, eventListener);
     }
 
     @Override
@@ -168,29 +169,44 @@ public class GoodListActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        CartManager.ins().clear();
+        EventManager.ins().removeListener(EventTag.GOOD_LIST_REFRESH, eventListener);
+    }
+
+    EventListener eventListener = new EventListener() {
+        @Override
+        public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
+            switch (what) {
+                case EventTag.GOOD_LIST_REFRESH:
+                    update((Boolean) dataobj);
+                    break;
+            }
+        }
+    };
+
     public void playAnimation(int[] start_location) {
         ImageView img = new ImageView(this);
         img.setImageResource(R.drawable.button_add);
         setAnim(img, start_location);
     }
 
-    private Animation createAnim(int startX, int startY) {
+    private AnimatorSet createAnim(View v, int startX, int startY) {
         int[] des = new int[2];
         rl_cart.getLocationInWindow(des);
 
-        AnimationSet set = new AnimationSet(false);
         int offset = PhoneUtil.dipToPixel(20, this);
 
-        Animation translationX = new TranslateAnimation(0, des[0] + offset - startX, 0, 0);
-        translationX.setInterpolator(new LinearInterpolator());
-        Animation translationY = new TranslateAnimation(0, 0, 0, des[1] + offset - startY);
-        translationY.setInterpolator(new AccelerateInterpolator());
-        Animation alpha = new AlphaAnimation(1, 0.5f);
-        set.addAnimation(translationX);
-        set.addAnimation(translationY);
-        set.addAnimation(alpha);
+        ObjectAnimator image_transX = ObjectAnimator.ofFloat(v, "translationX", startX, des[0] + offset);
+        image_transX.setInterpolator(new LinearInterpolator());
+        ObjectAnimator image_transY = ObjectAnimator.ofFloat(v, "translationY", startY - offset, des[1]);
+        image_transY.setInterpolator(new AccelerateInterpolator());
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(v, "alpha", 1f, 0.3f);
+        AnimatorSet set = new AnimatorSet();
         set.setDuration(500);
-
+        set.play(image_transX).with(image_transY).with(alpha);
         return set;
     }
 
@@ -221,7 +237,7 @@ public class GoodListActivity extends BaseActivity {
         return animator;
     }
 
-    private void addViewToAnimLayout(final ViewGroup vg, final View view,
+    private void addViewToAnimLayout(final ViewGroup vg, View view,
                                      int[] location) {
 
         int x = location[0];
@@ -236,15 +252,15 @@ public class GoodListActivity extends BaseActivity {
     private void setAnim(final View v, int[] start_location) {
 
         addViewToAnimLayout(anim_mask_layout, v, start_location);
-        Animation set = createAnim(start_location[0], start_location[1]);
-        set.setAnimationListener(new Animation.AnimationListener() {
+        AnimatorSet set = createAnim(v, start_location[0], start_location[1]);
+        set.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
+            public void onAnimationStart(Animator animation) {
 
             }
 
             @Override
-            public void onAnimationEnd(final Animation animation) {
+            public void onAnimationEnd(Animator animation) {
                 mHanlder.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -256,11 +272,41 @@ public class GoodListActivity extends BaseActivity {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
 
             }
         });
-        v.startAnimation(set);
+        set.start();
+//        Animation set = createAnim(v, start_location[0], start_location[1]);
+//        set.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(final Animation animation) {
+//                mHanlder.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        anim_mask_layout.removeView(v);
+//                    }
+//                }, 100);
+//                AnimatorSet animatorSet = createAnimator();
+//                animatorSet.start();
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+//        v.startAnimation(set);
     }
 
     @Override
@@ -286,46 +332,46 @@ public class GoodListActivity extends BaseActivity {
         }
     }
 
-    //添加商品
-    public void add(Good item, boolean refreshGoodList) {
-
-        int groupCount = groupSelect.get(item.getPosition());
-        if (groupCount == 0) {
-            groupSelect.append(item.getPosition(), 1);
-        } else {
-            groupSelect.append(item.getPosition(), ++groupCount);
-        }
-
-        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
-        if (temp == null) {
-            item.setCount(1);
-            CartManager.ins().cartList.append(item.getId().intValue(), item);
-        } else {
-            temp.setCount(temp.getCount() + 1);
-        }
-        update(refreshGoodList);
-    }
-
-    //移除商品
-    public void remove(Good item, boolean refreshGoodList) {
-
-        int groupCount = groupSelect.get(item.getPosition());
-        if (groupCount == 1) {
-            groupSelect.delete(item.getPosition());
-        } else if (groupCount > 1) {
-            groupSelect.append(item.getPosition(), --groupCount);
-        }
-
-        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
-        if (temp != null) {
-            if (temp.getCount() < 2) {
-                CartManager.ins().cartList.remove(item.getId().intValue());
-            } else {
-                item.setCount(item.getCount() - 1);
-            }
-        }
-        update(refreshGoodList);
-    }
+//    //添加商品
+//    public void add(Good item, boolean refreshGoodList) {
+//
+//        int groupCount = groupSelect.get(item.getPosition());
+//        if (groupCount == 0) {
+//            groupSelect.append(item.getPosition(), 1);
+//        } else {
+//            groupSelect.append(item.getPosition(), ++groupCount);
+//        }
+//
+//        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
+//        if (temp == null) {
+//            item.setCount(1);
+//            CartManager.ins().cartList.append(item.getId().intValue(), item);
+//        } else {
+//            temp.setCount(temp.getCount() + 1);
+//        }
+//        update(refreshGoodList);
+//    }
+//
+//    //移除商品
+//    public void remove(Good item, boolean refreshGoodList) {
+//
+//        int groupCount = groupSelect.get(item.getPosition());
+//        if (groupCount == 1) {
+//            groupSelect.delete(item.getPosition());
+//        } else if (groupCount > 1) {
+//            groupSelect.append(item.getPosition(), --groupCount);
+//        }
+//
+//        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
+//        if (temp != null) {
+//            if (temp.getCount() < 2) {
+//                CartManager.ins().cartList.remove(item.getId().intValue());
+//            } else {
+//                item.setCount(item.getCount() - 1);
+//            }
+//        }
+//        update(refreshGoodList);
+//    }
 
     //刷新布局 总价、购买数量等
     private void update(boolean refreshGoodList) {
@@ -366,26 +412,25 @@ public class GoodListActivity extends BaseActivity {
 
     //清空购物车
     public void clearCart() {
-        CartManager.ins().cartList.clear();
-        groupSelect.clear();
+        CartManager.ins().clear();
         update(true);
 
     }
 
-    //根据商品id获取当前商品的采购数量
-    public int getSelectedItemCountById(int id) {
-        Good temp = CartManager.ins().cartList.get(id);
-        if (temp == null) {
-            return 0;
-        }
-        return temp.getCount();
-    }
-
-    //根据类别Id获取属于当前类别的数量
-    public int getSelectedGroupCountByTypeId(int typeId) {
-        return groupSelect.get(typeId);
-    }
-
+//    //根据商品id获取当前商品的采购数量
+//    public int getSelectedItemCountById(int id) {
+//        Good temp = CartManager.ins().cartList.get(id);
+//        if (temp == null) {
+//            return 0;
+//        }
+//        return temp.getCount();
+//    }
+//
+//    //根据类别Id获取属于当前类别的数量
+//    public int getSelectedGroupCountByTypeId(int typeId) {
+//        return groupSelect.get(typeId);
+//    }
+//
     //根据类别id获取分类的Position 用于滚动左侧的类别列表
     public int getSelectedGroupPosition(int typeId) {
         for (int i = 0; i < goodTypeList.size(); i++) {

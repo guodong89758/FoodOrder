@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
 import com.foodorder.db.bean.GoodType;
+import com.foodorder.logic.CartManager;
 import com.foodorder.util.PhoneUtil;
 
 import java.util.List;
@@ -70,7 +71,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
                 type_name = item.getFr_name();
             }
             type.setText(type_name);
-            int count = activity.getSelectedGroupCountByTypeId(item.getPosition());
+            int count = CartManager.ins().getSelectedGroupCountByTypeId(item.getPosition());
             tvCount.setText(String.valueOf(count));
             if (count < 1) {
                 tvCount.setVisibility(View.GONE);

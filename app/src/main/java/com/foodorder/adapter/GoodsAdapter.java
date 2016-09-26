@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
 import com.foodorder.db.bean.Good;
+import com.foodorder.logic.CartManager;
 import com.foodorder.util.PhoneUtil;
 
 import java.text.NumberFormat;
@@ -115,7 +116,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             }
             name.setText(good_name);
             tv_code.setText(item.getReference());
-            item.setCount(mContext.getSelectedItemCountById(item.getId().intValue()));
+            item.setCount(CartManager.ins().getSelectedItemCountById(item.getId().intValue()));
             tvCount.setText(String.valueOf(item.getCount()));
             price.setText(nf.format(item.getPrice()));
             if (item.getCount() < 1) {
@@ -132,13 +133,13 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             GoodListActivity activity = mContext;
             switch (v.getId()) {
                 case R.id.tvAdd: {
-                    int count = activity.getSelectedItemCountById(item.getId().intValue());
+                    int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
                     if (count < 1) {
                         tvMinus.setAnimation(getShowAnimation());
                         tvMinus.setVisibility(View.VISIBLE);
                         tvCount.setVisibility(View.VISIBLE);
                     }
-                    activity.add(item, false);
+                    CartManager.ins().add(item, false);
                     count++;
                     item.setCount(count);
                     tvCount.setText(String.valueOf(count));
@@ -148,7 +149,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 }
                 break;
                 case R.id.tvMinus: {
-                    int count = activity.getSelectedItemCountById(item.getId().intValue());
+                    int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
                     if (count < 2) {
                         tvMinus.setAnimation(getHiddenAnimation());
                         tvMinus.setVisibility(View.GONE);
@@ -156,7 +157,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                     }
                     count--;
                     item.setCount(count);
-                    activity.remove(item, false);//activity.getSelectedItemCountById(item.id)
+                    CartManager.ins().remove(item, false);//activity.getSelectedItemCountById(item.id)
                     tvCount.setText(String.valueOf(count));
 
                 }

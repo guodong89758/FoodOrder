@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
 import com.foodorder.db.bean.Good;
+import com.foodorder.logic.CartManager;
 import com.foodorder.util.PhoneUtil;
 
 import java.text.NumberFormat;
@@ -69,10 +70,10 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tvAdd:
-                    activity.add(item, true);
+                    CartManager.ins().add(item, true);
                     break;
                 case R.id.tvMinus:
-                    activity.remove(item, true);
+                    CartManager.ins().remove(item, true);
                     break;
                 default:
                     break;
