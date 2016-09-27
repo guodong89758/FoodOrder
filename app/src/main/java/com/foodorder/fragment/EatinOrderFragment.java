@@ -1,11 +1,11 @@
 package com.foodorder.fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,12 @@ import com.foodorder.adapter.EatinOrderAdapter;
 import com.foodorder.base.BaseFragment;
 import com.foodorder.db.bean.Order;
 import com.foodorder.runtime.WeakHandler;
+import com.foodorder.util.PhoneUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +28,7 @@ import java.util.List;
 public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout swipe_refresh;
-    private RecyclerView rv_eatin;
+    private SwipeMenuRecyclerView rv_eatin;
     private EatinOrderAdapter orderAdapter;
     private List<Order> orderData;
 
@@ -37,7 +42,9 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_eatin, container, false);
         swipe_refresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swip_refresh);
-        rv_eatin = (RecyclerView) rootView.findViewById(R.id.rv_eatin);
+        rv_eatin = (SwipeMenuRecyclerView) rootView.findViewById(R.id.rv_eatin);
+        rv_eatin.setLongPressDragEnabled(true);
+        rv_eatin.setSwipeMenuCreator(swipeMenuCreator);
 
         swipe_refresh.setColorSchemeResources(R.color.refresh_progress_blue, R.color.refresh_progress_green, R.color.refresh_progress_red, R.color.refresh_progress_yellow);
         swipe_refresh.setOnRefreshListener(this);
@@ -69,4 +76,31 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
             }
         }, 3000);
     }
+
+    /**
+     * 菜单创建器。在Item要创建菜单的时候调用。
+     */
+    private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+        @Override
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+
+            SwipeMenuItem deleteItem = new SwipeMenuItem(getContext())
+                    .setBackgroundColor(getResources().getColor(R.color.colorAccent))
+                    .setText("催单") // 文字。
+                    .setTextColor(Color.WHITE) // 文字颜色。
+                    .setTextSize(16) // 文字大小。
+                    .setWidth(PhoneUtil.dipToPixel(60, getContext()))
+                    .setHeight(PhoneUtil.dipToPixel(60, getContext()));
+            swipeRightMenu.addMenuItem(deleteItem);
+            SwipeMenuItem printItem = new SwipeMenuItem(getContext())
+                    .setBackgroundColor(getResources().getColor(R.color.red_color))
+                    .setText("打印") // 文字。
+                    .setTextColor(Color.WHITE) // 文字颜色。
+                    .setTextSize(16) // 文字大小。
+                    .setWidth(PhoneUtil.dipToPixel(60, getContext()))
+                    .setHeight(PhoneUtil.dipToPixel(60, getContext()));
+            swipeRightMenu.addMenuItem(printItem);
+
+        }
+    };
 }
