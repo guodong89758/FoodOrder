@@ -120,6 +120,7 @@ public class AppInitParse {
                                 attr.setZh_name(zh_attribute);
                                 attr.setFr_name(fr_attribute);
                                 attr.setValue(value);
+                                attr.setMax_choose(max_attributes_choose);
                                 //保存菜品规格信息
                                 RT.ins().getDaoSession().getAttributeDao().insert(attr);
                             }
@@ -166,6 +167,11 @@ public class AppInitParse {
                                         formulaBean.setZh_name(formula_item_zh_name);
                                         formulaBean.setFr_name(formula_item_fr_name);
                                         formulaBean.setImage_url(formula_item_image_url);
+                                        if (n == 0) {
+                                            formulaBean.setShow_title(true);
+                                        } else {
+                                            formulaBean.setShow_title(false);
+                                        }
 
                                         //保存套餐菜品信息
                                         RT.ins().getDaoSession().getFormulaDao().insert(formulaBean);

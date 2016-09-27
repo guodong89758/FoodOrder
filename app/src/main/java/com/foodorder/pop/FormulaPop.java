@@ -15,26 +15,28 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
-import com.foodorder.adapter.AttributeAdapter;
+import com.foodorder.adapter.FormulaAdapter;
+import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.PhoneUtil;
 
 /**
  * Created by guodong on 2016/5/31 12:05.
  */
-public class AttributePop extends PopupWindow implements View.OnClickListener {
+public class FormulaPop extends PopupWindow implements View.OnClickListener {
 
     private Context mContext;
-    private TextView tv_name, tv_desc;
+    private TextView tv_name;
     private ImageButton ib_close;
     private Button btn_ok;
-    private ListView lv_attr;
-    private AttributeAdapter attrAdapter;
+    private ListView lv_formula;
+    private FormulaAdapter formulaAdapter;
     private Good good;
 
-    public AttributePop(Context context, Good good) {
+    public FormulaPop(Context context, Good good) {
         this.mContext = context;
         this.good = good;
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -43,7 +45,7 @@ public class AttributePop extends PopupWindow implements View.OnClickListener {
         setOutsideTouchable(true);
         setBackgroundDrawable(new ColorDrawable());
         setAnimationStyle(R.style.popupwindow_anim_style);
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_attribute_view, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_formula_view, null);
         setContentView(view);
         initView(view);
         initData();
@@ -51,10 +53,9 @@ public class AttributePop extends PopupWindow implements View.OnClickListener {
 
     private void initView(View view) {
         tv_name = (TextView) view.findViewById(R.id.tv_name);
-        tv_desc = (TextView) view.findViewById(R.id.tv_desc);
         ib_close = (ImageButton) view.findViewById(R.id.ib_close);
         btn_ok = (Button) view.findViewById(R.id.btn_ok);
-        lv_attr = (ListView) view.findViewById(R.id.lv_attr);
+        lv_formula = (ListView) view.findViewById(R.id.lv_formula);
 
         ib_close.setOnClickListener(this);
         btn_ok.setOnClickListener(this);
@@ -71,10 +72,9 @@ public class AttributePop extends PopupWindow implements View.OnClickListener {
             good_name = good.getFr_name();
         }
         tv_name.setText(good_name);
-        tv_desc.setText(mContext.getResources().getString(R.string.formula_max_count_desc, good.getMax_attributes_choose()));
-        attrAdapter = new AttributeAdapter();
-        attrAdapter.setData(good.getAttributeList());
-        lv_attr.setAdapter(attrAdapter);
+        formulaAdapter = new FormulaAdapter();
+        formulaAdapter.setData(good.getFormulaList());
+        lv_formula.setAdapter(formulaAdapter);
     }
 
     @Override
@@ -84,7 +84,11 @@ public class AttributePop extends PopupWindow implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.btn_ok:
-                CartManager.ins().add(good, true);
+                if (good != null && good.getAttributeList() != null && good.getAttributeList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, good);
+                } else {
+                    CartManager.ins().add(good, true);
+                }
                 dismiss();
                 break;
         }

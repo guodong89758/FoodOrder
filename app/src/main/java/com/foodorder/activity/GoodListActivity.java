@@ -34,6 +34,8 @@ import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
+import com.foodorder.pop.AttributePop;
+import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
@@ -50,6 +52,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
+import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 
 
 public class GoodListActivity extends BaseActivity {
@@ -122,6 +126,8 @@ public class GoodListActivity extends BaseActivity {
         });
         imgCart.setVisibility(View.GONE);
         EventManager.ins().registListener(EventTag.GOOD_LIST_REFRESH, eventListener);
+        EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
+        EventManager.ins().registListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
     }
 
     @Override
@@ -174,6 +180,8 @@ public class GoodListActivity extends BaseActivity {
         super.onDestroy();
         CartManager.ins().clear();
         EventManager.ins().removeListener(EventTag.GOOD_LIST_REFRESH, eventListener);
+        EventManager.ins().removeListener(POPUP_FORMULA_SHOW, eventListener);
+        EventManager.ins().removeListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
     }
 
     EventListener eventListener = new EventListener() {
@@ -182,6 +190,14 @@ public class GoodListActivity extends BaseActivity {
             switch (what) {
                 case EventTag.GOOD_LIST_REFRESH:
                     update((Boolean) dataobj);
+                    break;
+                case EventTag.POPUP_FORMULA_SHOW:
+                    FormulaPop formulaPop = new FormulaPop(GoodListActivity.this, (Good) dataobj);
+                    formulaPop.showPopup();
+                    break;
+                case EventTag.POPUP_ATTRIBUTE_SHOW:
+                    AttributePop attrPop = new AttributePop(GoodListActivity.this, (Good) dataobj);
+                    attrPop.showPopup();
                     break;
             }
         }
@@ -417,7 +433,7 @@ public class GoodListActivity extends BaseActivity {
 
     }
 
-//    //根据商品id获取当前商品的采购数量
+    //    //根据商品id获取当前商品的采购数量
 //    public int getSelectedItemCountById(int id) {
 //        Good temp = CartManager.ins().cartList.get(id);
 //        if (temp == null) {

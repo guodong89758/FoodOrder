@@ -39,6 +39,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
         public final static Property Zh_name = new Property(9, String.class, "zh_name", false, "ZH_NAME");
         public final static Property Fr_name = new Property(10, String.class, "fr_name", false, "FR_NAME");
         public final static Property Image_url = new Property(11, String.class, "image_url", false, "IMAGE_URL");
+        public final static Property Show_title = new Property(12, boolean.class, "show_title", false, "SHOW_TITLE");
     }
 
     private Query<Formula> good_FormulaListQuery;
@@ -66,7 +67,8 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
                 "\"POSITION\" INTEGER NOT NULL ," + // 8: position
                 "\"ZH_NAME\" TEXT," + // 9: zh_name
                 "\"FR_NAME\" TEXT," + // 10: fr_name
-                "\"IMAGE_URL\" TEXT);"); // 11: image_url
+                "\"IMAGE_URL\" TEXT," + // 11: image_url
+                "\"SHOW_TITLE\" INTEGER NOT NULL );"); // 12: show_title
     }
 
     /** Drops the underlying database table. */
@@ -130,6 +132,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
         if (image_url != null) {
             stmt.bindString(12, image_url);
         }
+        stmt.bindLong(13, entity.getShow_title() ? 1L: 0L);
     }
 
     @Override
@@ -187,6 +190,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
         if (image_url != null) {
             stmt.bindString(12, image_url);
         }
+        stmt.bindLong(13, entity.getShow_title() ? 1L: 0L);
     }
 
     @Override
@@ -208,7 +212,8 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
             cursor.getInt(offset + 8), // position
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // zh_name
             cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // fr_name
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // image_url
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // image_url
+            cursor.getShort(offset + 12) != 0 // show_title
         );
         return entity;
     }
@@ -227,6 +232,7 @@ public class FormulaDao extends AbstractDao<Formula, Long> {
         entity.setZh_name(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
         entity.setFr_name(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
         entity.setImage_url(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setShow_title(cursor.getShort(offset + 12) != 0);
      }
     
     @Override

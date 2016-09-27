@@ -14,10 +14,11 @@ import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
+import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
+import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.PhoneUtil;
-import com.foodorder.util.ToastUtil;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -187,7 +188,14 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 }
                 break;
                 case R.id.tv_specification:
-                    ToastUtil.showToast("规格");
+                    if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+                        EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, item);
+                    } else {
+                        if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+                            EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, item);
+                        }
+                    }
+
                     break;
                 default:
                     break;

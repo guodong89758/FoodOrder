@@ -33,6 +33,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
         public final static Property Zh_name = new Property(3, String.class, "zh_name", false, "ZH_NAME");
         public final static Property Fr_name = new Property(4, String.class, "fr_name", false, "FR_NAME");
         public final static Property Value = new Property(5, String.class, "value", false, "VALUE");
+        public final static Property Max_choose = new Property(6, int.class, "max_choose", false, "MAX_CHOOSE");
     }
 
     private Query<Attribute> good_AttributeListQuery;
@@ -54,7 +55,8 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
                 "\"ID_PRODUCT_ATTRIBUTE\" TEXT," + // 2: id_product_attribute
                 "\"ZH_NAME\" TEXT," + // 3: zh_name
                 "\"FR_NAME\" TEXT," + // 4: fr_name
-                "\"VALUE\" TEXT);"); // 5: value
+                "\"VALUE\" TEXT," + // 5: value
+                "\"MAX_CHOOSE\" INTEGER NOT NULL );"); // 6: max_choose
     }
 
     /** Drops the underlying database table. */
@@ -96,6 +98,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
         if (value != null) {
             stmt.bindString(6, value);
         }
+        stmt.bindLong(7, entity.getMax_choose());
     }
 
     @Override
@@ -131,6 +134,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
         if (value != null) {
             stmt.bindString(6, value);
         }
+        stmt.bindLong(7, entity.getMax_choose());
     }
 
     @Override
@@ -146,7 +150,8 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // id_product_attribute
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // zh_name
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // fr_name
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // value
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // value
+            cursor.getInt(offset + 6) // max_choose
         );
         return entity;
     }
@@ -159,6 +164,7 @@ public class AttributeDao extends AbstractDao<Attribute, Long> {
         entity.setZh_name(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setFr_name(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setValue(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setMax_choose(cursor.getInt(offset + 6));
      }
     
     @Override

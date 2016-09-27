@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.foodorder.cell.FormulaCell xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/good_list_type_bg_color">
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:singleLine="true"
+            android:text="标题"
+            android:textColor="@color/black_80"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_max_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:text="最多选择2个"
+            android:textColor="@color/black_60"
+            android:textSize="12dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="80dp"
+            android:singleLine="true"
+            android:text="商品名"
+            android:textColor="@color/black_80"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/tv_minus"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/button_minus"
+                android:clickable="true"
+                android:gravity="center"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:minWidth="20dp"
+                android:text="0"
+                android:textColor="@color/black_80"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/tv_add"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/button_add"
+                android:clickable="true"
+                android:gravity="center"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</com.foodorder.cell.FormulaCell>

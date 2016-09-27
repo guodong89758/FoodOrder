@@ -5,6 +5,10 @@ package com.foodorder.contant;
  */
 public class EventTag {
 
-    public static final int GOOD_LIST_REFRESH = 0x01;
-    public static final int GOOD_SEARCH_LIST_REFRESH = 0x02;
+    public static final int GOOD_LIST_REFRESH = 0x01; //菜单列表刷新
+    public static final int GOOD_SEARCH_LIST_REFRESH = 0x02; //搜索列表刷新
+    public static final int POPUP_FORMULA_SHOW = 0x03; //显示套餐够弹窗
+    public static final int POPUP_ATTRIBUTE_SHOW = 0x04; //显示规格弹窗
+
+
 }
