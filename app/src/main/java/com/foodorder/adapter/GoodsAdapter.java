@@ -166,8 +166,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                         tvCount.setVisibility(View.VISIBLE);
                     }
                     CartManager.ins().add(item, false);
-//                    count++;
-//                    item.setCount(count);
+                    count++;
                     tvCount.setText(String.valueOf(item.getCount()));
                     int[] loc = new int[2];
                     v.getLocationInWindow(loc);
@@ -181,8 +180,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                         tvMinus.setVisibility(View.GONE);
                         tvCount.setVisibility(View.GONE);
                     }
-//                    count--;
-//                    item.setCount(count);
+                    count--;
                     CartManager.ins().remove(item, false);//activity.getSelectedItemCountById(item.id)
                     tvCount.setText(String.valueOf(item.getCount()));
 

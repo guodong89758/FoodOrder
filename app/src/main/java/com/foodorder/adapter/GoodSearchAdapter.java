@@ -2,7 +2,6 @@ package com.foodorder.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
 
+import java.util.List;
+
 
 /**
  * Created by guodong on 16/9/25.
@@ -30,10 +31,10 @@ import com.foodorder.util.ToastUtil;
 public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.GoodViewHolder> {
 
     private Context mContext;
-    SparseArray<Good> mDataList;
+    List<Good> mDataList;
     private Good item;
 
-    public GoodSearchAdapter(Context mContext, SparseArray<Good> mDataList) {
+    public GoodSearchAdapter(Context mContext, List<Good> mDataList) {
         this.mContext = mContext;
         this.mDataList = mDataList;
     }
@@ -53,7 +54,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
 
     @Override
     public void onBindViewHolder(GoodViewHolder holder, int position) {
-        item = mDataList.valueAt(position);
+        item = mDataList.get(position);
         if (item == null) {
             return;
         }
@@ -133,10 +134,9 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
                         tvMinus.setVisibility(View.VISIBLE);
                         tvCount.setVisibility(View.VISIBLE);
                     }
-//                count++;
-//                item.setCount(count);
+                    count++;
                     CartManager.ins().add(item, true);
-//                    tvCount.setText(String.valueOf(item.getCount()));
+                    tvCount.setText(String.valueOf(item.getCount()));
                     EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
                 }
                 break;
@@ -147,13 +147,10 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
                         tvMinus.setVisibility(View.GONE);
                         tvCount.setVisibility(View.GONE);
                     }
-//                count--;
-//                item.setCount(count);
+                    count--;
                     CartManager.ins().remove(item, true);
-//                    tvCount.setText(String.valueOf(item.getCount()));
-//                    if (count == 0) {
+                    tvCount.setText(String.valueOf(item.getCount()));
                     EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
-//                    }
                 }
                 break;
                 case R.id.tv_specification:

@@ -7,6 +7,9 @@ import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.runtime.event.EventManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by guodong on 2016/9/19 17:12.
  */
@@ -15,12 +18,14 @@ public class CartManager {
     private volatile static CartManager instance;
 
     public SparseArray<Good> cartList;
+    public List<Good> cartData;
     public SparseIntArray groupSelect;
 
     public boolean isPack = false; // 是否打包
 
     private CartManager() {
         cartList = new SparseArray<>();
+        cartData = new ArrayList<>();
         groupSelect = new SparseIntArray();
     }
 
@@ -37,6 +42,7 @@ public class CartManager {
 
     public void clear() {
         cartList.clear();
+        cartData.clear();
         groupSelect.clear();
     }
 
@@ -50,10 +56,11 @@ public class CartManager {
             groupSelect.append(item.getPosition(), ++groupCount);
         }
 
-        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
+        Good temp = cartList.get(item.getId().intValue());
         if (temp == null) {
             item.setCount(1);
-            CartManager.ins().cartList.append(item.getId().intValue(), item);
+            cartList.append(item.getId().intValue(), item);
+            cartData.add(item);
         } else {
             temp.setCount(temp.getCount() + 1);
         }
@@ -70,10 +77,11 @@ public class CartManager {
             groupSelect.append(item.getPosition(), --groupCount);
         }
 
-        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
+        Good temp = cartList.get(item.getId().intValue());
         if (temp != null) {
             if (temp.getCount() < 2) {
-                CartManager.ins().cartList.remove(item.getId().intValue());
+                cartList.remove(item.getId().intValue());
+                cartData.remove(item);
             } else {
                 item.setCount(item.getCount() - 1);
             }

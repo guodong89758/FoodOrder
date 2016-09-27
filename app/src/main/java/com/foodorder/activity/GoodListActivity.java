@@ -463,7 +463,7 @@ public class GoodListActivity extends BaseActivity {
         rvSelected.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(getResources().getColor(R.color.black_10)).size(1).build());
         TextView clear = (TextView) view.findViewById(R.id.clear);
         clear.setOnClickListener(this);
-        selectAdapter = new SelectAdapter(this, CartManager.ins().cartList);
+        selectAdapter = new SelectAdapter(this, CartManager.ins().cartData);
         rvSelected.setAdapter(selectAdapter);
         return view;
     }

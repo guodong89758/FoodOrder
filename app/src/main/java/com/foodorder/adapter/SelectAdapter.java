@@ -1,7 +1,6 @@
 package com.foodorder.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +13,16 @@ import com.foodorder.logic.CartManager;
 import com.foodorder.util.PhoneUtil;
 
 import java.text.NumberFormat;
+import java.util.List;
 
 
 public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder> {
     private GoodListActivity activity;
-    private SparseArray<Good> dataList;
+    private List<Good> dataList;
     private NumberFormat nf;
     private LayoutInflater mInflater;
 
-    public SelectAdapter(GoodListActivity activity, SparseArray<Good> dataList) {
+    public SelectAdapter(GoodListActivity activity, List<Good> dataList) {
         this.activity = activity;
         this.dataList = dataList;
         nf = NumberFormat.getCurrencyInstance();
@@ -38,7 +38,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Good item = dataList.valueAt(position);
+        Good item = dataList.get(position);
         holder.bindData(item);
     }
 

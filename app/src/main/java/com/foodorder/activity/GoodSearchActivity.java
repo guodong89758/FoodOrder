@@ -84,7 +84,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         if (codeData == null) {
             codeData = new ArrayList<>();
         }
-        goodAdapter = new GoodSearchAdapter(GoodSearchActivity.this, CartManager.ins().cartList);
+        goodAdapter = new GoodSearchAdapter(GoodSearchActivity.this, CartManager.ins().cartData);
         rv_good.setAdapter(goodAdapter);
         if (CartManager.ins().isPack) {
             btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_true);
