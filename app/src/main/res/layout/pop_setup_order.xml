@@ -1,6 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue_color">
+
+        <ImageButton
+            android:id="@+id/ib_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_close_white" />
+
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:singleLine="true"
+            android:text="@string/good_send_setup_title"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/good_taihao_tip"
+            android:textColor="@color/black_80"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/et_num"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bg_search_input_blue"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/black_80"
+            android:textColorHint="@color/black_60"
+            android:textCursorDrawable="@drawable/text_cursor_drawable"
+            android:textSize="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/good_person_tip"
+            android:textColor="@color/black_80"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_minus"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button_minus"
+            android:clickable="true"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bg_search_input_blue"
+            android:gravity="center"
+            android:minWidth="80dp"
+            android:text="0"
+            android:textColor="@color/black_80"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/button_add"
+            android:clickable="true"
+            android:gravity="center"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_view"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_40" />
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/bg_btn_popup_selector"
+        android:clickable="true"
+        android:text="@string/action_ok"
+        android:textColor="@color/black_80"
+        android:textSize="15dp" />
 
 </LinearLayout>

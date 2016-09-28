@@ -34,7 +34,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.GoodListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.OrderInfoActivity"
             android:screenOrientation="portrait" />

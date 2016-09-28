@@ -60,8 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_below="@+id/tab_layout"
-            android:background="@color/black_10"
-            android:visibility="gone" />
+            android:background="@color/black_40"
+            android:visibility="visible" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

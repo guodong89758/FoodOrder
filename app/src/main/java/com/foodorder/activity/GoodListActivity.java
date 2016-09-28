@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.foodorder.R;
@@ -32,10 +31,12 @@ import com.foodorder.base.BaseActivity;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
+import com.foodorder.dialog.NormalDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.pop.FormulaPop;
+import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
@@ -338,10 +339,27 @@ public class GoodListActivity extends BaseActivity {
                 showBottomSheet();
                 break;
             case R.id.clear:
-                clearCart();
+                NormalDialog dialog = new NormalDialog(this);
+                dialog.setTitle(R.string.cart_clear_dialog_title);
+                dialog.setTextDes(getString(R.string.cart_clear_dialog_desc));
+                dialog.setButton1(getString(R.string.action_cancel), new NormalDialog.DialogButtonOnClickListener() {
+                    @Override
+                    public void onClick(View button, NormalDialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setButton2(getString(R.string.action_ok), new NormalDialog.DialogButtonOnClickListener() {
+                    @Override
+                    public void onClick(View button, NormalDialog dialog) {
+                        clearCart();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
                 break;
             case R.id.btn_send:
-                Toast.makeText(GoodListActivity.this, "开始下单", Toast.LENGTH_SHORT).show();
+                OrderSetupPop setupPop = new OrderSetupPop(GoodListActivity.this);
+                setupPop.showPopup();
                 break;
             default:
                 break;

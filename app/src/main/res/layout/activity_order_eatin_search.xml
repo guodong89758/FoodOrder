@@ -10,29 +10,36 @@
         android:id="@+id/rl_title"
         style="@style/TitleBarStyle">
 
-        <ImageButton
-            android:id="@+id/ib_back"
+        <Button
+            android:id="@+id/btn_back"
             android:layout_width="@dimen/title_height_size"
             android:layout_height="@dimen/title_height_size"
+            android:layout_alignParentRight="true"
             android:background="@color/transparent"
-            android:src="@drawable/ic_back_white" />
+            android:text="@string/action_cancel"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
 
         <EditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/ib_search"
-            android:layout_toRightOf="@+id/ib_back"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="48dp"
             android:background="@drawable/bg_search_input"
-            android:drawableLeft="@drawable/ic_search_gray"
+            android:drawableLeft="@drawable/icon_search_gray"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:paddingLeft="5dp"
             android:paddingRight="50dp"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textColor="@color/black_80"
+            android:textColorHint="@color/black_60"
+            android:textCursorDrawable="@drawable/text_cursor_drawable"
+            android:textSize="15dp" />
 
         <ImageButton
             android:id="@+id/ib_clear"
@@ -44,13 +51,6 @@
             android:background="@color/transparent"
             android:src="@drawable/ic_input_clear" />
 
-        <ImageButton
-            android:id="@+id/ib_search"
-            android:layout_width="@dimen/title_height_size"
-            android:layout_height="@dimen/title_height_size"
-            android:layout_alignParentRight="true"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_search_white" />
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

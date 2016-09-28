@@ -30,6 +30,9 @@
     <string name="good_check_pack_false">不打包</string>
     <string name="good_search_title">便捷点餐</string>
     <string name="good_specification">规格</string>
+    <string name="good_send_setup_title">台号与人数</string>
+    <string name="good_taihao_tip">台号:</string>
+    <string name="good_person_tip">人数:</string>
 
     <!-- formula -->
     <string name="formula_max_count_desc">最多选择%d个</string>
@@ -37,11 +40,17 @@
     <!-- cart -->
     <string name="cart_title">购物车</string>
     <string name="cart_clear">清空</string>
+    <string name="cart_clear_dialog_title">清空购物车</string>
+    <string name="cart_clear_dialog_desc">是否确认要清空购物车？</string>
 
     <!-- order -->
+    <string name="order_info_title">订单详情</string>
     <string name="order_taihao_label">台号:</string>
     <string name="order_person_num_label">人数:</string>
     <string name="order_num_label">订单号:</string>
+    <string name="order_action_title">订单操作</string>
+    <string name="order_action_1">催单</string>
+    <string name="order_action_2">打印</string>
 
 
     <!-- error -->

@@ -3,10 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.foodorder.activity.OrderInfoActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        style="@style/TitleBarStyle">
+
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="@dimen/title_height_size"
+            android:layout_height="@dimen/title_height_size"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_back_white" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TitleTextStyle"
+            android:layout_centerInParent="true"
+            android:text="@string/order_info_title" />
+    </RelativeLayout>
 
 </RelativeLayout>
