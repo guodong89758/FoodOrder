@@ -17,6 +17,8 @@ import com.foodorder.db.GoodDao;
 import com.foodorder.db.bean.Good;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
+import com.foodorder.pop.AttributePop;
+import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
@@ -73,6 +75,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         btn_pack.setOnClickListener(this);
 
         EventManager.ins().registListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
+        EventManager.ins().registListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
 
         rv_good.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rv_good.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(getResources().getColor(R.color.black_10)).size(1).build());
@@ -101,6 +104,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     protected void onDestroy() {
         super.onDestroy();
         EventManager.ins().removeListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
+        EventManager.ins().removeListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
     }
 
     @Override
@@ -191,6 +195,10 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                         goodAdapter.notifyDataSetChanged();
                     }
                     break;
+                case EventTag.POPUP_ATTRIBUTE_SHOW:
+                    AttributePop attrPop = new AttributePop(GoodSearchActivity.this, (Good) dataobj);
+                    attrPop.showPopup();
+                    break;
             }
         }
     };
@@ -215,9 +223,9 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
             public void onCompleted() {
                 if (codeData != null && codeData.size() > 0) {
 //                    if (keycodeAdapter == null) {
-                        keycodeAdapter = new KeycodeAdapter(GoodSearchActivity.this, codeData);
-                        keycodeAdapter.setOnItemClickListener(GoodSearchActivity.this);
-                        rv_code.setAdapter(keycodeAdapter);
+                    keycodeAdapter = new KeycodeAdapter(GoodSearchActivity.this, codeData);
+                    keycodeAdapter.setOnItemClickListener(GoodSearchActivity.this);
+                    rv_code.setAdapter(keycodeAdapter);
 //                    } else {
 //                        keycodeAdapter.notifyItemRangeChanged(0, codeData.size() - 1);
 //                    }
@@ -252,21 +260,30 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     public void onItemClick(View view, int position, long id) {
         Good good = codeData.get(position);
         if (good != null) {
-            if ((good.getAttributeList() != null && good.getAttributeList().size() > 0) || (good.getFormulaList() != null && good.getFormulaList().size() > 0)) {
-                ToastUtil.showToast("规格");
+            if ((good.getFormulaList() != null && good.getFormulaList().size() > 0)) {
+                FormulaPop formulaPop = new FormulaPop(GoodSearchActivity.this, good);
+                formulaPop.showPopup();
+            } else if ((good.getAttributeList() != null && good.getAttributeList().size() > 0)) {
+                AttributePop attrPop = new AttributePop(GoodSearchActivity.this, good);
+                attrPop.showPopup();
             } else {
+                CartManager.ins().add(good, true);
                 if (CartManager.ins().cartList.get(good.getId().intValue()) != null) {
-                    good.setCount(good.getCount() + 1);
+//                    good.setCount(good.getCount() + 1);
                     goodAdapter.notifyDataSetChanged();
                 } else {
-                    CartManager.ins().add(good, false);
-                    good.setCount(1);
-                    goodAdapter.notifyItemInserted(CartManager.ins().cartList.size() - 1);
-                    rv_good.smoothScrollToPosition(CartManager.ins().cartList.size() - 1);
+//                    good.setCount(1);
+                    goodAdapter.notifyItemInserted(CartManager.ins().cartData.size() - 1);
+                    rv_good.smoothScrollToPosition(CartManager.ins().cartData.size() - 1);
                 }
 
             }
 
         }
     }
+
+    private void showFormulPopup() {
+
+    }
+
 }

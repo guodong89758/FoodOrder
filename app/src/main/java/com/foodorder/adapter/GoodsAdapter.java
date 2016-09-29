@@ -190,10 +190,8 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 case R.id.tv_specification:
                     if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
                         EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, item);
-                    } else {
-                        if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
-                            EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, item);
-                        }
+                    } else if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+                        EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, item);
                     }
 
                     break;

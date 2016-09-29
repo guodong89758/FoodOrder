@@ -51,6 +51,8 @@
     <string name="order_action_title">订单操作</string>
     <string name="order_action_1">催单</string>
     <string name="order_action_2">打印</string>
+    <string name="order_eatin_search_hint">请输入台号</string>
+    <string name="order_pack_search_hint">请输入订单号</string>
 
 
     <!-- error -->

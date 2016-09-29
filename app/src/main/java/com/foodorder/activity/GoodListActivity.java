@@ -127,8 +127,6 @@ public class GoodListActivity extends BaseActivity {
         });
         imgCart.setVisibility(View.GONE);
         EventManager.ins().registListener(EventTag.GOOD_LIST_REFRESH, eventListener);
-        EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
-        EventManager.ins().registListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
     }
 
     @Override
@@ -177,12 +175,24 @@ public class GoodListActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
+        EventManager.ins().registListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventManager.ins().removeListener(POPUP_FORMULA_SHOW, eventListener);
+        EventManager.ins().removeListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         CartManager.ins().clear();
         EventManager.ins().removeListener(EventTag.GOOD_LIST_REFRESH, eventListener);
-        EventManager.ins().removeListener(POPUP_FORMULA_SHOW, eventListener);
-        EventManager.ins().removeListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
     }
 
     EventListener eventListener = new EventListener() {
@@ -409,11 +419,11 @@ public class GoodListActivity extends BaseActivity {
 
     //刷新布局 总价、购买数量等
     private void update(boolean refreshGoodList) {
-        int size = CartManager.ins().cartList.size();
+        int size = CartManager.ins().cartData.size();
         int count = 0;
         double cost = 0;
         for (int i = 0; i < size; i++) {
-            Good item = CartManager.ins().cartList.valueAt(i);
+            Good item = CartManager.ins().cartData.get(i);
             count += item.getCount();
             cost += item.getCount() * item.getPrice();
         }
@@ -439,7 +449,7 @@ public class GoodListActivity extends BaseActivity {
         if (typeAdapter != null) {
             typeAdapter.notifyDataSetChanged();
         }
-        if (bottomSheetLayout.isSheetShowing() && CartManager.ins().cartList.size() < 1) {
+        if (bottomSheetLayout.isSheetShowing() && CartManager.ins().cartData.size() < 1) {
             bottomSheetLayout.dismissSheet();
         }
     }
@@ -509,7 +519,7 @@ public class GoodListActivity extends BaseActivity {
         if (bottomSheetLayout.isSheetShowing()) {
             bottomSheetLayout.dismissSheet();
         } else {
-            if (CartManager.ins().cartList.size() != 0) {
+            if (CartManager.ins().cartData.size() != 0) {
                 bottomSheetLayout.showWithSheetView(bottomSheet);
             }
         }
