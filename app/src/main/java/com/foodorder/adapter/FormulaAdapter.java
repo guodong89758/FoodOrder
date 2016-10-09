@@ -6,12 +6,15 @@ import android.view.ViewGroup;
 
 import com.foodorder.R;
 import com.foodorder.cell.FormulaCell;
+import com.foodorder.db.bean.Good;
 
 /**
  * Created by guodong on 16/9/27.
  */
 
 public class FormulaAdapter extends FOAdapter {
+
+    private Good good;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -20,8 +23,13 @@ public class FormulaAdapter extends FOAdapter {
         }
         if (convertView instanceof FormulaCell) {
             FormulaCell cell = (FormulaCell) convertView;
+            cell.setGood(good);
             cell.onGetData(getItem(position), position, this);
         }
         return convertView;
+    }
+
+    public void setGood(Good good) {
+        this.good = good;
     }
 }

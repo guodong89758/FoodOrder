@@ -17,6 +17,8 @@ import android.view.animation.CycleInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AbsListView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -69,6 +71,7 @@ public class GoodListActivity extends BaseActivity {
     private BottomSheetLayout bottomSheetLayout;
     private View bottomSheet;
     private StickyListHeadersListView listView;
+    private CheckBox cb_pack;
 
     private List<GoodType> goodTypeList;
     private List<Good> goodList;
@@ -100,6 +103,7 @@ public class GoodListActivity extends BaseActivity {
         anim_mask_layout = (RelativeLayout) findViewById(R.id.containerLayout);
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomSheetLayout);
         listView = (StickyListHeadersListView) findViewById(R.id.itemListView);
+        cb_pack = (CheckBox) findViewById(R.id.cb_pack);
 
         ib_back.setOnClickListener(this);
         ib_search.setOnClickListener(this);
@@ -127,6 +131,17 @@ public class GoodListActivity extends BaseActivity {
         });
         imgCart.setVisibility(View.GONE);
         EventManager.ins().registListener(EventTag.GOOD_LIST_REFRESH, eventListener);
+
+        cb_pack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    CartManager.ins().isPack = true;
+                } else {
+                    CartManager.ins().isPack = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -179,6 +194,11 @@ public class GoodListActivity extends BaseActivity {
         super.onResume();
         EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
         EventManager.ins().registListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
+        if (CartManager.ins().isPack) {
+            cb_pack.setChecked(true);
+        } else {
+            cb_pack.setChecked(false);
+        }
     }
 
     @Override
@@ -419,11 +439,11 @@ public class GoodListActivity extends BaseActivity {
 
     //刷新布局 总价、购买数量等
     private void update(boolean refreshGoodList) {
-        int size = CartManager.ins().cartData.size();
+        int size = CartManager.ins().cartList.size();
         int count = 0;
         double cost = 0;
         for (int i = 0; i < size; i++) {
-            Good item = CartManager.ins().cartData.get(i);
+            Good item = CartManager.ins().cartList.valueAt(i);
             count += item.getCount();
             cost += item.getCount() * item.getPrice();
         }
@@ -449,7 +469,7 @@ public class GoodListActivity extends BaseActivity {
         if (typeAdapter != null) {
             typeAdapter.notifyDataSetChanged();
         }
-        if (bottomSheetLayout.isSheetShowing() && CartManager.ins().cartData.size() < 1) {
+        if (bottomSheetLayout.isSheetShowing() && CartManager.ins().cartList.size() < 1) {
             bottomSheetLayout.dismissSheet();
         }
     }
@@ -519,7 +539,7 @@ public class GoodListActivity extends BaseActivity {
         if (bottomSheetLayout.isSheetShowing()) {
             bottomSheetLayout.dismissSheet();
         } else {
-            if (CartManager.ins().cartData.size() != 0) {
+            if (CartManager.ins().cartList.size() != 0) {
                 bottomSheetLayout.showWithSheetView(bottomSheet);
             }
         }

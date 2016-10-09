@@ -39,6 +39,8 @@ public class Formula {
     private boolean show_title;
     @Transient
     private int count;
+    @Transient
+    private int sel_count;
 
 
     @Generated(hash = 1123931662)
@@ -178,6 +180,11 @@ public class Formula {
         this.show_title = show_title;
     }
 
+    public int getSel_count() {
+        return sel_count;
+    }
 
-
+    public void setSel_count(int sel_count) {
+        this.sel_count = sel_count;
+    }
 }

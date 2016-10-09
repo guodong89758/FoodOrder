@@ -10,6 +10,7 @@ import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
+import com.foodorder.runtime.RT;
 import com.foodorder.util.PhoneUtil;
 
 import java.text.NumberFormat;
@@ -26,7 +27,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
         this.activity = activity;
         this.dataList = dataList;
         nf = NumberFormat.getCurrencyInstance();
-        nf.setMaximumFractionDigits(2);
+        nf.setMaximumFractionDigits(RT.PRICE_NUM);
         mInflater = LayoutInflater.from(activity);
     }
 
@@ -70,10 +71,12 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tvAdd:
-                    CartManager.ins().add(item, true);
+//                    CartManager.ins().add(item, true);
+                    CartManager.ins().cartAdd(item, true);
                     break;
                 case R.id.tvMinus:
-                    CartManager.ins().remove(item, true);
+//                    CartManager.ins().remove(item, true);
+                    CartManager.ins().cartRemove(item, true);
                     break;
                 default:
                     break;

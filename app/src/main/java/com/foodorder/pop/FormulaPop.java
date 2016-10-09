@@ -73,6 +73,7 @@ public class FormulaPop extends PopupWindow implements View.OnClickListener {
         }
         tv_name.setText(good_name);
         formulaAdapter = new FormulaAdapter();
+        formulaAdapter.setGood(good);
         formulaAdapter.setData(good.getFormulaList());
         lv_formula.setAdapter(formulaAdapter);
     }

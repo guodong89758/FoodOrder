@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/order_taihao_label"
+            android:text="@string/order_person_num_label"
             android:textColor="@color/black_80"
             android:textSize="15dp" />
 

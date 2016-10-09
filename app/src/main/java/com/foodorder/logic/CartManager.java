@@ -44,6 +44,7 @@ public class CartManager {
         cartList.clear();
         cartData.clear();
         groupSelect.clear();
+        isPack = false;
     }
 
     //添加商品
@@ -60,11 +61,21 @@ public class CartManager {
         if (temp == null) {
             item.setCount(1);
             cartList.append(item.getId().intValue(), item);
-            cartData.add(item);
+            if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                cartData.add(item.clone());
+            } else {
+                cartData.add(item);
+            }
         } else {
+            if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                Good newGood = item.clone();
+                newGood.setCount(1);
+                cartData.add(newGood);
+            }
             temp.setCount(temp.getCount() + 1);
         }
         EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
     }
 
     //移除商品
@@ -83,10 +94,68 @@ public class CartManager {
                 cartList.remove(item.getId().intValue());
                 cartData.remove(item);
             } else {
-                item.setCount(item.getCount() - 1);
+                if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                    cartData.remove(item);
+                }
+                temp.setCount(temp.getCount() - 1);
             }
         }
         EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
+    }
+
+    //添加商品
+    public void cartAdd(Good item, boolean refreshGoodList) {
+
+        int groupCount = groupSelect.get(item.getPosition());
+        if (groupCount == 0) {
+            groupSelect.append(item.getPosition(), 1);
+        } else {
+            groupSelect.append(item.getPosition(), ++groupCount);
+        }
+
+        Good temp = cartList.get(item.getId().intValue());
+        if (temp == null) {
+            item.setCount(1);
+            cartList.append(item.getId().intValue(), item);
+            cartData.add(item);
+        } else {
+            if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                item.setCount(item.getCount() + 1);
+            }
+            temp.setCount(temp.getCount() + 1);
+        }
+        EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
+    }
+
+    //移除商品
+    public void cartRemove(Good item, boolean refreshGoodList) {
+
+        int groupCount = groupSelect.get(item.getPosition());
+        if (groupCount == 1) {
+            groupSelect.delete(item.getPosition());
+        } else if (groupCount > 1) {
+            groupSelect.append(item.getPosition(), --groupCount);
+        }
+
+        Good temp = cartList.get(item.getId().intValue());
+        if (temp != null) {
+            if (temp.getCount() < 2) {
+                cartList.remove(item.getId().intValue());
+                cartData.remove(item);
+            } else {
+                if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                    if (item.getCount() < 2) {
+                        cartData.remove(item);
+                    }
+                    item.setCount(item.getCount() - 1);
+                }
+                temp.setCount(temp.getCount() - 1);
+            }
+        }
+        EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
     }
 
     //根据商品id获取当前商品的采购数量

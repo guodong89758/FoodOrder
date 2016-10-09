@@ -20,7 +20,7 @@ import java.util.List;
  * Created by guodong on 2016/9/19 16:22.
  */
 @Entity
-public class Good {
+public class Good implements Cloneable {
 
     @Id(autoincrement = true)
     private Long id;
@@ -351,6 +351,17 @@ public class Good {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getGoodDao() : null;
+    }
+
+    @Override
+    public Good clone() {
+        Good o = null;
+        try {
+            o = (Good) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 
 }

@@ -68,6 +68,7 @@
             android:clickable="true"
             android:gravity="center"
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <TextView

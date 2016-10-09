@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.db.bean.Formula;
+import com.foodorder.db.bean.Good;
 import com.foodorder.util.PhoneUtil;
+import com.foodorder.util.ToastUtil;
+
+import java.util.List;
 
 /**
  * Created by guodong on 16/9/24.
@@ -20,6 +24,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
     private RelativeLayout rl_title;
     private TextView tv_type, tv_max_count, tv_name, tv_add, tv_minus, tv_count;
     private Formula formula;
+    private Good good;
 
     public FormulaCell(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -74,19 +79,46 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_add:
-                if (formula.getCount() == formula.getMax_choose()) {
-                    return;
-                }
-                formula.setCount(formula.getCount() + 1);
-                tv_count.setText(String.valueOf(formula.getCount()));
+                add();
                 break;
             case R.id.tv_minus:
-                if (formula.getCount() < 1) {
-                    return;
-                }
-                formula.setCount(formula.getCount() - 1);
-                tv_count.setText(String.valueOf(formula.getCount()));
+                remove();
                 break;
+        }
+    }
+
+    public void setGood(Good good) {
+        this.good = good;
+    }
+
+    public void add() {
+        if (formula.getSel_count() == formula.getMax_choose()) {
+            ToastUtil.showToast(getContext().getResources().getString(R.string.formula_max_count_desc, formula.getMax_choose()));
+            return;
+        }
+        formula.setCount(formula.getCount() + 1);
+        tv_count.setText(String.valueOf(formula.getCount()));
+        List<Formula> formulaData = good.getFormulaList();
+        for (int i = 0; i < formulaData.size(); i++) {
+            Formula temp = formulaData.get(i);
+            if (formula.getId_product_formula().equals(temp.getId_product_formula())) {
+                temp.setSel_count(temp.getSel_count() + 1);
+            }
+        }
+    }
+
+    public void remove() {
+        if (formula.getCount() < 1) {
+            return;
+        }
+        formula.setCount(formula.getCount() - 1);
+        tv_count.setText(String.valueOf(formula.getCount()));
+        List<Formula> formulaData = good.getFormulaList();
+        for (int i = 0; i < formulaData.size(); i++) {
+            Formula temp = formulaData.get(i);
+            if (formula.getId_product_formula().equals(temp.getId_product_formula())) {
+                temp.setSel_count(temp.getSel_count() - 1);
+            }
         }
     }
 }

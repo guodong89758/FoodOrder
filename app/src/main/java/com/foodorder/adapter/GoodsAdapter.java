@@ -17,6 +17,7 @@ import com.foodorder.activity.GoodListActivity;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
+import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.PhoneUtil;
 
@@ -39,7 +40,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
         this.dataList = dataList;
         this.mContext = mContext;
         nf = NumberFormat.getCurrencyInstance();
-        nf.setMaximumFractionDigits(3);
+        nf.setMaximumFractionDigits(RT.PRICE_NUM);
         mInflater = LayoutInflater.from(mContext);
     }
 

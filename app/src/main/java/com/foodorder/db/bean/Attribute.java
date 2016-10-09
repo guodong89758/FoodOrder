@@ -27,11 +27,13 @@ public class Attribute {
     private int max_choose;
     @Transient
     private int count;
+    @Transient
+    private int sel_count;
 
 
     @Generated(hash = 1878088058)
     public Attribute(Long id, String id_product, String id_product_attribute,
-            String zh_name, String fr_name, String value, int max_choose) {
+                     String zh_name, String fr_name, String value, int max_choose) {
         this.id = id;
         this.id_product = id_product;
         this.id_product_attribute = id_product_attribute;
@@ -108,5 +110,13 @@ public class Attribute {
 
     public void setMax_choose(int max_choose) {
         this.max_choose = max_choose;
+    }
+
+    public int getSel_count() {
+        return sel_count;
+    }
+
+    public void setSel_count(int sel_count) {
+        this.sel_count = sel_count;
     }
 }

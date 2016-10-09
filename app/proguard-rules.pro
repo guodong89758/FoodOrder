@@ -84,3 +84,11 @@
 public static java.lang.String TABLENAME;
 }
 -keep class **$Properties
+
+-keep class com.lzy.okhttputils.**
+-keep class com.lzy.okhttputils.** { *; }
+-keep class com.nostra13.universalimageloader.** { *; }
+-keep class com.google.**{*;}
+-keep class com.flipboard.**{*;}
+-keep class se.emilsjolander.**{*;}
+-keep class rx.**{*;}

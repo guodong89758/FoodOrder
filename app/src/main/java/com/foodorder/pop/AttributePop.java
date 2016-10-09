@@ -74,6 +74,7 @@ public class AttributePop extends PopupWindow implements View.OnClickListener {
         tv_desc.setText(mContext.getResources().getString(R.string.formula_max_count_desc, good.getMax_attributes_choose()));
         attrAdapter = new AttributeAdapter();
         attrAdapter.setData(good.getAttributeList());
+        attrAdapter.setGood(good);
         lv_attr.setAdapter(attrAdapter);
     }
 

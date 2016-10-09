@@ -14,12 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foodorder.R;
-import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
-import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.PhoneUtil;
-import com.foodorder.util.ToastUtil;
 
 import java.util.List;
 
@@ -95,7 +92,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
             }
             name.setText(good_name);
             tv_code.setText(item.getReference());
-            item.setCount(CartManager.ins().getSelectedItemCountById(item.getId().intValue()));
+//            item.setCount(CartManager.ins().getSelectedItemCountById(item.getId().intValue()));
             tvCount.setText(String.valueOf(item.getCount()));
             price.setText(String.valueOf(item.getPrice()));
             if (item.getCount() < 1) {
@@ -105,56 +102,58 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
                 tvCount.setVisibility(View.VISIBLE);
                 tvMinus.setVisibility(View.VISIBLE);
             }
-            if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
-                hasFormula = true;
-            } else {
-                hasFormula = false;
-            }
-            if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
-                hasAttribute = true;
-            } else {
-                hasAttribute = false;
-            }
-            if (hasFormula || hasAttribute) {
-                tv_specification.setVisibility(View.VISIBLE);
-                tvAdd.setVisibility(View.GONE);
-            } else {
-                tv_specification.setVisibility(View.GONE);
-                tvAdd.setVisibility(View.VISIBLE);
-            }
+//            if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+//                hasFormula = true;
+//            } else {
+//                hasFormula = false;
+//            }
+//            if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+//                hasAttribute = true;
+//            } else {
+//                hasAttribute = false;
+//            }
+//            if (hasFormula || hasAttribute) {
+//                tv_specification.setVisibility(View.VISIBLE);
+//                tvAdd.setVisibility(View.GONE);
+//            } else {
+//                tv_specification.setVisibility(View.GONE);
+//                tvAdd.setVisibility(View.VISIBLE);
+//            }
         }
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.tvAdd: {
-                    int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
-                    if (count < 1) {
-                        tvMinus.setAnimation(getShowAnimation());
-                        tvMinus.setVisibility(View.VISIBLE);
-                        tvCount.setVisibility(View.VISIBLE);
-                    }
-                    count++;
-                    CartManager.ins().add(item, true);
-                    tvCount.setText(String.valueOf(item.getCount()));
-                    EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+//                    int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
+//                    if (count < 1) {
+//                        tvMinus.setAnimation(getShowAnimation());
+//                        tvMinus.setVisibility(View.VISIBLE);
+//                        tvCount.setVisibility(View.VISIBLE);
+//                    }
+//                    count++;
+//                    CartManager.ins().add(item, true);
+//                    tvCount.setText(String.valueOf(item.getCount()));
+                    CartManager.ins().cartAdd(item, true);
+//                    EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
                 }
                 break;
                 case R.id.tvMinus: {
-                    int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
-                    if (count < 2) {
-                        tvMinus.setAnimation(getHiddenAnimation());
-                        tvMinus.setVisibility(View.GONE);
-                        tvCount.setVisibility(View.GONE);
-                    }
-                    count--;
-                    CartManager.ins().remove(item, true);
-                    tvCount.setText(String.valueOf(item.getCount()));
-                    EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+//                    int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
+//                    if (count < 2) {
+//                        tvMinus.setAnimation(getHiddenAnimation());
+//                        tvMinus.setVisibility(View.GONE);
+//                        tvCount.setVisibility(View.GONE);
+//                    }
+//                    count--;
+//                    CartManager.ins().remove(item, true);
+//                    tvCount.setText(String.valueOf(item.getCount()));
+                    CartManager.ins().cartRemove(item, true);
+//                    EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
                 }
                 break;
                 case R.id.tv_specification:
-                    ToastUtil.showToast("规格");
+//                    ToastUtil.showToast("规格");
                     break;
             }
         }

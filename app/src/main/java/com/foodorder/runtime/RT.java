@@ -32,6 +32,8 @@ public class RT {
 
     public static Application application = null;
 
+    public static int PRICE_NUM = 3;
+
     /**
      * The m local external path.
      */

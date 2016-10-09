@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.db.bean.Attribute;
+import com.foodorder.db.bean.Good;
+import com.foodorder.util.ToastUtil;
+
+import java.util.List;
 
 /**
  * Created by guodong on 16/9/24.
@@ -17,6 +21,7 @@ import com.foodorder.db.bean.Attribute;
 public class AttributeCell extends LinearLayout implements ListCell, View.OnClickListener {
     private TextView tv_name, tv_add, tv_minus, tv_count;
     private Attribute attr;
+    private Good good;
 
     public AttributeCell(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -55,19 +60,44 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_add:
-                if (attr.getCount() == attr.getMax_choose()) {
-                    return;
-                }
-                attr.setCount(attr.getCount() + 1);
-                tv_count.setText(String.valueOf(attr.getCount()));
+                add();
                 break;
             case R.id.tv_minus:
-                if (attr.getCount() < 1) {
-                    return;
-                }
-                attr.setCount(attr.getCount() - 1);
-                tv_count.setText(String.valueOf(attr.getCount()));
+                remove();
                 break;
         }
+    }
+
+    public void setGood(Good good) {
+        this.good = good;
+    }
+
+    private void add() {
+        if (attr.getSel_count() == attr.getMax_choose()) {
+            ToastUtil.showToast(getContext().getResources().getString(R.string.formula_max_count_desc, good.getMax_attributes_choose()));
+            return;
+        }
+        attr.setCount(attr.getCount() + 1);
+        tv_count.setText(String.valueOf(attr.getCount()));
+        List<Attribute> attrData = good.getAttributeList();
+        for (int i = 0; i < attrData.size(); i++) {
+            Attribute temp = attrData.get(i);
+            temp.setSel_count(temp.getSel_count() + 1);
+        }
+
+    }
+
+    private void remove() {
+        if (attr.getCount() < 1) {
+            return;
+        }
+        attr.setCount(attr.getCount() - 1);
+        tv_count.setText(String.valueOf(attr.getCount()));
+        List<Attribute> attrData = good.getAttributeList();
+        for (int i = 0; i < attrData.size(); i++) {
+            Attribute temp = attrData.get(i);
+            temp.setSel_count(temp.getSel_count() - 1);
+        }
+
     }
 }

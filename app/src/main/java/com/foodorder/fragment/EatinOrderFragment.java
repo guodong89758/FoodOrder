@@ -18,12 +18,25 @@ import com.foodorder.base.BaseFragment;
 import com.foodorder.base.BaseRecyclerAdapter;
 import com.foodorder.db.bean.Order;
 import com.foodorder.dialog.OrderActionDialog;
+import com.foodorder.log.DLOG;
+import com.foodorder.parse.OrdersParse;
+import com.foodorder.runtime.RT;
 import com.foodorder.runtime.WeakHandler;
+import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener, BaseRecyclerAdapter.OnItemLongClickListener {
 
@@ -44,6 +57,10 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         swipe_refresh = (SwipeRefreshLayout) rootView.findViewById(R.id.swip_refresh);
         rv_eatin = (RecyclerView) rootView.findViewById(R.id.rv_eatin);
 
+        rv_eatin.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_eatin.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(getResources().getColor(R.color.black_10)).size(1).build());
+        rv_eatin.setHasFixedSize(true);
+
         swipe_refresh.setColorSchemeResources(R.color.refresh_progress_blue, R.color.refresh_progress_green, R.color.refresh_progress_red, R.color.refresh_progress_yellow);
         swipe_refresh.setOnRefreshListener(this);
         return rootView;
@@ -55,16 +72,39 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         if (orderData == null) {
             orderData = new ArrayList<>();
         }
-        for (int i = 0; i < 15; i++) {
-            orderData.add(new Order());
-        }
-        rv_eatin.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv_eatin.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(getResources().getColor(R.color.black_10)).size(1).build());
-        rv_eatin.setHasFixedSize(true);
-        orderAdapter = new EatinOrderAdapter(getActivity(), orderData);
-        orderAdapter.setOnItemClickListener(this);
-        orderAdapter.setOnItemLongClickListener(this);
-        rv_eatin.setAdapter(orderAdapter);
+
+        Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber<? super Object> subscriber) {
+                String order_json = StringUtil.getJson(getActivity(), "orders.json");
+                try {
+                    OrdersParse.parseJson(new JSONObject(order_json));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                orderData = RT.ins().getDaoSession().getOrderDao().loadAll();
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
+            @Override
+            public void onCompleted() {
+                orderAdapter = new EatinOrderAdapter(getActivity(), orderData);
+                orderAdapter.setOnItemClickListener(EatinOrderFragment.this);
+                orderAdapter.setOnItemLongClickListener(EatinOrderFragment.this);
+                rv_eatin.setAdapter(orderAdapter);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                DLOG.e(e.getMessage());
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+        });
+
     }
 
     @Override
@@ -96,12 +136,14 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         dialog.setButton1(new OrderActionDialog.DialogButtonOnClickListener() {
             @Override
             public void onClick(View button, OrderActionDialog dialog, Order order) {
+                dialog.dismiss();
                 ToastUtil.showToast(getResources().getString(R.string.order_action_1));
             }
         });
         dialog.setButton2(new OrderActionDialog.DialogButtonOnClickListener() {
             @Override
             public void onClick(View button, OrderActionDialog dialog, Order order) {
+                dialog.dismiss();
                 ToastUtil.showToast(getResources().getString(R.string.order_action_2));
             }
         });

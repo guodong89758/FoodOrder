@@ -19,10 +19,10 @@ import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.pop.FormulaPop;
+import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
-import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -35,6 +35,8 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 
 public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener {
 
@@ -75,6 +77,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         btn_pack.setOnClickListener(this);
 
         EventManager.ins().registListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
+        EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
         EventManager.ins().registListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
 
         rv_good.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -104,6 +107,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     protected void onDestroy() {
         super.onDestroy();
         EventManager.ins().removeListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
+        EventManager.ins().removeListener(POPUP_FORMULA_SHOW, eventListener);
         EventManager.ins().removeListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
     }
 
@@ -164,7 +168,8 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                 search();
                 break;
             case R.id.btn_send:
-                ToastUtil.showToast(search_content);
+                OrderSetupPop setupPop = new OrderSetupPop(GoodSearchActivity.this);
+                setupPop.showPopup();
                 break;
             case R.id.btn_0:
                 search_content = search_content + "0";
@@ -194,6 +199,10 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                     if (goodAdapter != null) {
                         goodAdapter.notifyDataSetChanged();
                     }
+                    break;
+                case EventTag.POPUP_FORMULA_SHOW:
+                    FormulaPop formulaPop = new FormulaPop(GoodSearchActivity.this, (Good) dataobj);
+                    formulaPop.showPopup();
                     break;
                 case EventTag.POPUP_ATTRIBUTE_SHOW:
                     AttributePop attrPop = new AttributePop(GoodSearchActivity.this, (Good) dataobj);
@@ -234,7 +243,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                         keycodeAdapter.notifyDataSetChanged();
                     }
                 }
-                ToastUtil.showToast(codeData.size() + "");
+//                ToastUtil.showToast(codeData.size() + "");
             }
 
             @Override
@@ -260,30 +269,32 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     public void onItemClick(View view, int position, long id) {
         Good good = codeData.get(position);
         if (good != null) {
-            if ((good.getFormulaList() != null && good.getFormulaList().size() > 0)) {
-                FormulaPop formulaPop = new FormulaPop(GoodSearchActivity.this, good);
-                formulaPop.showPopup();
-            } else if ((good.getAttributeList() != null && good.getAttributeList().size() > 0)) {
-                AttributePop attrPop = new AttributePop(GoodSearchActivity.this, good);
-                attrPop.showPopup();
+            if ((good.getAttributeList() != null && good.getAttributeList().size() > 0) || (good.getFormulaList() != null && good.getFormulaList().size() > 0)) {
+                if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, good);
+                } else {
+                    if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
+                        EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, good);
+                    }
+                }
             } else {
                 CartManager.ins().add(good, true);
-                if (CartManager.ins().cartList.get(good.getId().intValue()) != null) {
-//                    good.setCount(good.getCount() + 1);
+                if (goodAdapter != null) {
                     goodAdapter.notifyDataSetChanged();
-                } else {
-//                    good.setCount(1);
-                    goodAdapter.notifyItemInserted(CartManager.ins().cartData.size() - 1);
                     rv_good.smoothScrollToPosition(CartManager.ins().cartData.size() - 1);
                 }
+//                if (CartManager.ins().cartList.get(good.getId().intValue()) != null) {
+//                    good.setCount(good.getCount() + 1);
+//                    goodAdapter.notifyDataSetChanged();
+//                } else {
+//                    CartManager.ins().add(good, false);
+//                    good.setCount(1);
+//                    goodAdapter.notifyItemInserted(CartManager.ins().cartList.size() - 1);
+//                    rv_good.smoothScrollToPosition(CartManager.ins().cartList.size() - 1);
+//                }
 
             }
 
         }
     }
-
-    private void showFormulPopup() {
-
-    }
-
 }
