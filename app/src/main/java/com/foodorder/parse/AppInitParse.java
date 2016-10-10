@@ -19,9 +19,12 @@ public class AppInitParse {
         if (json == null) {
             return;
         }
-
+        JSONObject data = json.optJSONObject("data");
+        if (data == null) {
+            return;
+        }
         //用户信息
-        JSONArray userArray = json.optJSONArray("Users");
+        JSONArray userArray = data.optJSONArray("Users");
         if (userArray != null && userArray.length() > 0) {
             UserManager.getInstance().getUserList().clear();
             for (int i = 0; i < userArray.length(); i++) {
@@ -34,7 +37,7 @@ public class AppInitParse {
             }
         }
         //菜单信息
-        JSONArray categoryArray = json.optJSONArray("Categories");
+        JSONArray categoryArray = data.optJSONArray("Categories");
         if (categoryArray != null && categoryArray.length() > 0) {
             RT.ins().getDaoSession().getGoodTypeDao().deleteAll();
             RT.ins().getDaoSession().getGoodDao().deleteAll();
