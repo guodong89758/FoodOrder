@@ -19,8 +19,9 @@
             android:layout_width="@dimen/title_height_size"
             android:layout_height="@dimen/title_height_size"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:background="@color/transparent"
-            android:text="二维码"
+            android:text="@string/zxing_title"
             android:textColor="@color/white"
             android:textSize="16dp" />
     </RelativeLayout>

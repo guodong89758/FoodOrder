@@ -3,6 +3,8 @@ package com.foodorder.activity;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.foodorder.R;
@@ -11,18 +13,21 @@ import com.foodorder.log.DLOG;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
 
-public class ScanActivity extends AppCompatActivity implements QRCodeView.Delegate {
+public class ScanActivity extends AppCompatActivity implements QRCodeView.Delegate, View.OnClickListener {
 
+    private ImageButton ib_back;
     private QRCodeView mQRCodeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+        ib_back = (ImageButton) findViewById(R.id.ib_back);
         mQRCodeView = (ZXingView) findViewById(R.id.zxingview);
         mQRCodeView.setDelegate(this);
 
         mQRCodeView.startSpotDelay(3000);
+        ib_back.setOnClickListener(this);
     }
 
     @Override
@@ -59,5 +64,14 @@ public class ScanActivity extends AppCompatActivity implements QRCodeView.Delega
     @Override
     public void onScanQRCodeOpenCameraError() {
         DLOG.e("打开相机出错");
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ib_back:
+                onBackPressed();
+                break;
+        }
     }
 }

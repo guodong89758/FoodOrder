@@ -1,5 +1,6 @@
 package com.foodorder.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -10,6 +11,12 @@ import android.widget.EditText;
 import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.logic.UserManager;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 public class LoginActivity extends BaseActivity {
 
@@ -48,7 +55,22 @@ public class LoginActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_zxing:
-                startActivity(new Intent(LoginActivity.this, ScanActivity.class));
+                Dexter.checkPermission(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        startActivity(new Intent(LoginActivity.this, ScanActivity.class));
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+
+                    }
+                }, Manifest.permission.CAMERA);
                 break;
         }
     }

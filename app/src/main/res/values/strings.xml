@@ -15,6 +15,7 @@
     <string name="action_back">后退</string>
     <string name="action_clear">清空</string>
     <string name="prompt">提示</string>
+    <string name="zxing_title">二维码</string>
 
     <!-- login -->
     <string name="login_title">登陆</string>

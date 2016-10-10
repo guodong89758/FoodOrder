@@ -88,9 +88,9 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
     }
 
     private void remove() {
-        if (attr.getCount() < 1) {
-            return;
-        }
+//        if (attr.getCount() < 1) {
+//            return;
+//        }
         attr.setCount(attr.getCount() - 1);
         tv_count.setText(String.valueOf(attr.getCount()));
         List<Attribute> attrData = good.getAttributeList();

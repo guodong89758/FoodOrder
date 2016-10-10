@@ -108,9 +108,9 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
     }
 
     public void remove() {
-        if (formula.getCount() < 1) {
-            return;
-        }
+//        if (formula.getCount() < 1) {
+//            return;
+//        }
         formula.setCount(formula.getCount() - 1);
         tv_count.setText(String.valueOf(formula.getCount()));
         List<Formula> formulaData = good.getFormulaList();
