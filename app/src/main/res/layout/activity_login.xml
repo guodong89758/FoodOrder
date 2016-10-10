@@ -13,6 +13,16 @@
             style="@style/TitleTextStyle"
             android:layout_centerInParent="true"
             android:text="@string/login_title" />
+
+        <Button
+            android:id="@+id/btn_zxing"
+            android:layout_width="@dimen/title_height_size"
+            android:layout_height="@dimen/title_height_size"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:text="二维码"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
     </RelativeLayout>
 
     <AutoCompleteTextView

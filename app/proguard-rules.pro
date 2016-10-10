@@ -66,6 +66,9 @@
 -keep class com.lzy.okhttputils.**
 -keep class com.lzy.okhttputils.** { *; }
 -keep class com.nostra13.universalimageloader.** { *; }
+-keep class net.sourceforge.zbar.** { *; }
+-keep interface net.sourceforge.zbar.** { *; }
+-dontwarn net.sourceforge.zbar.**
 
 -keep class com.google.**{*;}
 -keepclassmembers class * implements java.io.Serializable {

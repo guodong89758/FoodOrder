@@ -15,7 +15,7 @@ public class LoginActivity extends BaseActivity {
 
     private AutoCompleteTextView tv_username;
     private EditText et_password;
-    private Button btn_login;
+    private Button btn_login, btn_zxing;
 
     @Override
     protected int getLayoutId() {
@@ -27,8 +27,10 @@ public class LoginActivity extends BaseActivity {
         tv_username = (AutoCompleteTextView) findViewById(R.id.tv_username);
         et_password = (EditText) findViewById(R.id.et_password);
         btn_login = (Button) findViewById(R.id.btn_login);
+        btn_zxing = (Button) findViewById(R.id.btn_zxing);
 
         btn_login.setOnClickListener(this);
+        btn_zxing.setOnClickListener(this);
 
     }
 
@@ -44,6 +46,9 @@ public class LoginActivity extends BaseActivity {
             case R.id.btn_login:
                 startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
                 finish();
+                break;
+            case R.id.btn_zxing:
+                startActivity(new Intent(LoginActivity.this, ScanActivity.class));
                 break;
         }
     }
