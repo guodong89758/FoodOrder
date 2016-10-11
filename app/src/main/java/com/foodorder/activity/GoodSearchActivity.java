@@ -201,7 +201,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                     }
                     break;
                 case EventTag.POPUP_FORMULA_SHOW:
-                    FormulaPop formulaPop = new FormulaPop(GoodSearchActivity.this, (Good) dataobj);
+                    FormulaPop formulaPop = new FormulaPop(GoodSearchActivity.this, (Good) dataobj, FormulaPop.TYPE_MENU);
                     formulaPop.showPopup();
                     break;
                 case EventTag.POPUP_ATTRIBUTE_SHOW:

@@ -223,7 +223,7 @@ public class GoodListActivity extends BaseActivity {
                     update((Boolean) dataobj);
                     break;
                 case EventTag.POPUP_FORMULA_SHOW:
-                    FormulaPop formulaPop = new FormulaPop(GoodListActivity.this, (Good) dataobj);
+                    FormulaPop formulaPop = new FormulaPop(GoodListActivity.this, (Good) dataobj, FormulaPop.TYPE_MENU);
                     formulaPop.showPopup();
                     break;
                 case EventTag.POPUP_ATTRIBUTE_SHOW:

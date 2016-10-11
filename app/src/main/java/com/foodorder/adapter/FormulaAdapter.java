@@ -15,6 +15,7 @@ import com.foodorder.db.bean.Good;
 public class FormulaAdapter extends FOAdapter {
 
     private Good good;
+    private int type;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -24,6 +25,7 @@ public class FormulaAdapter extends FOAdapter {
         if (convertView instanceof FormulaCell) {
             FormulaCell cell = (FormulaCell) convertView;
             cell.setGood(good);
+            cell.setType(type);
             cell.onGetData(getItem(position), position, this);
         }
         return convertView;
@@ -31,5 +33,9 @@ public class FormulaAdapter extends FOAdapter {
 
     public void setGood(Good good) {
         this.good = good;
+    }
+
+    public void setType(int type){
+        this.type = type;
     }
 }

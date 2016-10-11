@@ -23,4 +23,13 @@
             android:text="@string/order_info_title" />
     </RelativeLayout>
 
+    <ListView
+        android:id="@+id/lv_good"
+        style="@style/ListViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rl_title"
+        android:divider="@color/black_10"
+        android:dividerHeight="1px" />
+
 </RelativeLayout>

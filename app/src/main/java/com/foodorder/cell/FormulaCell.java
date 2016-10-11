@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.db.bean.Formula;
 import com.foodorder.db.bean.Good;
+import com.foodorder.pop.FormulaPop;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
 
@@ -25,6 +26,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
     private TextView tv_type, tv_max_count, tv_name, tv_add, tv_minus, tv_count;
     private Formula formula;
     private Good good;
+    private int type;
 
     public FormulaCell(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -72,6 +74,11 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
 //        }
         tv_name.setText(name);
         tv_count.setText(String.valueOf(formula.getCount()));
+        if(type == FormulaPop.TYPE_MENU){
+            tv_add.setVisibility(View.VISIBLE);
+        }else{
+
+        }
 
     }
 
@@ -105,6 +112,10 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
                 temp.setSel_count(temp.getSel_count() + 1);
             }
         }
+    }
+
+    public void setType(int type){
+        this.type = type;
     }
 
     public void remove() {

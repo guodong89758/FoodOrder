@@ -27,7 +27,8 @@ import com.foodorder.util.PhoneUtil;
  * Created by guodong on 2016/5/31 12:05.
  */
 public class FormulaPop extends PopupWindow implements View.OnClickListener {
-
+    public static final int TYPE_MENU = 1; //菜单购物车中使用
+    public static final int TYPE_ORDER = 2; //订单详情中菜品列表中使用
     private Context mContext;
     private TextView tv_name;
     private ImageButton ib_close;
@@ -35,10 +36,12 @@ public class FormulaPop extends PopupWindow implements View.OnClickListener {
     private ListView lv_formula;
     private FormulaAdapter formulaAdapter;
     private Good good;
+    private int type = TYPE_MENU;
 
-    public FormulaPop(Context context, Good good) {
+    public FormulaPop(Context context, Good good, int type) {
         this.mContext = context;
         this.good = good;
+        this.type = type;
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setHeight(RT.getScreenHeight() * 3 / 5);
         setFocusable(true);
@@ -74,6 +77,7 @@ public class FormulaPop extends PopupWindow implements View.OnClickListener {
         tv_name.setText(good_name);
         formulaAdapter = new FormulaAdapter();
         formulaAdapter.setGood(good);
+        formulaAdapter.setType(type);
         formulaAdapter.setData(good.getFormulaList());
         lv_formula.setAdapter(formulaAdapter);
     }
