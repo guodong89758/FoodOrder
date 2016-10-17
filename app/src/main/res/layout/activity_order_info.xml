@@ -23,11 +23,48 @@
             android:text="@string/order_info_title" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/cart_layout_bg"
+        android:clickable="true"
+        android:onClick="onClick">
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="￥ 0"
+            android:textColor="#fff"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/cart_send_btn_bg"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:text="加菜"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+
     <ListView
         android:id="@+id/lv_good"
         style="@style/ListViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/rl_bottom"
         android:layout_below="@id/rl_title"
         android:divider="@color/black_10"
         android:dividerHeight="1px" />

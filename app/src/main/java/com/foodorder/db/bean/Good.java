@@ -13,7 +13,10 @@ import org.greenrobot.greendao.annotation.Keep;
 import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Transient;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -362,6 +365,53 @@ public class Good implements Cloneable {
             e.printStackTrace();
         }
         return o;
+    }
+
+    public Good(JSONObject json) {
+        if (json == null) {
+            return;
+        }
+
+        this.id_product = json.optString("id_product");
+        this.reference = json.optString("product_reference");
+        this.fr_name = json.optString("product_name");
+        JSONObject product_zh = json.optJSONObject("zh");
+        if (product_zh != null) {
+            this.zh_name = product_zh.optString("name");
+        }
+//        this.quantity = json.optInt("product_quantity", 0);
+        this.price = json.optDouble("product_price", 0);
+//        this.id_product = json.optString("tax_rate");
+//        this.id_product = json.optString("product_price_with_tax");
+        JSONArray formulaArray = json.optJSONArray("Formula_Items");
+        List<Formula> formulaData = new ArrayList<>();
+        if (formulaArray != null && formulaArray.length() > 0) {
+            for (int i = 0; i < formulaArray.length(); i++) {
+                JSONObject formulaJson = formulaArray.optJSONObject(i);
+                int count = formulaJson.optInt("quantity", 0);
+                Formula formula = new Formula();
+                formula.setFr_name("菜品" + i);
+                formula.setZh_name("菜品" + i);
+                formula.setCount(count);
+                formulaData.add(formula);
+            }
+        }
+        this.formulaList = formulaData;
+        JSONArray attrArray = json.optJSONArray("Attributes");
+        List<Attribute> attrData = new ArrayList<>();
+        if (attrArray != null && attrArray.length() > 0) {
+            for (int i = 0; i < attrArray.length(); i++) {
+                JSONObject attrJson = attrArray.optJSONObject(i);
+                int count = attrJson.optInt("quantity", 0);
+                Attribute attr = new Attribute();
+                attr.setFr_name("规格" + i);
+                attr.setZh_name("规格" + i);
+                attr.setCount(count);
+                attrData.add(attr);
+            }
+        }
+        this.attributeList = attrData;
+
     }
 
 }

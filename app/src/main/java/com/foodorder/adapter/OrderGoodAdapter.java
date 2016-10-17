@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.db.bean.Good;
-import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.util.PhoneUtil;
 
@@ -67,7 +66,6 @@ public class OrderGoodAdapter extends FOAdapter<Good> {
             }
             name.setText(good_name);
             tv_code.setText(item.getReference());
-            item.setCount(CartManager.ins().getSelectedItemCountById(item.getId().intValue()));
             tvCount.setText(String.valueOf(item.getCount()));
             price.setText(nf.format(item.getPrice()));
 

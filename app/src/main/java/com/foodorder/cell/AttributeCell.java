@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.db.bean.Attribute;
 import com.foodorder.db.bean.Good;
+import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
 
 import java.util.List;
@@ -46,11 +47,11 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
         }
         attr = (Attribute) data;
         String name = "";
-//        if (PhoneUtil.isZh()) {
-//            name = attr.getZh_name();
-//        } else {
-        name = attr.getFr_name();
-//        }
+        if (PhoneUtil.isZh()) {
+            name = attr.getZh_name();
+        } else {
+            name = attr.getFr_name();
+        }
         tv_name.setText(name);
         tv_count.setText(String.valueOf(attr.getCount()));
 

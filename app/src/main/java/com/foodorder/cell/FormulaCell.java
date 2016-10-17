@@ -67,16 +67,16 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
             rl_title.setVisibility(View.GONE);
         }
         String name = "";
-//        if (PhoneUtil.isZh()) {
-//            name = formula.getZh_name();
-//        } else {
-        name = formula.getFr_name();
-//        }
+        if (PhoneUtil.isZh()) {
+            name = formula.getZh_name();
+        } else {
+            name = formula.getFr_name();
+        }
         tv_name.setText(name);
         tv_count.setText(String.valueOf(formula.getCount()));
-        if(type == FormulaPop.TYPE_MENU){
+        if (type == FormulaPop.TYPE_MENU) {
             tv_add.setVisibility(View.VISIBLE);
-        }else{
+        } else {
 
         }
 
@@ -114,7 +114,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
         }
     }
 
-    public void setType(int type){
+    public void setType(int type) {
         this.type = type;
     }
 

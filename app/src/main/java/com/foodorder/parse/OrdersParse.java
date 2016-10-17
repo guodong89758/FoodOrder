@@ -16,12 +16,12 @@ public class OrdersParse {
         if (json == null) {
             return;
         }
-
-        JSONObject orders = json.optJSONObject("Orders");
-        if (orders == null) {
+        JSONObject data = json.optJSONObject("data");
+        if (data == null) {
             return;
         }
-        JSONArray orderArray = orders.optJSONArray("Order");
+
+        JSONArray orderArray = data.optJSONArray("Orders");
         if (orderArray != null && orderArray.length() > 0) {
 //            RT.ins().getDaoSession().getOrderDao().deleteAll();
             for (int i = 0; i < orderArray.length(); i++) {

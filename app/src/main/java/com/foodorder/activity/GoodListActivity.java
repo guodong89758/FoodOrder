@@ -30,6 +30,7 @@ import com.foodorder.adapter.GoodsAdapter;
 import com.foodorder.adapter.SelectAdapter;
 import com.foodorder.adapter.TypeAdapter;
 import com.foodorder.base.BaseActivity;
+import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
@@ -83,6 +84,7 @@ public class GoodListActivity extends BaseActivity {
 
     private NumberFormat nf;
     private Handler mHanlder;
+    private int list_type = AppKey.GOOD_LIST_MENU;
 
     @Override
     protected int getLayoutId() {
@@ -146,8 +148,11 @@ public class GoodListActivity extends BaseActivity {
 
     @Override
     public void initData() {
+        if (getIntent() != null) {
+            list_type = getIntent().getIntExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
+        }
         nf = NumberFormat.getCurrencyInstance();
-        nf.setMaximumFractionDigits(3);
+        nf.setMaximumFractionDigits(RT.PRICE_NUM);
         mHanlder = new Handler(getMainLooper());
         groupSelect = new SparseIntArray();
         if (goodTypeList == null) {

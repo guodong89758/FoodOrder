@@ -152,9 +152,9 @@ public class AppInitParse {
                                         int formula_item_position = formulaItem.optInt("position", 0);
                                         String formula_item_fr_name = formulaItem.optString("product_name");
                                         String formula_item_zh_name = "";
-                                        JSONObject formula_item_name_zh = formula.optJSONObject("zh");
+                                        JSONObject formula_item_name_zh = formulaItem.optJSONObject("zh");
                                         if (formula_item_name_zh != null) {
-                                            formula_item_zh_name = formula_item_name_zh.optString("product_name");
+                                            formula_item_zh_name = formula_item_name_zh.optString("name");
                                         }
                                         String formula_item_image_url = formulaItem.optString("image");
 
