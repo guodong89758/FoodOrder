@@ -379,7 +379,7 @@ public class Good implements Cloneable {
         if (product_zh != null) {
             this.zh_name = product_zh.optString("name");
         }
-//        this.quantity = json.optInt("product_quantity", 0);
+        this.count = json.optInt("product_quantity", 0);
         this.price = json.optDouble("product_price", 0);
 //        this.id_product = json.optString("tax_rate");
 //        this.id_product = json.optString("product_price_with_tax");
