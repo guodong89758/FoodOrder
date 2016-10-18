@@ -4,8 +4,12 @@ import android.util.SparseArray;
 import android.util.SparseIntArray;
 
 import com.foodorder.contant.EventTag;
+import com.foodorder.db.bean.Attribute;
+import com.foodorder.db.bean.Formula;
 import com.foodorder.db.bean.Good;
+import com.foodorder.entry.OrderGood;
 import com.foodorder.runtime.event.EventManager;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,6 +174,55 @@ public class CartManager {
     //根据类别Id获取属于当前类别的数量
     public int getSelectedGroupCountByTypeId(int typeId) {
         return groupSelect.get(typeId);
+    }
+
+
+    public String getOrderGoodJson() {
+        if (cartData == null || cartData.size() < 0) {
+            return "";
+        }
+
+        OrderGood orderGood = new OrderGood();
+        List<OrderGood.Product> products = new ArrayList<>();
+        for (int i = 0; i < cartData.size(); i++) {
+            Good good = cartData.get(i);
+            OrderGood.Product product = new OrderGood.Product();
+            product.setId_product(good.getId_product());
+            product.setCount(good.getCount());
+            if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
+                List<OrderGood.Attribute> attributes = new ArrayList<>();
+                for (int j = 0; j < good.getAttributeList().size(); j++) {
+                    Attribute attribute = good.getAttributeList().get(j);
+                    if (attribute.getCount() == 0) {
+                        continue;
+                    }
+                    OrderGood.Attribute attr = new OrderGood.Attribute();
+                    attr.setId_product_attribute(attribute.getId_product_attribute());
+                    attr.setCount(attribute.getCount());
+                    attributes.add(attr);
+                }
+                product.setAttributes(attributes);
+            }
+            if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
+                List<OrderGood.Formula> formulas = new ArrayList<>();
+                for (int j = 0; j < good.getFormulaList().size(); j++) {
+                    Formula formula = good.getFormulaList().get(j);
+                    if (formula.getCount() == 0) {
+                        continue;
+                    }
+                    OrderGood.Formula form = new OrderGood.Formula();
+                    form.setId_product_formula_item(formula.getId_product_formula_item());
+                    form.setId_product_item(formula.getId_product_item());
+                    form.setCount(formula.getCount());
+                    formulas.add(form);
+                }
+                product.setFormuals(formulas);
+            }
+            products.add(product);
+
+        }
+        orderGood.setProducts(products);
+        return new Gson().toJson(orderGood);
     }
 
 }

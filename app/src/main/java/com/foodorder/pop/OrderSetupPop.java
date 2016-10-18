@@ -16,6 +16,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
+import com.foodorder.log.DLOG;
+import com.foodorder.logic.CartManager;
 import com.foodorder.util.SoftKeyboardUtil;
 
 /**
@@ -74,6 +76,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
                 break;
             case R.id.btn_ok:
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
+                DLOG.json(CartManager.ins().getOrderGoodJson());
                 dismiss();
                 break;
             case R.id.tv_add:
