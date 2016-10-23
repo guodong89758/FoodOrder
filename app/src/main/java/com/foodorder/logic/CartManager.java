@@ -45,6 +45,7 @@ public class CartManager {
     }
 
     public void clear() {
+//        clearTempData();
         cartList.clear();
         cartData.clear();
         groupSelect.clear();
@@ -67,6 +68,7 @@ public class CartManager {
             cartList.append(item.getId().intValue(), item);
             if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
                 cartData.add(item.clone());
+                clearTempData(item);
             } else {
                 cartData.add(item);
             }
@@ -75,6 +77,7 @@ public class CartManager {
                 Good newGood = item.clone();
                 newGood.setCount(1);
                 cartData.add(newGood);
+                clearTempData(item);
             }
             temp.setCount(temp.getCount() + 1);
         }
@@ -176,19 +179,47 @@ public class CartManager {
         return groupSelect.get(typeId);
     }
 
+    public void clearTempData(Good good) {
+        if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
+            for (int j = 0; j < good.getAttributeList().size(); j++) {
+                Attribute attribute = good.getAttributeList().get(j);
+                if (attribute.getCount() == 0) {
+                    continue;
+                }
+                attribute.setCount(0);
+                attribute.setSel_count(0);
+            }
+        }
+        if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
+            for (int j = 0; j < good.getFormulaList().size(); j++) {
+                Formula formula = good.getFormulaList().get(j);
+                if (formula.getCount() == 0) {
+                    continue;
+                }
+                formula.setCount(0);
+                formula.setSel_count(0);
+            }
+        }
 
-    public String getOrderGoodJson() {
+    }
+
+    public String getOrderGoodJson(boolean isPack, String id_order, String number, String persons) {
         if (cartData == null || cartData.size() < 0) {
             return "";
         }
 
         OrderGood orderGood = new OrderGood();
+        orderGood.setId_order(id_order);
+        orderGood.setPack(isPack);
+        orderGood.setNumber(number);
+        orderGood.setPersons(persons);
         List<OrderGood.Product> products = new ArrayList<>();
         for (int i = 0; i < cartData.size(); i++) {
             Good good = cartData.get(i);
             OrderGood.Product product = new OrderGood.Product();
             product.setId_product(good.getId_product());
             product.setCount(good.getCount());
+            good.setCount(0);
             if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
                 List<OrderGood.Attribute> attributes = new ArrayList<>();
                 for (int j = 0; j < good.getAttributeList().size(); j++) {
@@ -200,6 +231,8 @@ public class CartManager {
                     attr.setId_product_attribute(attribute.getId_product_attribute());
                     attr.setCount(attribute.getCount());
                     attributes.add(attr);
+                    attribute.setCount(0);
+                    attribute.setSel_count(0);
                 }
                 product.setAttributes(attributes);
             }
@@ -215,6 +248,8 @@ public class CartManager {
                     form.setId_product_item(formula.getId_product_item());
                     form.setCount(formula.getCount());
                     formulas.add(form);
+                    formula.setCount(0);
+                    formula.setSel_count(0);
                 }
                 product.setFormuals(formulas);
             }

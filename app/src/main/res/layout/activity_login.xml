@@ -23,7 +23,8 @@
             android:background="@color/transparent"
             android:text="@string/zxing_title"
             android:textColor="@color/white"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <AutoCompleteTextView

@@ -74,7 +74,7 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
     }
 
     private void add() {
-        if (attr.getSel_count() == attr.getMax_choose()) {
+        if (attr.getSel_count() >= attr.getMax_choose()) {
             ToastUtil.showToast(getContext().getResources().getString(R.string.formula_max_count_desc, good.getMax_attributes_choose()));
             return;
         }

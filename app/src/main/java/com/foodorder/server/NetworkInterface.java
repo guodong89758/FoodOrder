@@ -59,12 +59,12 @@ public class NetworkInterface {
         }
     }
 
-        /**
-         * @param requestUrl 地址
-         * @param params     参数列表
-         * @param apiTag
-         * @param callback   回调接口
-         */
+    /**
+     * @param requestUrl 地址
+     * @param params     参数列表
+     * @param apiTag
+     * @param callback   回调接口
+     */
 
     private void connectedByPost(final String requestUrl, final String apiTag, final HttpParams params, final ResponseCallback callback) {
         {
@@ -186,6 +186,6 @@ public class NetworkInterface {
 
     public String getRequsetUrl(String request) {
 
-        return ServerManager.SERVER_DOMAIN + request;
+        return "http://" + ServerManager.SERVER_DOMAIN + "/" + request;
     }
 }

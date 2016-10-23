@@ -43,8 +43,14 @@ import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
+import com.foodorder.server.api.API_Food;
+import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.PhoneUtil;
+import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
+import com.lzy.okhttputils.OkHttpUtils;
+
+import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -61,7 +67,7 @@ import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 
 
 public class GoodListActivity extends BaseActivity {
-
+    private static final String TAG = "GoodListActivity";
     private ImageButton ib_back, ib_search;
     private RelativeLayout rl_cart;
     private ImageView imgCart, iv_cart_empty;
@@ -85,6 +91,7 @@ public class GoodListActivity extends BaseActivity {
     private NumberFormat nf;
     private Handler mHanlder;
     private int list_type = AppKey.GOOD_LIST_MENU;
+    private String id_order;
 
     @Override
     protected int getLayoutId() {
@@ -150,6 +157,7 @@ public class GoodListActivity extends BaseActivity {
     public void initData() {
         if (getIntent() != null) {
             list_type = getIntent().getIntExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
+            id_order = getIntent().getStringExtra(AppKey.ID_ORDER);
         }
         nf = NumberFormat.getCurrencyInstance();
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
@@ -218,6 +226,7 @@ public class GoodListActivity extends BaseActivity {
         super.onDestroy();
         CartManager.ins().clear();
         EventManager.ins().removeListener(EventTag.GOOD_LIST_REFRESH, eventListener);
+        OkHttpUtils.getInstance().cancelTag(TAG);
     }
 
     EventListener eventListener = new EventListener() {
@@ -368,7 +377,10 @@ public class GoodListActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.ib_search:
-                startActivity(new Intent(this, GoodSearchActivity.class));
+                Intent intent = new Intent(this, GoodSearchActivity.class);
+                intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_ADD);
+                intent.putExtra(AppKey.ID_ORDER, id_order);
+                startActivity(intent);
                 break;
             case R.id.bottom:
                 showBottomSheet();
@@ -393,8 +405,22 @@ public class GoodListActivity extends BaseActivity {
                 dialog.show();
                 break;
             case R.id.btn_send:
-                OrderSetupPop setupPop = new OrderSetupPop(GoodListActivity.this);
-                setupPop.showPopup();
+                if (cb_pack.isChecked()) {
+                    OrderSetupPop setupPop = new OrderSetupPop(GoodListActivity.this, id_order);
+                    setupPop.showPopup();
+                } else {
+                    API_Food.ins().orderGood(TAG, CartManager.ins().getOrderGoodJson(false, id_order, "", ""), new JsonResponseCallback() {
+                        @Override
+                        public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                            if (errcode == 200) {
+                                clearCart();
+                            }
+                            ToastUtil.showToast(errmsg);
+                            return false;
+                        }
+                    });
+                }
+
                 break;
             default:
                 break;

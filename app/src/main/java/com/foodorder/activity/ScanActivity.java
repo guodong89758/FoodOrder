@@ -8,7 +8,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.foodorder.R;
+import com.foodorder.contant.EventTag;
 import com.foodorder.log.DLOG;
+import com.foodorder.runtime.event.EventManager;
+import com.foodorder.server.ServerManager;
 
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
@@ -57,8 +60,11 @@ public class ScanActivity extends AppCompatActivity implements QRCodeView.Delega
     @Override
     public void onScanQRCodeSuccess(String result) {
         Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
+        ServerManager.SERVER_DOMAIN = result;
         vibrate();
         mQRCodeView.startSpot();
+        EventManager.ins().sendEvent(EventTag.GET_SERVER_DOMAIN_FROM_ZXING, 0, 0, result);
+        finish();
     }
 
     @Override

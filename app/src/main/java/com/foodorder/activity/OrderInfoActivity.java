@@ -15,26 +15,23 @@ import com.foodorder.adapter.OrderGoodAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.contant.AppKey;
 import com.foodorder.db.bean.Good;
-import com.foodorder.log.DLOG;
 import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
-import com.foodorder.util.StringUtil;
+import com.foodorder.server.api.API_Food;
+import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.ToastUtil;
+import com.foodorder.widget.EmptyLayout;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-
 public class OrderInfoActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+    private static final String TAG = "OrderInfoActivity";
     private ImageButton ib_back;
     private ListView lv_good;
     private OrderGoodAdapter goodAdapter;
@@ -43,6 +40,7 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
     private LinearLayout ll_number, ll_person;
     private TextView tv_order_num, tv_time, tv_number, tv_person_count, tv_total;
     private Button btn_add;
+    private EmptyLayout emptyLayout;
     private NumberFormat nf;
     private String id_order, time, persons, number;
     private double total;
@@ -74,55 +72,82 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
 
         nf = NumberFormat.getCurrencyInstance();
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
+
+        emptyLayout = new EmptyLayout(this, lv_good);
+        emptyLayout.showLoading();
+        emptyLayout.setErrorButtonShow(true);
+        emptyLayout.setEmptyButtonShow(true);
+        emptyLayout.setEmptyButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyLayout.showLoading();
+                API_Food.ins().getOrderInfo(TAG, id_order, infoCallback);
+            }
+        });
+
+        emptyLayout.setErrorButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyLayout.showLoading();
+                API_Food.ins().getOrderInfo(TAG, id_order, infoCallback);
+            }
+        });
     }
 
     @Override
     public void initData() {
+        id_order = getIntent().getStringExtra(AppKey.ORDER_ID);
         if (goodData == null) {
             goodData = new ArrayList<>();
         }
+        API_Food.ins().getOrderInfo(TAG, id_order, infoCallback);
+//        Observable.create(new Observable.OnSubscribe<Object>() {
+//            @Override
+//            public void call(Subscriber<? super Object> subscriber) {
+//                String order_json = StringUtil.getJson(OrderInfoActivity.this, "order.json");
+//                try {
+//                    parseJson(new JSONObject(order_json));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                subscriber.onCompleted();
+//            }
+//        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
+//            @Override
+//            public void onCompleted() {
+//                goodAdapter = new OrderGoodAdapter(OrderInfoActivity.this);
+//                goodAdapter.setData(goodData);
+//                lv_good.setAdapter(goodAdapter);
+//                tv_order_num.setText(id_order);
+//                tv_time.setText(time);
+//                if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
+//                    ll_number.setVisibility(View.GONE);
+//                    ll_person.setVisibility(View.GONE);
+//                } else {
+//                    ll_number.setVisibility(View.VISIBLE);
+//                    ll_person.setVisibility(View.VISIBLE);
+//                    tv_number.setText(number);
+//                    tv_person_count.setText(persons);
+//                }
+//                tv_total.setText(nf.format(total));
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                DLOG.e(e.getMessage());
+//            }
+//
+//            @Override
+//            public void onNext(Object o) {
+//
+//            }
+//        });
+    }
 
-        Observable.create(new Observable.OnSubscribe<Object>() {
-            @Override
-            public void call(Subscriber<? super Object> subscriber) {
-                String order_json = StringUtil.getJson(OrderInfoActivity.this, "order.json");
-                try {
-                    parseJson(new JSONObject(order_json));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
-            @Override
-            public void onCompleted() {
-                goodAdapter = new OrderGoodAdapter(OrderInfoActivity.this);
-                goodAdapter.setData(goodData);
-                lv_good.setAdapter(goodAdapter);
-                tv_order_num.setText(id_order);
-                tv_time.setText(time);
-                if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
-                    ll_number.setVisibility(View.GONE);
-                    ll_person.setVisibility(View.GONE);
-                } else {
-                    ll_number.setVisibility(View.VISIBLE);
-                    ll_person.setVisibility(View.VISIBLE);
-                    tv_number.setText(number);
-                    tv_person_count.setText(persons);
-                }
-                tv_total.setText(nf.format(total));
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                DLOG.e(e.getMessage());
-            }
-
-            @Override
-            public void onNext(Object o) {
-
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(TAG);
     }
 
     @Override
@@ -134,6 +159,7 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
             case R.id.btn_add:
                 Intent intent = new Intent(OrderInfoActivity.this, GoodListActivity.class);
                 intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_ADD);
+                intent.putExtra(AppKey.ID_ORDER, id_order);
                 startActivity(intent);
                 break;
         }
@@ -151,14 +177,43 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
         }
     }
 
-    public void parseJson(JSONObject json) {
-        if (json == null) {
-            return;
+    JsonResponseCallback infoCallback = new JsonResponseCallback() {
+        @Override
+        public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+            if (errcode == 200 && json != null) {
+                emptyLayout.showContent();
+                parseJson(json);
+                goodAdapter = new OrderGoodAdapter(OrderInfoActivity.this);
+                goodAdapter.setData(goodData);
+                lv_good.setAdapter(goodAdapter);
+                tv_order_num.setText(id_order);
+                tv_time.setText(time);
+                if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
+                    ll_number.setVisibility(View.GONE);
+                    ll_person.setVisibility(View.GONE);
+                } else {
+                    ll_number.setVisibility(View.VISIBLE);
+                    ll_person.setVisibility(View.VISIBLE);
+                    tv_number.setText(number);
+                    tv_person_count.setText(persons);
+                }
+                tv_total.setText(nf.format(total));
+            } else {
+                ToastUtil.showToast(errmsg);
+                emptyLayout.showError();
+            }
+            return false;
         }
-        if (goodData != null) {
-            goodData.clear();
-        }
-        JSONObject data = json.optJSONObject("data");
+    };
+
+    public void parseJson(JSONObject data) {
+//        if (json == null) {
+//            return;
+//        }
+//        if (goodData != null) {
+//            goodData.clear();
+//        }
+//        JSONObject data = json.optJSONObject("data");
         this.id_order = data.optString("id_order");
         this.time = data.optString("time");
         this.persons = data.optString("persons");

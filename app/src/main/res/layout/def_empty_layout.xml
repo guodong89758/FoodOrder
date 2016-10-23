@@ -24,7 +24,7 @@
         android:textColor="@color/black_40"
         android:textSize="14sp" />
 
-    <FontButton
+    <Button
         android:id="@+id/btn_null"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="120dp"

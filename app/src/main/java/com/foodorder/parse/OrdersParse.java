@@ -12,14 +12,14 @@ import org.json.JSONObject;
  */
 public class OrdersParse {
 
-    public static void parseJson(JSONObject json) {
-        if (json == null) {
-            return;
-        }
-        JSONObject data = json.optJSONObject("data");
+    public static void parseJson(JSONObject data) {
         if (data == null) {
             return;
         }
+//        JSONObject data = json.optJSONObject("data");
+//        if (data == null) {
+//            return;
+//        }
 
         JSONArray orderArray = data.optJSONArray("Orders");
         if (orderArray != null && orderArray.length() > 0) {

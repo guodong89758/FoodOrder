@@ -12,6 +12,7 @@ import com.foodorder.adapter.GoodSearchAdapter;
 import com.foodorder.adapter.KeycodeAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.base.BaseRecyclerAdapter;
+import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.GoodDao;
 import com.foodorder.db.bean.Good;
@@ -23,9 +24,13 @@ import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
+import com.foodorder.server.api.API_Food;
+import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,6 @@ import rx.schedulers.Schedulers;
 import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 
 public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener {
-
     private GridLayout gl_keybord;
     private RecyclerView rv_good, rv_code;
     private Button btn_pack;
@@ -47,6 +51,8 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     private GoodSearchAdapter goodAdapter;
     private List<Good> codeData;
     private String search_content = "";
+    private int list_type = AppKey.GOOD_LIST_MENU;
+    private String id_order;
 
     @Override
     protected int getLayoutId() {
@@ -87,6 +93,8 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 
     @Override
     public void initData() {
+        list_type = getIntent().getIntExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
+        id_order = getIntent().getStringExtra(AppKey.ID_ORDER);
         if (codeData == null) {
             codeData = new ArrayList<>();
         }
@@ -168,8 +176,24 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                 search();
                 break;
             case R.id.btn_send:
-                OrderSetupPop setupPop = new OrderSetupPop(GoodSearchActivity.this);
-                setupPop.showPopup();
+                if (CartManager.ins().isPack) {
+                    OrderSetupPop setupPop = new OrderSetupPop(GoodSearchActivity.this, id_order);
+                    setupPop.showPopup();
+                } else {
+                    API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(false, id_order, "", ""), new JsonResponseCallback() {
+                        @Override
+                        public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                            if (errcode == 200) {
+                                CartManager.ins().clear();
+                                EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
+                                EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+                            }
+                            ToastUtil.showToast(errmsg);
+                            return false;
+                        }
+                    });
+                }
+
                 break;
             case R.id.btn_0:
                 search_content = search_content + "0";

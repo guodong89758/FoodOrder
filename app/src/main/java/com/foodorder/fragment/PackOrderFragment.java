@@ -16,17 +16,23 @@ import com.foodorder.activity.OrderInfoActivity;
 import com.foodorder.adapter.PackOrderAdapter;
 import com.foodorder.base.BaseFragment;
 import com.foodorder.base.BaseRecyclerAdapter;
+import com.foodorder.contant.AppKey;
+import com.foodorder.contant.EventTag;
+import com.foodorder.db.OrderDao;
 import com.foodorder.db.bean.Order;
 import com.foodorder.dialog.OrderActionDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.parse.OrdersParse;
 import com.foodorder.runtime.RT;
-import com.foodorder.runtime.WeakHandler;
-import com.foodorder.util.StringUtil;
+import com.foodorder.runtime.event.EventListener;
+import com.foodorder.runtime.event.EventManager;
+import com.foodorder.server.api.API_Food;
+import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.ToastUtil;
+import com.foodorder.widget.EmptyLayout;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
+import com.lzy.okhttputils.OkHttpUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -38,11 +44,14 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.lzy.okhttputils.interceptor.LoggerInterceptor.TAG;
+
 
 public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, BaseRecyclerAdapter.OnItemClickListener, BaseRecyclerAdapter.OnItemLongClickListener {
 
     private SwipeRefreshLayout swipe_refresh;
     private RecyclerView rv_pack;
+    private EmptyLayout emptyLayout;
     private PackOrderAdapter orderAdapter;
     private List<Order> orderData;
 
@@ -63,6 +72,13 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
 
         swipe_refresh.setColorSchemeResources(R.color.refresh_progress_blue, R.color.refresh_progress_green, R.color.refresh_progress_red, R.color.refresh_progress_yellow);
         swipe_refresh.setOnRefreshListener(this);
+
+        emptyLayout = new EmptyLayout(getActivity(), swipe_refresh);
+        emptyLayout.setShowTemp(true);
+        emptyLayout.setEmptyText(RT.getString(R.string.order_list_empty));
+        emptyLayout.showLoading();
+
+        EventManager.ins().registListener(EventTag.ORDER_LIST_REFRESH, eventListener);
         return rootView;
     }
 
@@ -73,25 +89,157 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
             orderData = new ArrayList<>();
         }
 
+//        Observable.create(new Observable.OnSubscribe<Object>() {
+//            @Override
+//            public void call(Subscriber<? super Object> subscriber) {
+//                String order_json = StringUtil.getJson(getActivity(), "orders.json");
+//                try {
+//                    OrdersParse.parseJson(new JSONObject(order_json));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                orderData = RT.ins().getDaoSession().getOrderDao().loadAll();
+//                subscriber.onCompleted();
+//            }
+//        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
+//            @Override
+//            public void onCompleted() {
+//                orderAdapter = new PackOrderAdapter(getActivity(), orderData);
+//                orderAdapter.setOnItemClickListener(PackOrderFragment.this);
+//                orderAdapter.setOnItemLongClickListener(PackOrderFragment.this);
+//                rv_pack.setAdapter(orderAdapter);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                DLOG.e(e.getMessage());
+//            }
+//
+//            @Override
+//            public void onNext(Object o) {
+//
+//            }
+//        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventManager.ins().removeListener(EventTag.ORDER_LIST_REFRESH, eventListener);
+        OkHttpUtils.getInstance().cancelTag(TAG);
+    }
+
+    @Override
+    public void onRefresh() {
+        API_Food.ins().getOrderList(TAG, refreshCallback);
+    }
+
+    @Override
+    public void onItemClick(View view, int position, long id) {
+        Order order = orderData.get(position);
+        if (order == null) {
+            return;
+        }
+        Intent intent = new Intent(getActivity(), OrderInfoActivity.class);
+        intent.putExtra(AppKey.ORDER_ID, order.getId_order());
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(View view, int position, long id) {
+        Order order = orderData.get(position);
+        if (order != null) {
+            showActionDialog(order);
+        }
+        return true;
+    }
+
+    private void showActionDialog(Order order) {
+        if (order == null) {
+            return;
+        }
+        OrderActionDialog dialog = new OrderActionDialog(getActivity(), order);
+        dialog.setButton1(new OrderActionDialog.DialogButtonOnClickListener() {
+            @Override
+            public void onClick(View button, final OrderActionDialog dialog, Order order) {
+                dialog.dismiss();
+//                ToastUtil.showToast(getResources().getString(R.string.order_action_1));
+                API_Food.ins().remindOrder(TAG, order.getId_order(), new JsonResponseCallback() {
+                    @Override
+                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        ToastUtil.showToast(errmsg);
+                        return false;
+                    }
+                });
+            }
+        });
+        dialog.setButton2(new OrderActionDialog.DialogButtonOnClickListener() {
+            @Override
+            public void onClick(View button, OrderActionDialog dialog, Order order) {
+                dialog.dismiss();
+//                ToastUtil.showToast(getResources().getString(R.string.order_action_2));
+                API_Food.ins().printOrder(TAG, order.getId_order(), new JsonResponseCallback() {
+                    @Override
+                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        ToastUtil.showToast(errmsg);
+                        return false;
+                    }
+                });
+            }
+        });
+        dialog.show();
+    }
+
+    EventListener eventListener = new EventListener() {
+        @Override
+        public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
+            switch (what) {
+                case EventTag.ORDER_LIST_REFRESH:
+                    parseJson();
+                    break;
+            }
+        }
+    };
+
+    JsonResponseCallback refreshCallback = new JsonResponseCallback() {
+        @Override
+        public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+            swipe_refresh.setRefreshing(false);
+            if (errcode == 200 && json != null) {
+                OrdersParse.parseJson(json);
+                parseJson();
+            } else {
+                emptyLayout.showEmptyOrError(errcode);
+                ToastUtil.showToast(errmsg);
+            }
+            return false;
+        }
+    };
+
+    private void parseJson() {
         Observable.create(new Observable.OnSubscribe<Object>() {
             @Override
             public void call(Subscriber<? super Object> subscriber) {
-                String order_json = StringUtil.getJson(getActivity(), "orders.json");
-                try {
-                    OrdersParse.parseJson(new JSONObject(order_json));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                orderData = RT.ins().getDaoSession().getOrderDao().loadAll();
+                orderData = RT.ins().getDaoSession().getOrderDao().queryBuilder().where(OrderDao.Properties.Type.eq(AppKey.ORDER_TYPE_EMPORTER)).build().list();
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
             @Override
             public void onCompleted() {
-                orderAdapter = new PackOrderAdapter(getActivity(), orderData);
-                orderAdapter.setOnItemClickListener(PackOrderFragment.this);
-                orderAdapter.setOnItemLongClickListener(PackOrderFragment.this);
-                rv_pack.setAdapter(orderAdapter);
+                if (orderAdapter == null) {
+                    orderAdapter = new PackOrderAdapter(getActivity(), orderData);
+                    orderAdapter.setOnItemClickListener(PackOrderFragment.this);
+                    orderAdapter.setOnItemLongClickListener(PackOrderFragment.this);
+                    rv_pack.setAdapter(orderAdapter);
+                } else {
+                    orderAdapter.notifyDataSetChanged();
+                }
+                if (orderData.size() > 0) {
+                    emptyLayout.showContent();
+                } else {
+                    emptyLayout.showEmpty();
+                }
+
             }
 
             @Override
@@ -105,48 +253,4 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
             }
         });
     }
-
-    @Override
-    public void onRefresh() {
-        new WeakHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipe_refresh.setRefreshing(false);
-            }
-        }, 3000);
-    }
-
-    @Override
-    public void onItemClick(View view, int position, long id) {
-        startActivity(new Intent(getActivity(), OrderInfoActivity.class));
-    }
-
-    @Override
-    public boolean onItemLongClick(View view, int position, long id) {
-        Order order = orderData.get(position);
-        if (order != null) {
-            showActionDialog(order);
-        }
-        return true;
-    }
-
-    private void showActionDialog(Order order) {
-        OrderActionDialog dialog = new OrderActionDialog(getActivity(), order);
-        dialog.setButton1(new OrderActionDialog.DialogButtonOnClickListener() {
-            @Override
-            public void onClick(View button, OrderActionDialog dialog, Order order) {
-                dialog.dismiss();
-                ToastUtil.showToast(getResources().getString(R.string.order_action_1));
-            }
-        });
-        dialog.setButton2(new OrderActionDialog.DialogButtonOnClickListener() {
-            @Override
-            public void onClick(View button, OrderActionDialog dialog, Order order) {
-                dialog.dismiss();
-                ToastUtil.showToast(getResources().getString(R.string.order_action_2));
-            }
-        });
-        dialog.show();
-    }
-
 }

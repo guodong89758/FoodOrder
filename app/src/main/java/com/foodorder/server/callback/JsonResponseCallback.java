@@ -13,7 +13,7 @@ public abstract class JsonResponseCallback extends ResponseCallback {
         try {
             JSONObject json = new JSONObject(new String((byte[]) result));
 
-            int code = json.optInt("status", -1);
+            int code = json.optInt("code", -1);
             errmsg = json.optString("message");
             JSONObject data = json.optJSONObject("data");
 

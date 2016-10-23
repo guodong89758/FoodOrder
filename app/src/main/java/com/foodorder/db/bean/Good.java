@@ -389,28 +389,34 @@ public class Good implements Cloneable {
             for (int i = 0; i < formulaArray.length(); i++) {
                 JSONObject formulaJson = formulaArray.optJSONObject(i);
                 int count = formulaJson.optInt("quantity", 0);
+                String product_name_fr = formulaJson.optString("product_name");
+                JSONObject zh = formulaJson.optJSONObject("zh");
+                String product_name_zh = "";
+                if(zh != null){
+                    product_name_zh = zh.optString("name");
+                }
                 Formula formula = new Formula();
-                formula.setFr_name("菜品" + i);
-                formula.setZh_name("菜品" + i);
+                formula.setFr_name(product_name_fr);
+                formula.setZh_name(product_name_zh);
                 formula.setCount(count);
                 formulaData.add(formula);
             }
         }
         this.formulaList = formulaData;
-        JSONArray attrArray = json.optJSONArray("Attributes");
-        List<Attribute> attrData = new ArrayList<>();
-        if (attrArray != null && attrArray.length() > 0) {
-            for (int i = 0; i < attrArray.length(); i++) {
-                JSONObject attrJson = attrArray.optJSONObject(i);
-                int count = attrJson.optInt("quantity", 0);
-                Attribute attr = new Attribute();
-                attr.setFr_name("规格" + i);
-                attr.setZh_name("规格" + i);
-                attr.setCount(count);
-                attrData.add(attr);
-            }
-        }
-        this.attributeList = attrData;
+//        JSONArray attrArray = json.optJSONArray("Attributes");
+//        List<Attribute> attrData = new ArrayList<>();
+//        if (attrArray != null && attrArray.length() > 0) {
+//            for (int i = 0; i < attrArray.length(); i++) {
+//                JSONObject attrJson = attrArray.optJSONObject(i);
+//                int count = attrJson.optInt("quantity", 0);
+//                Attribute attr = new Attribute();
+//                attr.setFr_name("规格" + i);
+//                attr.setZh_name("规格" + i);
+//                attr.setCount(count);
+//                attrData.add(attr);
+//            }
+//        }
+//        this.attributeList = attrData;
 
     }
 

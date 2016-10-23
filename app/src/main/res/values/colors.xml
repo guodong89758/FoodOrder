@@ -29,7 +29,7 @@
     <color name="red_color">#ffff461d</color>
     <color name="price_color">#ffff6000</color>
 
-    <color name="progressbar_color">#99000000</color>
+    <color name="progressbar_color">#ff3190e8</color>
 
     <!-- 下拉刷新进度条颜色 -->
     <color name="refresh_progress_red">#FFC93437</color>

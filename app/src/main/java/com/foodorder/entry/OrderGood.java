@@ -7,8 +7,43 @@ import java.util.List;
  */
 
 public class OrderGood {
-
+    private String id_order;
+    private boolean isPack;
+    private String persons;
+    private String number;
     private List<Product> products;
+
+    public String getId_order() {
+        return id_order;
+    }
+
+    public void setId_order(String id_order) {
+        this.id_order = id_order;
+    }
+
+    public boolean isPack() {
+        return isPack;
+    }
+
+    public void setPack(boolean pack) {
+        isPack = pack;
+    }
+
+    public String getPersons() {
+        return persons;
+    }
+
+    public void setPersons(String persons) {
+        this.persons = persons;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public List<Product> getProducts() {
         return products;

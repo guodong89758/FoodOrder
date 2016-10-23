@@ -3,6 +3,7 @@ package com.foodorder.pop;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.text.method.ReplacementTransformationMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,9 +17,17 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
-import com.foodorder.log.DLOG;
+import com.foodorder.contant.AppKey;
+import com.foodorder.contant.EventTag;
 import com.foodorder.logic.CartManager;
+import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventManager;
+import com.foodorder.server.api.API_Food;
+import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.SoftKeyboardUtil;
+import com.foodorder.util.ToastUtil;
+
+import org.json.JSONObject;
 
 /**
  * Created by guodong on 2016/5/31 12:05.
@@ -30,10 +39,12 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
     private EditText et_num;
     private TextView tv_minus, tv_count, tv_add;
     private Button btn_ok;
-    private int count = 0;
+    private String id_order;
+    private int count = 1;
 
-    public OrderSetupPop(Context context) {
+    public OrderSetupPop(Context context, String id_order) {
         this.mContext = context;
+        this.id_order = id_order;
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         setFocusable(true);
@@ -75,8 +86,25 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.btn_ok:
+                String number = et_num.getText().toString().trim().toUpperCase();
+                if (TextUtils.isEmpty(number)) {
+                    ToastUtil.showToast(RT.getString(R.string.good_taihao_empty));
+                    return;
+                }
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
-                DLOG.json(CartManager.ins().getOrderGoodJson());
+                String persons = tv_count.getText().toString().trim();
+                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(true, id_order, number, persons), new JsonResponseCallback() {
+                    @Override
+                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        if (errcode == 200) {
+                            CartManager.ins().clear();
+                            EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
+                            EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+                        }
+                        ToastUtil.showToast(errmsg);
+                        return false;
+                    }
+                });
                 dismiss();
                 break;
             case R.id.tv_add:

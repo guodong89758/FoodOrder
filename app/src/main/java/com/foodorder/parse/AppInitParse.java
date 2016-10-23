@@ -15,14 +15,14 @@ import org.json.JSONObject;
  */
 public class AppInitParse {
 
-    public static void parseJson(JSONObject json) {
-        if (json == null) {
-            return;
-        }
-        JSONObject data = json.optJSONObject("data");
+    public static void parseJson(JSONObject data) {
         if (data == null) {
             return;
         }
+//        JSONObject data = json.optJSONObject("data");
+//        if (data == null) {
+//            return;
+//        }
         //用户信息
         JSONArray userArray = data.optJSONArray("Users");
         if (userArray != null && userArray.length() > 0) {

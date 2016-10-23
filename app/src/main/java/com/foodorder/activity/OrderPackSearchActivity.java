@@ -19,15 +19,20 @@ import com.foodorder.R;
 import com.foodorder.adapter.PackOrderAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.base.BaseRecyclerAdapter;
+import com.foodorder.contant.AppKey;
 import com.foodorder.db.OrderDao;
 import com.foodorder.db.bean.Order;
 import com.foodorder.dialog.OrderActionDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.runtime.RT;
+import com.foodorder.server.api.API_Food;
+import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
+import com.lzy.okhttputils.OkHttpUtils;
 
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class OrderPackSearchActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener, BaseRecyclerAdapter.OnItemLongClickListener {
-
+    private static final String TAG = "OrderPackSearchActivity";
     private ImageButton ib_clear;
     private Button btn_back;
     private EditText et_search;
@@ -90,6 +95,12 @@ public class OrderPackSearchActivity extends BaseActivity implements BaseRecycle
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OkHttpUtils.getInstance().cancelTag(TAG);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_clear:
@@ -110,7 +121,13 @@ public class OrderPackSearchActivity extends BaseActivity implements BaseRecycle
 
     @Override
     public void onItemClick(View view, int position, long id) {
-        startActivity(new Intent(OrderPackSearchActivity.this, OrderInfoActivity.class));
+        Order order = orderData.get(position);
+        if (order == null) {
+            return;
+        }
+        Intent intent = new Intent(OrderPackSearchActivity.this, OrderInfoActivity.class);
+        intent.putExtra(AppKey.ORDER_ID, order.getId_order());
+        startActivity(intent);
     }
 
     @Override
@@ -123,19 +140,36 @@ public class OrderPackSearchActivity extends BaseActivity implements BaseRecycle
     }
 
     private void showActionDialog(Order order) {
+        if (order == null) {
+            return;
+        }
         OrderActionDialog dialog = new OrderActionDialog(this, order);
         dialog.setButton1(new OrderActionDialog.DialogButtonOnClickListener() {
             @Override
-            public void onClick(View button, OrderActionDialog dialog, Order order) {
+            public void onClick(View button, final OrderActionDialog dialog, Order order) {
                 dialog.dismiss();
-                ToastUtil.showToast(getResources().getString(R.string.order_action_1));
+//                ToastUtil.showToast(getResources().getString(R.string.order_action_1));
+                API_Food.ins().remindOrder(TAG, order.getId_order(), new JsonResponseCallback() {
+                    @Override
+                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        ToastUtil.showToast(errmsg);
+                        return false;
+                    }
+                });
             }
         });
         dialog.setButton2(new OrderActionDialog.DialogButtonOnClickListener() {
             @Override
             public void onClick(View button, OrderActionDialog dialog, Order order) {
                 dialog.dismiss();
-                ToastUtil.showToast(getResources().getString(R.string.order_action_2));
+//                ToastUtil.showToast(getResources().getString(R.string.order_action_2));
+                API_Food.ins().printOrder(TAG, order.getId_order(), new JsonResponseCallback() {
+                    @Override
+                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        ToastUtil.showToast(errmsg);
+                        return false;
+                    }
+                });
             }
         });
         dialog.show();

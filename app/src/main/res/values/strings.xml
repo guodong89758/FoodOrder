@@ -19,11 +19,14 @@
 
     <!-- login -->
     <string name="login_title">登陆</string>
+    <string name="login_username_empty">用户名不能为空</string>
+    <string name="login_password_empty">密码不能为空</string>
 
     <!-- order -->
     <string name="order_title">订单</string>
     <string name="order_tab_1">堂吃</string>
     <string name="order_tab_2">打包</string>
+    <string name="order_list_empty">暂无订单数据</string>
 
     <!-- goodlist -->
     <string name="good_title">菜单</string>
@@ -34,6 +37,7 @@
     <string name="good_send_setup_title">台号与人数</string>
     <string name="good_taihao_tip">台号:</string>
     <string name="good_person_tip">人数:</string>
+    <string name="good_taihao_empty">台号不能为空</string>
 
     <!-- formula -->
     <string name="formula_max_count_desc">最多选择%d个</string>

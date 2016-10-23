@@ -101,7 +101,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
     }
 
     public void add() {
-        if (formula.getSel_count() == formula.getMax_choose()) {
+        if (formula.getSel_count() >= formula.getMax_choose()) {
             ToastUtil.showToast(getContext().getResources().getString(R.string.formula_max_count_desc, formula.getMax_choose()));
             return;
         }

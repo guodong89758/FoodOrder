@@ -35,7 +35,7 @@
         app:qrcv_cornerColor="@color/colorPrimaryDark"
         app:qrcv_cornerLength="20dp"
         app:qrcv_cornerSize="3dp"
-        app:qrcv_maskColor="@color/black_30"
+        app:qrcv_maskColor="@color/black_10"
         app:qrcv_rectWidth="200dp"
         app:qrcv_scanLineColor="@color/colorPrimaryDark"
         app:qrcv_scanLineSize="1dp"
