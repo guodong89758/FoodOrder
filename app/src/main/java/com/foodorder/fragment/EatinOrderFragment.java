@@ -24,6 +24,7 @@ import com.foodorder.dialog.OrderActionDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.parse.OrdersParse;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
@@ -75,6 +76,8 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         emptyLayout.setEmptyText(RT.getString(R.string.order_list_empty));
         emptyLayout.showLoading();
 
+        EventManager.ins().registListener(EventTag.ORDER_LIST_REFRESH, eventListener);
+
         return rootView;
     }
 
@@ -123,6 +126,7 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
     public void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(TAG);
+        EventManager.ins().removeListener(EventTag.ORDER_LIST_REFRESH, eventListener);
     }
 
     @Override
@@ -150,6 +154,17 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         return true;
     }
 
+    EventListener eventListener = new EventListener() {
+        @Override
+        public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
+            switch (what) {
+                case EventTag.ORDER_LIST_REFRESH:
+                    API_Food.ins().getOrderList(TAG, getOrderListCallback);
+                    break;
+            }
+        }
+    };
+
     private void showActionDialog(Order order) {
         if (order == null) {
             return;
@@ -163,6 +178,9 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
                 API_Food.ins().remindOrder(TAG, order.getId_order(), new JsonResponseCallback() {
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        if (errcode == 200) {
+                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                        }
                         ToastUtil.showToast(errmsg);
                         return false;
                     }

@@ -20,11 +20,13 @@ import com.foodorder.adapter.PackOrderAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.base.BaseRecyclerAdapter;
 import com.foodorder.contant.AppKey;
+import com.foodorder.contant.EventTag;
 import com.foodorder.db.OrderDao;
 import com.foodorder.db.bean.Order;
 import com.foodorder.dialog.OrderActionDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.ToastUtil;
@@ -152,6 +154,9 @@ public class OrderPackSearchActivity extends BaseActivity implements BaseRecycle
                 API_Food.ins().remindOrder(TAG, order.getId_order(), new JsonResponseCallback() {
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        if (errcode == 200) {
+                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                        }
                         ToastUtil.showToast(errmsg);
                         return false;
                     }

@@ -78,7 +78,7 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
         emptyLayout.setEmptyText(RT.getString(R.string.order_list_empty));
         emptyLayout.showLoading();
 
-        EventManager.ins().registListener(EventTag.ORDER_LIST_REFRESH, eventListener);
+        EventManager.ins().registListener(EventTag.ORDER_PACK_LIST_REFRESH, eventListener);
         return rootView;
     }
 
@@ -125,7 +125,7 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventManager.ins().removeListener(EventTag.ORDER_LIST_REFRESH, eventListener);
+        EventManager.ins().removeListener(EventTag.ORDER_PACK_LIST_REFRESH, eventListener);
         OkHttpUtils.getInstance().cancelTag(TAG);
     }
 
@@ -167,6 +167,9 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
                 API_Food.ins().remindOrder(TAG, order.getId_order(), new JsonResponseCallback() {
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        if (errcode == 200) {
+                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                        }
                         ToastUtil.showToast(errmsg);
                         return false;
                     }
@@ -194,7 +197,7 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
         @Override
         public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
             switch (what) {
-                case EventTag.ORDER_LIST_REFRESH:
+                case EventTag.ORDER_PACK_LIST_REFRESH:
                     parseJson();
                     break;
             }
