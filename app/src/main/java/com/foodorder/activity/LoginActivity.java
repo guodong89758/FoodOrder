@@ -4,14 +4,14 @@ import android.Manifest;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.logic.UserManager;
+import com.foodorder.pop.LoginUserPop;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.ToastUtil;
@@ -25,9 +25,11 @@ import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONObject;
 
-public class LoginActivity extends BaseActivity {
+
+public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSelectedListener {
     private static final String TAG = "LoginActivity";
-    private AutoCompleteTextView tv_username;
+    //    private AutoCompleteTextView tv_username;
+    private TextView tv_username;
     private EditText et_password;
     private Button btn_login, btn_zxing;
 
@@ -38,20 +40,22 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        tv_username = (AutoCompleteTextView) findViewById(R.id.tv_username);
+//        tv_username = (AutoCompleteTextView) findViewById(tv_username);
+        tv_username = (TextView) findViewById(R.id.tv_username);
         et_password = (EditText) findViewById(R.id.et_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_zxing = (Button) findViewById(R.id.btn_zxing);
 
         btn_login.setOnClickListener(this);
         btn_zxing.setOnClickListener(this);
+        tv_username.setOnClickListener(this);
 
     }
 
     @Override
     public void initData() {
-        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, UserManager.getInstance().getUserList());
-        tv_username.setAdapter(arrayAdapter);
+//        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, UserManager.getInstance().getUserList());
+//        tv_username.setAdapter(arrayAdapter);
     }
 
     @Override
@@ -105,8 +109,19 @@ public class LoginActivity extends BaseActivity {
                     }
                 }, Manifest.permission.CAMERA);
                 break;
+            case R.id.tv_username:
+                if (UserManager.getInstance().getUserList() != null && UserManager.getInstance().getUserList().size() > 0) {
+                    LoginUserPop userPop = new LoginUserPop(this);
+                    userPop.setOnUserSelectedListener(this);
+                    userPop.showPopup(tv_username);
+                }
+                break;
         }
     }
 
 
+    @Override
+    public void selectedUser(String username) {
+        tv_username.setText(username);
+    }
 }
