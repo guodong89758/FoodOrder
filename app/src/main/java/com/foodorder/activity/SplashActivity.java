@@ -2,20 +2,24 @@ package com.foodorder.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
+import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.log.DLOG;
 import com.foodorder.parse.AppInitParse;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
+import com.foodorder.server.ServerManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.PreferenceHelper;
 import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.karumi.dexter.Dexter;
@@ -90,7 +94,29 @@ public class SplashActivity extends BaseActivity {
 //            }
 //        });
         if (StringUtil.checkTime()) {
-            API_Food.ins().getGoodMenu(TAG, initCallbck);
+            ServerManager.SERVER_DOMAIN = PreferenceHelper.ins().getStringShareData(AppKey.SERVER_DOMAIN, "");
+            if(TextUtils.isEmpty(ServerManager.SERVER_DOMAIN)){
+                Dexter.checkPermission(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        startActivity(new Intent(SplashActivity.this, ScanActivity.class));
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        if (token != null) {
+                            token.continuePermissionRequest();
+                        }
+                    }
+                }, Manifest.permission.CAMERA);
+            }else {
+                API_Food.ins().getGoodMenu(TAG, initCallbck);
+            }
         }
     }
 

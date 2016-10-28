@@ -126,11 +126,10 @@ public class NetworkInterface {
      * @param callback   回调接口
      */
     public void connectedByGet(final String requestUrl, String apiTag, HttpParams params, final ResponseCallback callback) {
-        String url = getRequsetUrl(requestUrl);
         if (RT.DEBUG) {
             DLOG.d(AppKey.HTTP_TAG, requestUrl);
         }
-        OkHttpUtils.get(url).params(params).tag(apiTag).execute(new StringCallback() {
+        OkHttpUtils.get(requestUrl).params(params).tag(apiTag).execute(new StringCallback() {
             @Override
             public void onBefore(BaseRequest request) {
                 super.onBefore(request);
