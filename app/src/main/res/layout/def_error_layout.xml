@@ -5,10 +5,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
 
     <ImageView
         android:id="@+id/iv_error"
@@ -40,8 +36,10 @@
         android:textSize="12sp" />
 
     <View
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2" />
+        android:id="@+id/temp_error_view"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:visibility="gone" />
+
 
 </LinearLayout>

@@ -414,6 +414,7 @@ public class GoodListActivity extends BaseActivity {
                         public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                             if (errcode == 200) {
                                 clearCart();
+                                EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
                             }
                             ToastUtil.showToast(errmsg);
                             return false;

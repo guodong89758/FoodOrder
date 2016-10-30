@@ -76,7 +76,23 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
         emptyLayout = new EmptyLayout(getActivity(), swipe_refresh);
         emptyLayout.setShowTemp(true);
         emptyLayout.setEmptyText(RT.getString(R.string.order_list_empty));
+        emptyLayout.setEmptyButtonShow(true);
+        emptyLayout.setErrorButtonShow(true);
         emptyLayout.showLoading();
+        emptyLayout.setEmptyButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyLayout.showLoading();
+                API_Food.ins().getOrderList(TAG, refreshCallback);
+            }
+        });
+        emptyLayout.setErrorButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyLayout.showLoading();
+                API_Food.ins().getOrderList(TAG, refreshCallback);
+            }
+        });
 
         EventManager.ins().registListener(EventTag.ORDER_PACK_LIST_REFRESH, eventListener);
         return rootView;

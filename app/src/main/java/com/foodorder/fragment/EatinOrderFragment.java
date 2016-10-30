@@ -73,8 +73,25 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
 
         emptyLayout = new EmptyLayout(getActivity(), swipe_refresh);
         emptyLayout.setShowTemp(true);
+        emptyLayout.setEmptyButtonShow(true);
+        emptyLayout.setErrorButtonShow(true);
         emptyLayout.setEmptyText(RT.getString(R.string.order_list_empty));
         emptyLayout.showLoading();
+        emptyLayout.setEmptyButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyLayout.showLoading();
+                API_Food.ins().getOrderList(TAG, getOrderListCallback);
+            }
+        });
+        emptyLayout.setErrorButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emptyLayout.showLoading();
+                API_Food.ins().getOrderList(TAG, getOrderListCallback);
+            }
+        });
+
 
         EventManager.ins().registListener(EventTag.ORDER_LIST_REFRESH, eventListener);
 

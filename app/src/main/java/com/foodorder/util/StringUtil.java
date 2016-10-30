@@ -45,8 +45,8 @@ public class StringUtil {
     public static boolean checkTime() {
         long mostTime = 0;
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d H:m:s");
-            Date date = dateFormat.parse("2016-11-5 0:0:0");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = dateFormat.parse("2016-11-07 00:00:00");
             mostTime = date.getTime();
         } catch (ParseException e) {
             e.printStackTrace();

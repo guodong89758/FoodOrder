@@ -187,6 +187,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                                 CartManager.ins().clear();
                                 EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
                                 EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+                                EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
                             }
                             ToastUtil.showToast(errmsg);
                             return false;

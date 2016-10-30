@@ -32,7 +32,7 @@ public class EmptyLayout {
     private ImageView iv_empty, iv_error;
     private TextView tv_empty, tv_error, tv_status;
     private Button btn_empty, btn_error;
-    private View temp_view;
+    private View temp_view, temp_empty_view, temp_error_view;
     private LayoutInflater mInflater;
     private boolean mViewsAdded = false;
     private View.OnClickListener mEmptyButtonClickListener;
@@ -191,6 +191,7 @@ public class EmptyLayout {
             iv_empty = (ImageView) mEmptyView.findViewById(R.id.iv_data_null);
             tv_empty = (TextView) mEmptyView.findViewById(R.id.tv_null_desc);
             btn_empty = (Button) mEmptyView.findViewById(R.id.btn_null);
+            temp_empty_view = mEmptyView.findViewById(R.id.temp_empty_view);
 
             if (mEmptyButtonClickListener != null) {
                 btn_empty.setOnClickListener(mEmptyButtonClickListener);
@@ -202,6 +203,7 @@ public class EmptyLayout {
             iv_error = (ImageView) mErrorView.findViewById(R.id.iv_error);
             tv_error = (TextView) mErrorView.findViewById(R.id.tv_error_desc);
             btn_error = (Button) mErrorView.findViewById(R.id.btn_error);
+            temp_error_view = mErrorView.findViewById(R.id.temp_error_view);
 
             if (mErrorButtonClickListener != null) {
                 btn_error.setOnClickListener(mErrorButtonClickListener);
@@ -210,8 +212,12 @@ public class EmptyLayout {
 
         if (isShowTemp) {
             temp_view.setVisibility(View.VISIBLE);
+            temp_empty_view.setVisibility(View.VISIBLE);
+            temp_error_view.setVisibility(View.VISIBLE);
         } else {
             temp_view.setVisibility(View.GONE);
+            temp_empty_view.setVisibility(View.GONE);
+            temp_error_view.setVisibility(View.GONE);
         }
         tv_status.setText(loadingStr);
 
