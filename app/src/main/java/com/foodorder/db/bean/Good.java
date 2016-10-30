@@ -381,6 +381,7 @@ public class Good implements Cloneable {
         }
         this.count = json.optInt("product_quantity", 0);
         this.price = json.optDouble("product_price", 0);
+        this.image_url = json.optString("image");
 //        this.id_product = json.optString("tax_rate");
 //        this.id_product = json.optString("product_price_with_tax");
         JSONArray formulaArray = json.optJSONArray("Formula_Items");
@@ -392,7 +393,7 @@ public class Good implements Cloneable {
                 String product_name_fr = formulaJson.optString("product_name");
                 JSONObject zh = formulaJson.optJSONObject("zh");
                 String product_name_zh = "";
-                if(zh != null){
+                if (zh != null) {
                     product_name_zh = zh.optString("name");
                 }
                 Formula formula = new Formula();

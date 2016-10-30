@@ -302,12 +302,14 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                         EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, good);
                     }
                 }
+                clearCode();
             } else {
                 CartManager.ins().add(good, true);
                 if (goodAdapter != null) {
                     goodAdapter.notifyDataSetChanged();
                     rv_good.smoothScrollToPosition(CartManager.ins().cartData.size() - 1);
                 }
+                clearCode();
 //                if (CartManager.ins().cartList.get(good.getId().intValue()) != null) {
 //                    good.setCount(good.getCount() + 1);
 //                    goodAdapter.notifyDataSetChanged();
@@ -321,5 +323,10 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
             }
 
         }
+    }
+
+    private void clearCode() {
+        search_content = "";
+        search();
     }
 }

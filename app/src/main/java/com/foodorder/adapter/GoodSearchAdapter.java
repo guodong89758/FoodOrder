@@ -16,9 +16,11 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
+import com.foodorder.runtime.RT;
 import com.foodorder.util.BitmapLoader;
 import com.foodorder.util.PhoneUtil;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 
@@ -66,6 +68,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
         private Good item;
         private boolean hasAttribute = false;
         private boolean hasFormula = false;
+        private NumberFormat nf;
 
         public GoodViewHolder(View itemView) {
             super(itemView);
@@ -81,6 +84,9 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
             tv_specification.setOnClickListener(this);
+
+            nf = NumberFormat.getCurrencyInstance(RT.locale);
+            nf.setMaximumFractionDigits(RT.PRICE_NUM);
         }
 
         public void bindData(Good item) {
@@ -96,7 +102,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
             tv_code.setText(item.getReference());
 //            item.setCount(CartManager.ins().getSelectedItemCountById(item.getId().intValue()));
             tvCount.setText(String.valueOf(item.getCount()));
-            price.setText(String.valueOf(item.getPrice()));
+            price.setText(nf.format(item.getPrice()));
             if (item.getCount() < 1) {
                 tvCount.setVisibility(View.GONE);
                 tvMinus.setVisibility(View.GONE);

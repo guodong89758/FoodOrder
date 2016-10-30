@@ -15,20 +15,30 @@ import com.foodorder.adapter.OrderGoodAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.contant.AppKey;
 import com.foodorder.db.bean.Good;
+import com.foodorder.log.DLOG;
+import com.foodorder.logic.CartManager;
 import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.EmptyLayout;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class OrderInfoActivity extends BaseActivity implements AdapterView.OnItemClickListener {
     private static final String TAG = "OrderInfoActivity";
@@ -70,7 +80,7 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
         btn_add.setOnClickListener(this);
         lv_good.setOnItemClickListener(this);
 
-        nf = NumberFormat.getCurrencyInstance();
+        nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
 
         emptyLayout = new EmptyLayout(this, lv_good);
@@ -100,48 +110,53 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
         if (goodData == null) {
             goodData = new ArrayList<>();
         }
-        API_Food.ins().getOrderInfo(TAG, id_order, infoCallback);
-//        Observable.create(new Observable.OnSubscribe<Object>() {
-//            @Override
-//            public void call(Subscriber<? super Object> subscriber) {
-//                String order_json = StringUtil.getJson(OrderInfoActivity.this, "order.json");
-//                try {
-//                    parseJson(new JSONObject(order_json));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                subscriber.onCompleted();
-//            }
-//        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
-//            @Override
-//            public void onCompleted() {
-//                goodAdapter = new OrderGoodAdapter(OrderInfoActivity.this);
-//                goodAdapter.setData(goodData);
-//                lv_good.setAdapter(goodAdapter);
-//                tv_order_num.setText(id_order);
-//                tv_time.setText(time);
-//                if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
-//                    ll_number.setVisibility(View.GONE);
-//                    ll_person.setVisibility(View.GONE);
-//                } else {
-//                    ll_number.setVisibility(View.VISIBLE);
-//                    ll_person.setVisibility(View.VISIBLE);
-//                    tv_number.setText(number);
-//                    tv_person_count.setText(persons);
-//                }
-//                tv_total.setText(nf.format(total));
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                DLOG.e(e.getMessage());
-//            }
-//
-//            @Override
-//            public void onNext(Object o) {
-//
-//            }
-//        });
+        if (RT.DEBUG) {
+            Observable.create(new Observable.OnSubscribe<Object>() {
+                @Override
+                public void call(Subscriber<? super Object> subscriber) {
+                    String order_json = StringUtil.getJson(OrderInfoActivity.this, "order.json");
+                    try {
+                        parseJson(new JSONObject(order_json));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    subscriber.onCompleted();
+                }
+            }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
+                @Override
+                public void onCompleted() {
+                    emptyLayout.showContent();
+                    goodAdapter = new OrderGoodAdapter(OrderInfoActivity.this);
+                    goodAdapter.setData(goodData);
+                    lv_good.setAdapter(goodAdapter);
+                    tv_order_num.setText(number);
+                    tv_time.setText(time);
+                    if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
+                        ll_number.setVisibility(View.GONE);
+                        ll_person.setVisibility(View.GONE);
+                    } else {
+                        ll_number.setVisibility(View.VISIBLE);
+                        ll_person.setVisibility(View.VISIBLE);
+                        tv_number.setText(number);
+                        tv_person_count.setText(persons);
+                    }
+                    tv_total.setText(nf.format(total));
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    DLOG.e(e.getMessage());
+                }
+
+                @Override
+                public void onNext(Object o) {
+
+                }
+            });
+        } else {
+            API_Food.ins().getOrderInfo(TAG, id_order, infoCallback);
+        }
+
     }
 
     @Override
@@ -157,6 +172,11 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
                 onBackPressed();
                 break;
             case R.id.btn_add:
+                if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
+                    CartManager.ins().isPack = true;
+                } else {
+                    CartManager.ins().isPack = false;
+                }
                 Intent intent = new Intent(OrderInfoActivity.this, GoodListActivity.class);
                 intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_ADD);
                 intent.putExtra(AppKey.ID_ORDER, id_order);
@@ -186,7 +206,7 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
                 goodAdapter = new OrderGoodAdapter(OrderInfoActivity.this);
                 goodAdapter.setData(goodData);
                 lv_good.setAdapter(goodAdapter);
-                tv_order_num.setText(id_order);
+                tv_order_num.setText(number);
                 tv_time.setText(time);
                 if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
                     ll_number.setVisibility(View.GONE);
@@ -206,14 +226,19 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
         }
     };
 
-    public void parseJson(JSONObject data) {
-//        if (json == null) {
-//            return;
-//        }
-//        if (goodData != null) {
-//            goodData.clear();
-//        }
-//        JSONObject data = json.optJSONObject("data");
+    public void parseJson(JSONObject json) {
+        if (json == null) {
+            return;
+        }
+        if (goodData != null) {
+            goodData.clear();
+        }
+        JSONObject data = null;
+        if (RT.DEBUG) {
+            data = json.optJSONObject("data");
+        } else {
+            data = json;
+        }
         this.id_order = data.optString("id_order");
         this.time = data.optString("time");
         this.persons = data.optString("persons");

@@ -13,6 +13,7 @@ import com.foodorder.base.BaseActivity;
 import com.foodorder.contant.AppKey;
 import com.foodorder.fragment.EatinOrderFragment;
 import com.foodorder.fragment.PackOrderFragment;
+import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.ActivityManager;
 import com.foodorder.util.SmoothSwitchScreenUtil;
 import com.foodorder.util.ToastUtil;
@@ -75,10 +76,10 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
                 Intent intent = new Intent(OrdersActivity.this, GoodListActivity.class);
                 if (vp_order.getCurrentItem() == 0) {
                     intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
-                    intent.putExtra(AppKey.ID_ORDER, false);
+                    CartManager.ins().isPack = false;
                 } else {
                     intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
-                    intent.putExtra(AppKey.ID_ORDER, true);
+                    CartManager.ins().isPack = true;
                 }
                 startActivity(intent);
                 break;

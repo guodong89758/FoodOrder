@@ -25,7 +25,7 @@ public class PackOrderAdapter extends BaseRecyclerAdapter<BaseRecyclerAdapter.Ba
     public PackOrderAdapter(Context mContext, List<Order> mDataList) {
         super(mDataList);
         this.mContext = mContext;
-        nf = NumberFormat.getCurrencyInstance();
+        nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
     }
 
@@ -40,7 +40,7 @@ public class PackOrderAdapter extends BaseRecyclerAdapter<BaseRecyclerAdapter.Ba
             return;
         }
         PackViewHolder mHolder = (PackViewHolder) holder;
-        mHolder.tv_order_num.setText(data.getId_order());
+        mHolder.tv_order_num.setText(data.getNumber());
 //        mHolder.tv_price.setText(mContext.getString(R.string.order_price, nf.format(data.getTotal())));
         mHolder.tv_price.setText(nf.format(data.getTotal()));
         mHolder.tv_time.setText(data.getTime());

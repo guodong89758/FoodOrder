@@ -246,7 +246,7 @@ public class OrderPackSearchActivity extends BaseActivity implements BaseRecycle
 
     private List<Order> queryOrder() {
         QueryBuilder<Order> qb = RT.ins().getDaoSession().getOrderDao().queryBuilder();
-        qb.where(OrderDao.Properties.Id_order.like(search_content + "%"));
+        qb.where(OrderDao.Properties.Number.like(search_content + "%"));
         return qb.list();
     }
 

@@ -26,7 +26,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
     public SelectAdapter(GoodListActivity activity, List<Good> dataList) {
         this.activity = activity;
         this.dataList = dataList;
-        nf = NumberFormat.getCurrencyInstance();
+        nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
         mInflater = LayoutInflater.from(activity);
     }

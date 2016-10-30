@@ -40,7 +40,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
     public GoodsAdapter(List<Good> dataList, GoodListActivity mContext) {
         this.dataList = dataList;
         this.mContext = mContext;
-        nf = NumberFormat.getCurrencyInstance();
+        nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
         mInflater = LayoutInflater.from(mContext);
     }

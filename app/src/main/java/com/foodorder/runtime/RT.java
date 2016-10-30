@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * The Class DMRT.
@@ -33,6 +34,7 @@ public class RT {
     public static Application application = null;
 
     public static int PRICE_NUM = 3;
+    public static Locale locale = Locale.FRANCE;
 
     /**
      * The m local external path.

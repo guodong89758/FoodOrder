@@ -12,6 +12,7 @@ import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.logic.UserManager;
 import com.foodorder.pop.LoginUserPop;
+import com.foodorder.runtime.RT;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.ToastUtil;
@@ -78,17 +79,22 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                     ToastUtil.showToast(getString(R.string.login_password_empty));
                     return;
                 }
-                API_Food.ins().login(TAG, username, password, new JsonResponseCallback() {
-                    @Override
-                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
-                        if (errcode == 200) {
-                            startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
-                            finish();
+                if (RT.DEBUG) {
+                    startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
+                    finish();
+                } else {
+                    API_Food.ins().login(TAG, username, password, new JsonResponseCallback() {
+                        @Override
+                        public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                            if (errcode == 200) {
+                                startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
+                                finish();
+                            }
+                            ToastUtil.showToast(errmsg);
+                            return false;
                         }
-                        ToastUtil.showToast(errmsg);
-                        return false;
-                    }
-                });
+                    });
+                }
 
                 break;
             case R.id.btn_zxing:

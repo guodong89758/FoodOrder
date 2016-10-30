@@ -30,6 +30,7 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.lzy.okhttputils.OkHttpUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import rx.Observable;
@@ -61,63 +62,68 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     public void initData() {
-//        Observable.create(new Observable.OnSubscribe<Object>() {
-//            @Override
-//            public void call(Subscriber<? super Object> subscriber) {
-//                String menu_json = StringUtil.getJson(SplashActivity.this, "menu.json");
-//                DLOG.json(menu_json);
-//                JSONObject json = null;
-//                try {
-//                    json = new JSONObject(menu_json);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                AppInitParse.parseJson(json);
-//
-//                subscriber.onCompleted();
-//            }
-//        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
-//            @Override
-//            public void onCompleted() {
-//                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-//                finish();
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                DLOG.e(e.getMessage());
-//            }
-//
-//            @Override
-//            public void onNext(Object o) {
-//
-//            }
-//        });
-        if (StringUtil.checkTime()) {
-            ServerManager.SERVER_DOMAIN = PreferenceHelper.ins().getStringShareData(AppKey.SERVER_DOMAIN, "");
-            if(TextUtils.isEmpty(ServerManager.SERVER_DOMAIN)){
-                Dexter.checkPermission(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse response) {
-                        startActivity(new Intent(SplashActivity.this, ScanActivity.class));
+        if (RT.DEBUG) {
+            Observable.create(new Observable.OnSubscribe<Object>() {
+                @Override
+                public void call(Subscriber<? super Object> subscriber) {
+                    String menu_json = StringUtil.getJson(SplashActivity.this, "menu.json");
+                    DLOG.json(menu_json);
+                    JSONObject json = null;
+                    try {
+                        json = new JSONObject(menu_json);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
+                    AppInitParse.parseJson(json);
 
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                    subscriber.onCompleted();
+                }
+            }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
+                @Override
+                public void onCompleted() {
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    finish();
+                }
 
-                    }
+                @Override
+                public void onError(Throwable e) {
+                    DLOG.e(e.getMessage());
+                }
 
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                        if (token != null) {
-                            token.continuePermissionRequest();
+                @Override
+                public void onNext(Object o) {
+
+                }
+            });
+        } else {
+            if (StringUtil.checkTime()) {
+                ServerManager.SERVER_DOMAIN = PreferenceHelper.ins().getStringShareData(AppKey.SERVER_DOMAIN, "");
+                if (TextUtils.isEmpty(ServerManager.SERVER_DOMAIN)) {
+                    Dexter.checkPermission(new PermissionListener() {
+                        @Override
+                        public void onPermissionGranted(PermissionGrantedResponse response) {
+                            startActivity(new Intent(SplashActivity.this, ScanActivity.class));
                         }
-                    }
-                }, Manifest.permission.CAMERA);
-            }else {
-                API_Food.ins().getGoodMenu(TAG, initCallbck);
+
+                        @Override
+                        public void onPermissionDenied(PermissionDeniedResponse response) {
+
+                        }
+
+                        @Override
+                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                            if (token != null) {
+                                token.continuePermissionRequest();
+                            }
+                        }
+                    }, Manifest.permission.CAMERA);
+                } else {
+                    API_Food.ins().getGoodMenu(TAG, initCallbck);
+                }
             }
         }
+
+
     }
 
     @Override

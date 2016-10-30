@@ -25,7 +25,7 @@ public class OrderGoodAdapter extends FOAdapter<Good> {
 
     public OrderGoodAdapter(Context mContext) {
         this.mContext = mContext;
-        nf = NumberFormat.getCurrencyInstance();
+        nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
     }
 

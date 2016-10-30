@@ -58,8 +58,8 @@
 
                 <TextView
                     android:id="@+id/tvMinus"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/button_count_size"
+                    android:layout_height="@dimen/button_count_size"
                     android:background="@drawable/button_minus"
                     android:clickable="true"
                     android:gravity="center"
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:gravity="center"
-                    android:minWidth="20dp"
+                    android:minWidth="@dimen/button_count_size"
                     android:text="0"
                     android:textColor="@color/black_80"
                     android:textSize="15dp"
@@ -80,8 +80,8 @@
 
                 <TextView
                     android:id="@+id/tvAdd"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="@dimen/button_count_size"
+                    android:layout_height="@dimen/button_count_size"
                     android:background="@drawable/button_add"
                     android:clickable="true"
                     android:gravity="center"

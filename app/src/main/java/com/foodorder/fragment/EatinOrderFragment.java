@@ -28,11 +28,13 @@ import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.EmptyLayout;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 import com.lzy.okhttputils.OkHttpUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -104,39 +106,46 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         if (orderData == null) {
             orderData = new ArrayList<>();
         }
-        API_Food.ins().getOrderList(TAG, getOrderListCallback);
-//        Observable.create(new Observable.OnSubscribe<Object>() {
-//            @Override
-//            public void call(Subscriber<? super Object> subscriber) {
-//                String order_json = StringUtil.getJson(getActivity(), "orders.json");
-//                try {
-//                    OrdersParse.parseJson(new JSONObject(order_json));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                orderData = RT.ins().getDaoSession().getOrderDao().loadAll();
-//                subscriber.onCompleted();
-//            }
-//        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
-//            @Override
-//            public void onCompleted() {
-//                orderAdapter = new EatinOrderAdapter(getActivity(), orderData);
-//                orderAdapter.setOnItemClickListener(EatinOrderFragment.this);
-//                orderAdapter.setOnItemLongClickListener(EatinOrderFragment.this);
-//                rv_eatin.setAdapter(orderAdapter);
-//            }
-//
-//            @Override
-//            public void onError(Throwable e) {
-//                DLOG.e(e.getMessage());
-//            }
-//
-//            @Override
-//            public void onNext(Object o) {
-//
-//            }
-//        });
+        if (RT.DEBUG) {
+            Observable.create(new Observable.OnSubscribe<Object>() {
+                @Override
+                public void call(Subscriber<? super Object> subscriber) {
+                    String order_json = StringUtil.getJson(getActivity(), "orders.json");
+                    try {
+                        OrdersParse.parseJson(new JSONObject(order_json));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    orderData = RT.ins().getDaoSession().getOrderDao().queryBuilder().where(OrderDao.Properties.Type.eq(AppKey.ORDER_TYPE_SURPLACE)).build().list();
+                    subscriber.onCompleted();
+                }
+            }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
+                @Override
+                public void onCompleted() {
+                    orderAdapter = new EatinOrderAdapter(getActivity(), orderData);
+                    orderAdapter.setOnItemClickListener(EatinOrderFragment.this);
+                    orderAdapter.setOnItemLongClickListener(EatinOrderFragment.this);
+                    rv_eatin.setAdapter(orderAdapter);
+                    if(orderData.size() > 0){
+                        emptyLayout.showContent();
+                    }else{
+                        emptyLayout.showEmpty();
+                    }
+                }
 
+                @Override
+                public void onError(Throwable e) {
+                    DLOG.e(e.getMessage());
+                }
+
+                @Override
+                public void onNext(Object o) {
+
+                }
+            });
+        } else {
+            API_Food.ins().getOrderList(TAG, getOrderListCallback);
+        }
     }
 
     @Override
@@ -261,14 +270,14 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
             @Override
             public void onCompleted() {
-                if (orderAdapter == null) {
-                    orderAdapter = new EatinOrderAdapter(getActivity(), orderData);
-                    orderAdapter.setOnItemClickListener(EatinOrderFragment.this);
-                    orderAdapter.setOnItemLongClickListener(EatinOrderFragment.this);
-                    rv_eatin.setAdapter(orderAdapter);
-                } else {
-                    orderAdapter.notifyDataSetChanged();
-                }
+//                if (orderAdapter == null) {
+                orderAdapter = new EatinOrderAdapter(getActivity(), orderData);
+                orderAdapter.setOnItemClickListener(EatinOrderFragment.this);
+                orderAdapter.setOnItemLongClickListener(EatinOrderFragment.this);
+                rv_eatin.setAdapter(orderAdapter);
+//                } else {
+//                    orderAdapter.notifyDataSetChanged();
+//                }
                 if (orderData.size() > 0) {
                     emptyLayout.showContent();
                 } else {

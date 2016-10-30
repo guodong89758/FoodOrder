@@ -25,7 +25,7 @@ public class EatinOrderAdapter extends BaseRecyclerAdapter<BaseRecyclerAdapter.B
     public EatinOrderAdapter(Context mContext, List<Order> mDataList) {
         super(mDataList);
         this.mContext = mContext;
-        nf = NumberFormat.getCurrencyInstance();
+        nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
     }
 

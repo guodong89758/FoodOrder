@@ -159,7 +159,7 @@ public class GoodListActivity extends BaseActivity {
             list_type = getIntent().getIntExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
             id_order = getIntent().getStringExtra(AppKey.ID_ORDER);
         }
-        nf = NumberFormat.getCurrencyInstance();
+        nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
         mHanlder = new Handler(getMainLooper());
         groupSelect = new SparseIntArray();
