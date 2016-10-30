@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
+import com.foodorder.util.BitmapLoader;
 import com.foodorder.util.PhoneUtil;
 
 import java.util.List;
@@ -84,6 +85,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
 
         public void bindData(Good item) {
             this.item = item;
+            BitmapLoader.ins().loadImage(item.getImage_url(), R.drawable.ic_def_image, img);
             String good_name = "";
             if (PhoneUtil.isZh()) {
                 good_name = item.getZh_name();

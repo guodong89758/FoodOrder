@@ -19,6 +19,7 @@ import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventManager;
+import com.foodorder.util.BitmapLoader;
 import com.foodorder.util.PhoneUtil;
 
 import java.text.NumberFormat;
@@ -118,6 +119,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
 
         public void bindData(Good item) {
             this.item = item;
+            BitmapLoader.ins().loadImage(item.getImage_url(), R.drawable.ic_def_image, img);
             String good_name = "";
             if (PhoneUtil.isZh()) {
                 good_name = item.getZh_name();

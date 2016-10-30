@@ -209,7 +209,7 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
             if (errcode == 200 && json != null) {
                 OrdersParse.parseJson(json);
-                EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                EventManager.ins().sendEvent(EventTag.ORDER_PACK_LIST_REFRESH, 0, 0, null);
                 parseJson();
             } else {
                 emptyLayout.showEmptyOrError(errcode);

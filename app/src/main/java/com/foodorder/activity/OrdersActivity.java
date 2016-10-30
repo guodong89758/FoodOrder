@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import com.foodorder.R;
 import com.foodorder.adapter.OrderAdapter;
 import com.foodorder.base.BaseActivity;
+import com.foodorder.contant.AppKey;
 import com.foodorder.fragment.EatinOrderFragment;
 import com.foodorder.fragment.PackOrderFragment;
 import com.foodorder.runtime.ActivityManager;
@@ -71,7 +72,15 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
                 }
                 break;
             case R.id.fab_menu:
-                startActivity(new Intent(OrdersActivity.this, GoodListActivity.class));
+                Intent intent = new Intent(OrdersActivity.this, GoodListActivity.class);
+                if (vp_order.getCurrentItem() == 0) {
+                    intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
+                    intent.putExtra(AppKey.ID_ORDER, false);
+                } else {
+                    intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
+                    intent.putExtra(AppKey.ID_ORDER, true);
+                }
+                startActivity(intent);
                 break;
         }
     }
