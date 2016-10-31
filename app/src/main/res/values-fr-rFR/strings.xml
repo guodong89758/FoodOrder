@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">Repas</string>
+    <string name="app_exit">Cliquez de nouveau pour sortir de l\'application</string>
+    <string name="language">Langue:</string>
+    <string name="language_zh">Chinois</string>
+    <string name="language_fr">Français</string>
+
+    <!-- empty layout -->
+    <string name="def_empty_data_text">Il n\'y a pas de contenu</string>
+    <string name="def_net_error_text">Le réseau ne donne pas de force</string>
+    <string name="def_empty_button_retry">Réessayer</string>
+    <string name="def_data_loading">De chargement&#8230;</string>
+
+    <!-- action -->
+    <string name="action_ok">Déterminer</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_send">Envoyer</string>
+    <string name="action_back">Reculez</string>
+    <string name="action_clear">Vide</string>
+    <string name="prompt">Pointe</string>
+    <string name="zxing_title">Le Code bidimensionnel</string>
+
+    <!-- login -->
+    <string name="login_title">Débarquement</string>
+    <string name="login_username">Nom d\'utilisateur</string>
+    <string name="login_password">Mot de passe</string>
+    <string name="login_username_empty">Nom d\'utilisateur ne doit pas être vide</string>
+    <string name="login_password_empty">Le mot de passe ne doit pas être vide</string>
+    <string name="login_success">Atterrissage réussi</string>
+    <string name="login_failed">La défaillance de connexion</string>
+
+    <!-- order -->
+    <string name="order_title">Ordre</string>
+    <string name="order_tab_1">Manger</string>
+    <string name="order_tab_2">Emballage</string>
+    <string name="order_list_empty">Les données de commande de pas</string>
+
+    <!-- goodlist -->
+    <string name="good_title">Menu</string>
+    <string name="good_check_pack">Emballage</string>
+    <string name="good_check_pack_false">Non emballé</string>
+    <string name="good_search_title">Facile à manger</string>
+    <string name="good_specification">Spécifications</string>
+    <string name="good_send_setup_title">Numéro de table et le nombre</string>
+    <string name="good_taihao_tip">Numéro de table:</string>
+    <string name="good_person_tip">Nombre:</string>
+    <string name="good_taihao_empty">Numéro de table ne doit pas être vide</string>
+    <string name="good_order_success">Seul le succès</string>
+    <string name="good_order_failed">A échoué</string>
+
+    <!-- formula -->
+    <string name="formula_max_count_desc">Plus de choix%dUn</string>
+
+    <!-- cart -->
+    <string name="cart_title">Chariot de supermarché</string>
+    <string name="cart_clear">Vide</string>
+    <string name="cart_clear_dialog_title">Chariot vide</string>
+    <string name="cart_clear_dialog_desc">Tu veux vider le panier？</string>
+
+    <!-- order -->
+    <string name="order_info_title">Pour de plus amples informations, ordre</string>
+    <string name="order_taihao_label">Numéro de table:</string>
+    <string name="order_person_num_label">Nombre:</string>
+    <string name="order_num_label">Numéro d\'ordre:</string>
+    <string name="order_action_title">De l\'ordre de fonctionnement</string>
+    <string name="order_action_1">Rappel</string>
+    <string name="order_action_2">Imprimer</string>
+    <string name="order_eatin_search_hint">Saisissez un numéro de table</string>
+    <string name="order_pack_search_hint">Saisissez le numéro d\'ordre</string>
+
+
+    <!-- error -->
+    <string name="error_http_request">Le réseau ne donne pas de force</string>
+    <!-- splash -->
+    <string name="splash_initing">Initialiser...</string>
+
+</resources>

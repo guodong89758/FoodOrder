@@ -52,7 +52,10 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     private List<Good> codeData;
     private String search_content = "";
     private int list_type = AppKey.GOOD_LIST_MENU;
-    private String id_order;
+    private String id_order = "";
+    private String number = "";
+    private String persons = "";
+
 
     @Override
     protected int getLayoutId() {
@@ -95,6 +98,8 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     public void initData() {
         list_type = getIntent().getIntExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
         id_order = getIntent().getStringExtra(AppKey.ID_ORDER);
+        number = getIntent().getStringExtra(AppKey.ORDER_NUMBER);
+        persons = getIntent().getStringExtra(AppKey.ORDER_PERSON);
         if (codeData == null) {
             codeData = new ArrayList<>();
         }
@@ -176,11 +181,12 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                 search();
                 break;
             case R.id.btn_send:
-                if (CartManager.ins().isPack) {
+                if (TextUtils.isEmpty(id_order)) {
                     OrderSetupPop setupPop = new OrderSetupPop(GoodSearchActivity.this, id_order);
                     setupPop.showPopup();
                 } else {
-                    API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(false, id_order, "", ""), new JsonResponseCallback() {
+//                    DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, "", ""));
+                    API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
                         @Override
                         public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                             if (errcode == 200) {

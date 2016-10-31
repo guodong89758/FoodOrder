@@ -180,6 +180,10 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
                 Intent intent = new Intent(OrderInfoActivity.this, GoodListActivity.class);
                 intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_ADD);
                 intent.putExtra(AppKey.ID_ORDER, id_order);
+                if (type.equals(AppKey.ORDER_TYPE_SURPLACE)) {
+                    intent.putExtra(AppKey.ORDER_NUMBER, number);
+                }
+                intent.putExtra(AppKey.ORDER_PERSON, persons);
                 startActivity(intent);
                 break;
         }

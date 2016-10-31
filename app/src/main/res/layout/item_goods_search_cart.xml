@@ -94,6 +94,7 @@
                     android:background="@drawable/bg_btn_specification_selector"
                     android:clickable="true"
                     android:gravity="center"
+                    android:singleLine="true"
                     android:text="@string/good_specification"
                     android:textColor="@color/specification_text_color"
                     android:textSize="12dp"

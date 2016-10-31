@@ -45,7 +45,6 @@ public class CartManager {
     }
 
     public void clear() {
-//        clearTempData();
         cartList.clear();
         cartData.clear();
         groupSelect.clear();
@@ -67,8 +66,9 @@ public class CartManager {
             item.setCount(1);
             cartList.append(item.getId().intValue(), item);
             if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
-                cartData.add(item.clone());
-                clearTempData(item);
+                Good newGood = item.clone();
+                cartData.add(newGood);
+//                clearTempData(item);
             } else {
                 cartData.add(item);
             }
@@ -77,7 +77,7 @@ public class CartManager {
                 Good newGood = item.clone();
                 newGood.setCount(1);
                 cartData.add(newGood);
-                clearTempData(item);
+//                clearTempData(item);
             }
             temp.setCount(temp.getCount() + 1);
         }

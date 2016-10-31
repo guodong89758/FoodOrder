@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="@string/splash_initing"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="15dp" />
 

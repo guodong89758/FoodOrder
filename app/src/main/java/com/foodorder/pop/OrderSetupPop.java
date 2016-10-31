@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -38,6 +39,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
     private ImageButton ib_close;
     private EditText et_num;
     private TextView tv_minus, tv_count, tv_add;
+    private LinearLayout ll_number;
     private Button btn_ok;
     private String id_order;
     private int count = 1;
@@ -65,6 +67,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
         tv_count = (TextView) view.findViewById(R.id.tv_count);
         tv_add = (TextView) view.findViewById(R.id.tv_add);
         btn_ok = (Button) view.findViewById(R.id.btn_ok);
+        ll_number = (LinearLayout) view.findViewById(R.id.ll_number);
 
         et_num.setTransformationMethod(new AllCapTransformationMethod());
 
@@ -73,6 +76,12 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
         btn_ok.setOnClickListener(this);
         tv_minus.setOnClickListener(this);
         tv_add.setOnClickListener(this);
+
+        if (CartManager.ins().isPack) {
+            ll_number.setVisibility(View.GONE);
+        } else {
+            ll_number.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initData() {
@@ -87,13 +96,14 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
                 break;
             case R.id.btn_ok:
                 String number = et_num.getText().toString().trim().toUpperCase();
-                if (TextUtils.isEmpty(number)) {
+                if (!CartManager.ins().isPack && TextUtils.isEmpty(number)) {
                     ToastUtil.showToast(RT.getString(R.string.good_taihao_empty));
                     return;
                 }
+
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
                 String persons = tv_count.getText().toString().trim();
-                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(true, id_order, number, persons), new JsonResponseCallback() {
+                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                         if (errcode == 200) {

@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * Created by guodong on 2016/9/19 16:48.
  */
 @Entity
-public class Formula {
+public class Formula implements Cloneable {
     @Id(autoincrement = true)
     private Long id;
     @Property
@@ -45,9 +45,9 @@ public class Formula {
 
     @Generated(hash = 1123931662)
     public Formula(Long id, String id_product, String id_product_formula,
-            String zh_type_name, String fr_type_name, int max_choose,
-            String id_product_formula_item, String id_product_item, int position,
-            String zh_name, String fr_name, String image_url, boolean show_title) {
+                   String zh_type_name, String fr_type_name, int max_choose,
+                   String id_product_formula_item, String id_product_item, int position,
+                   String zh_name, String fr_name, String image_url, boolean show_title) {
         this.id = id;
         this.id_product = id_product;
         this.id_product_formula = id_product_formula;
@@ -186,5 +186,16 @@ public class Formula {
 
     public void setSel_count(int sel_count) {
         this.sel_count = sel_count;
+    }
+
+    @Override
+    public Formula clone() {
+        Formula o = null;
+        try {
+            o = (Formula) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 }

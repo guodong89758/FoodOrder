@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * Created by guodong on 2016/9/19 16:33.
  */
 @Entity
-public class Attribute {
+public class Attribute implements Cloneable {
     @Id(autoincrement = true)
     private Long id;
     @Property
@@ -118,5 +118,16 @@ public class Attribute {
 
     public void setSel_count(int sel_count) {
         this.sel_count = sel_count;
+    }
+
+    @Override
+    public Attribute clone() {
+        Attribute o = null;
+        try {
+            o = (Attribute) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 }

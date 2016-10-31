@@ -80,9 +80,57 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="40dp"
         android:background="@color/blue_color"
-        android:text="登陆"
+        android:text="@string/login_title"
         android:textColor="@color/white"
         android:textSize="16dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical|right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textColor="@color/black_80"
+            android:textSize="15dp" />
+
+        <RadioGroup
+            android:id="@+id/rg_language"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_zh"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:button="@drawable/bg_radio_selector"
+                android:checked="true"
+                android:paddingLeft="10dp"
+                android:text="@string/language_zh"
+                android:textColor="@color/radio_text_color_selector"
+                android:textSize="14dp" />
+
+            <RadioButton
+                android:id="@+id/rb_fr"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:background="@color/transparent"
+                android:button="@drawable/bg_radio_selector"
+                android:paddingLeft="10dp"
+                android:text="@string/language_fr"
+                android:textColor="@color/radio_text_color_selector"
+                android:textSize="14dp" />
+        </RadioGroup>
+    </LinearLayout>
 
 </LinearLayout>

@@ -2,19 +2,26 @@ package com.foodorder.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
+import com.foodorder.contant.AppKey;
 import com.foodorder.logic.UserManager;
 import com.foodorder.pop.LoginUserPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.PreferenceHelper;
 import com.foodorder.util.ToastUtil;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -26,6 +33,8 @@ import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 
 public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSelectedListener {
     private static final String TAG = "LoginActivity";
@@ -33,6 +42,8 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
     private TextView tv_username;
     private EditText et_password;
     private Button btn_login, btn_zxing;
+    private RadioGroup rg_language;
+    private RadioButton rb_zh, rb_fr;
 
     @Override
     protected int getLayoutId() {
@@ -46,10 +57,34 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
         et_password = (EditText) findViewById(R.id.et_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_zxing = (Button) findViewById(R.id.btn_zxing);
+        rg_language = (RadioGroup) findViewById(R.id.rg_language);
+        rb_zh = (RadioButton) findViewById(R.id.rb_zh);
+        rb_fr = (RadioButton) findViewById(R.id.rb_fr);
 
         btn_login.setOnClickListener(this);
         btn_zxing.setOnClickListener(this);
         tv_username.setOnClickListener(this);
+
+        rg_language.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                String language = PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, "zh");
+                switch (checkedId) {
+                    case R.id.rb_zh:
+                        if ("zh".equals(language)) {
+                            return;
+                        }
+                        switchLanguage("zh");
+                        break;
+                    case R.id.rb_fr:
+                        if ("fr".equals(language)) {
+                            return;
+                        }
+                        switchLanguage("fr");
+                        break;
+                }
+            }
+        });
 
     }
 
@@ -57,6 +92,12 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
     public void initData() {
 //        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, UserManager.getInstance().getUserList());
 //        tv_username.setAdapter(arrayAdapter);
+        String language = PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, "zh");
+        if (language.equals("zh")) {
+            rb_zh.setChecked(true);
+        } else {
+            rb_fr.setChecked(true);
+        }
     }
 
     @Override
@@ -129,5 +170,36 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
     @Override
     public void selectedUser(String username) {
         tv_username.setText(username);
+    }
+
+
+    protected void switchLanguage(String language) {
+
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        switch (language) {
+            case "fr":
+                config.locale = Locale.FRANCE;
+                resources.updateConfiguration(config, dm);
+                PreferenceHelper.ins().storeShareStringData(AppKey.LANGUAGE, "fr");
+                PreferenceHelper.ins().commit();
+                break;
+            case "zh":
+                config.locale = Locale.SIMPLIFIED_CHINESE;
+                resources.updateConfiguration(config, dm);
+                PreferenceHelper.ins().storeShareStringData(AppKey.LANGUAGE, "zh");
+                PreferenceHelper.ins().commit();
+                break;
+            default:
+                config.locale = Locale.SIMPLIFIED_CHINESE;
+                resources.updateConfiguration(config, dm);
+                break;
+        }
+
+        Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }

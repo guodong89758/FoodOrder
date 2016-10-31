@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,7 +92,9 @@ public class GoodListActivity extends BaseActivity {
     private NumberFormat nf;
     private Handler mHanlder;
     private int list_type = AppKey.GOOD_LIST_MENU;
-    private String id_order;
+    private String id_order = "";
+    private String number = "";
+    private String persons = "";
 
     @Override
     protected int getLayoutId() {
@@ -158,6 +161,8 @@ public class GoodListActivity extends BaseActivity {
         if (getIntent() != null) {
             list_type = getIntent().getIntExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
             id_order = getIntent().getStringExtra(AppKey.ID_ORDER);
+            number = getIntent().getStringExtra(AppKey.ORDER_NUMBER);
+            persons = getIntent().getStringExtra(AppKey.ORDER_PERSON);
         }
         nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
@@ -380,6 +385,8 @@ public class GoodListActivity extends BaseActivity {
                 Intent intent = new Intent(this, GoodSearchActivity.class);
                 intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_ADD);
                 intent.putExtra(AppKey.ID_ORDER, id_order);
+                intent.putExtra(AppKey.ORDER_NUMBER, number);
+                intent.putExtra(AppKey.ORDER_PERSON, persons);
                 startActivity(intent);
                 break;
             case R.id.bottom:
@@ -405,11 +412,12 @@ public class GoodListActivity extends BaseActivity {
                 dialog.show();
                 break;
             case R.id.btn_send:
-                if (cb_pack.isChecked()) {
+                if (TextUtils.isEmpty(id_order)) {
                     OrderSetupPop setupPop = new OrderSetupPop(GoodListActivity.this, id_order);
                     setupPop.showPopup();
                 } else {
-                    API_Food.ins().orderGood(TAG, CartManager.ins().getOrderGoodJson(false, id_order, "", ""), new JsonResponseCallback() {
+//                    DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, "", ""));
+                    API_Food.ins().orderGood(TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
                         @Override
                         public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                             if (errcode == 200) {

@@ -42,25 +42,32 @@
         android:paddingBottom="40dp"
         android:paddingTop="40dp">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/ll_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/good_taihao_tip"
-            android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_num"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/bg_search_input_blue"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/black_80"
-            android:textColorHint="@color/black_60"
-            android:textCursorDrawable="@drawable/text_cursor_drawable"
-            android:textSize="15dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/good_taihao_tip"
+                android:textColor="@color/black_80"
+                android:textSize="15dp" />
+
+            <EditText
+                android:id="@+id/et_num"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/bg_search_input_blue"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/black_80"
+                android:textColorHint="@color/black_60"
+                android:textCursorDrawable="@drawable/text_cursor_drawable"
+                android:textSize="15dp" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

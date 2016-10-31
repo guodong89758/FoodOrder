@@ -2,7 +2,10 @@ package com.foodorder.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,6 +36,8 @@ import com.lzy.okhttputils.OkHttpUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -57,7 +62,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void initView() {
         EventManager.ins().registListener(EventTag.GET_SERVER_DOMAIN_FROM_ZXING, eventListener);
-
+        switchLanguage(PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, "zh"));
     }
 
     @Override
@@ -213,5 +218,25 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+    protected void switchLanguage(String language) {
 
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        switch (language) {
+            case "fr":
+                config.locale = Locale.FRANCE;
+                resources.updateConfiguration(config, dm);
+                break;
+            case "zh":
+                config.locale = Locale.SIMPLIFIED_CHINESE;
+                resources.updateConfiguration(config, dm);
+                break;
+            default:
+                config.locale = Locale.SIMPLIFIED_CHINESE;
+                resources.updateConfiguration(config, dm);
+                break;
+        }
+
+    }
 }
