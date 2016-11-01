@@ -356,11 +356,35 @@ public class Good implements Cloneable {
         myDao = daoSession != null ? daoSession.getGoodDao() : null;
     }
 
+    public void setAttributeList(List<Attribute> attributeList) {
+        this.attributeList = attributeList;
+    }
+
+    public void setFormulaList(List<Formula> formulaList) {
+        this.formulaList = formulaList;
+    }
+
     @Override
     public Good clone() {
         Good o = null;
         try {
             o = (Good) super.clone();
+            List<Formula> formulaData = new ArrayList<>();
+            List<Attribute> attrData = new ArrayList<>();
+            if (formulaList != null && formulaList.size() > 0) {
+                for (int i = 0; i < formulaList.size(); i++) {
+                    Formula formula = formulaList.get(i);
+                    formulaData.add(formula.clone());
+                }
+            }
+            if (attributeList != null && attributeList.size() > 0) {
+                for (int i = 0; i < attributeList.size(); i++) {
+                    Attribute attribute = attributeList.get(i);
+                    attrData.add(attribute.clone());
+                }
+            }
+            o.setAttributeList(attrData);
+            o.setFormulaList(formulaData);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

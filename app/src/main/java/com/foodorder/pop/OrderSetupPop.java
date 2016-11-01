@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
+import com.foodorder.dialog.NormalDialog;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventManager;
@@ -29,6 +30,8 @@ import com.foodorder.util.SoftKeyboardUtil;
 import com.foodorder.util.ToastUtil;
 
 import org.json.JSONObject;
+
+import static com.foodorder.runtime.RT.getString;
 
 /**
  * Created by guodong on 2016/5/31 12:05.
@@ -97,25 +100,27 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
             case R.id.btn_ok:
                 String number = et_num.getText().toString().trim().toUpperCase();
                 if (!CartManager.ins().isPack && TextUtils.isEmpty(number)) {
-                    ToastUtil.showToast(RT.getString(R.string.good_taihao_empty));
+                    ToastUtil.showToast(getString(R.string.good_taihao_empty));
                     return;
                 }
 
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
                 String persons = tv_count.getText().toString().trim();
-                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
-                    @Override
-                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
-                        if (errcode == 200) {
-                            CartManager.ins().clear();
-                            EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
-                            EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
-                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
-                        }
-                        ToastUtil.showToast(errmsg);
-                        return false;
-                    }
-                });
+//                DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
+                showOrderGoodDialog(mContext, id_order, number, persons);
+//                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
+//                    @Override
+//                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+//                        if (errcode == 200) {
+//                            CartManager.ins().clear();
+//                            EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
+//                            EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+//                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+//                        }
+//                        ToastUtil.showToast(errmsg);
+//                        return false;
+//                    }
+//                });
                 dismiss();
                 break;
             case R.id.tv_add:
@@ -141,6 +146,40 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
     public void showPopup() {
         this.showAtLocation(((Activity) mContext).getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
         backgroundAlpha(0.5f);
+    }
+
+    public void showOrderGoodDialog(Context context, final String id_order, final String number, final String persons) {
+        NormalDialog dialog = new NormalDialog(context);
+        dialog.setTitle(R.string.good_order_dialog_title);
+        dialog.setTextDes(getString(R.string.good_order_dialog_desc));
+        dialog.setButton1(getString(R.string.action_cancel), new NormalDialog.DialogButtonOnClickListener() {
+            @Override
+            public void onClick(View button, NormalDialog dialog) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setButton2(getString(R.string.action_ok), new NormalDialog.DialogButtonOnClickListener() {
+            @Override
+            public void onClick(View button, NormalDialog dialog) {
+                dialog.dismiss();
+                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
+                    @Override
+                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        if (errcode == 200) {
+                            CartManager.ins().clear();
+                            EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
+                            EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                            ToastUtil.showToast(RT.getString(R.string.good_order_success));
+                        } else {
+                            ToastUtil.showToast(RT.getString(R.string.good_order_failed));
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+        dialog.show();
     }
 
 

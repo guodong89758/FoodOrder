@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">点餐</string>
+    <string name="app_name">微小铺</string>
     <string name="app_exit">再次点击退出应用</string>
     <string name="language">语言:</string>
     <string name="language_zh">中文</string>
@@ -47,6 +47,8 @@
     <string name="good_taihao_empty">台号不能为空</string>
     <string name="good_order_success">下单成功</string>
     <string name="good_order_failed">下单失败</string>
+    <string name="good_order_dialog_title">下单</string>
+    <string name="good_order_dialog_desc">是否确认立刻下单？</string>
 
     <!-- formula -->
     <string name="formula_max_count_desc">最多选择%d个</string>

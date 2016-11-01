@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Repas</string>
+    <string name="app_name">weshop</string>
     <string name="app_exit">Cliquez de nouveau pour sortir de l\'application</string>
     <string name="language">Langue:</string>
     <string name="language_zh">Chinois</string>
@@ -42,11 +42,13 @@
     <string name="good_search_title">Facile à manger</string>
     <string name="good_specification">Spécifications</string>
     <string name="good_send_setup_title">Numéro de table et le nombre</string>
-    <string name="good_taihao_tip">Numéro de table:</string>
+    <string name="good_taihao_tip">Numéro:</string>
     <string name="good_person_tip">Nombre:</string>
     <string name="good_taihao_empty">Numéro de table ne doit pas être vide</string>
     <string name="good_order_success">Seul le succès</string>
     <string name="good_order_failed">A échoué</string>
+    <string name="good_order_dialog_title">Ordre</string>
+    <string name="good_order_dialog_desc">Confirmer ordre immédiatement?</string>
 
     <!-- formula -->
     <string name="formula_max_count_desc">Plus de choix%dUn</string>

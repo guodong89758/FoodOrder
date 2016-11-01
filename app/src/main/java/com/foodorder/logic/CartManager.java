@@ -14,6 +14,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.foodorder.contant.EventTag.GOOD_LIST_REFRESH;
+
 /**
  * Created by guodong on 2016/9/19 17:12.
  */
@@ -68,7 +70,7 @@ public class CartManager {
             if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
                 Good newGood = item.clone();
                 cartData.add(newGood);
-//                clearTempData(item);
+                clearTempData(item);
             } else {
                 cartData.add(item);
             }
@@ -77,11 +79,11 @@ public class CartManager {
                 Good newGood = item.clone();
                 newGood.setCount(1);
                 cartData.add(newGood);
-//                clearTempData(item);
+                clearTempData(item);
             }
             temp.setCount(temp.getCount() + 1);
         }
-        EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
         EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
     }
 
@@ -107,7 +109,7 @@ public class CartManager {
                 temp.setCount(temp.getCount() - 1);
             }
         }
-        EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
         EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
     }
 
@@ -132,7 +134,7 @@ public class CartManager {
             }
             temp.setCount(temp.getCount() + 1);
         }
-        EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
         EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
     }
 
@@ -161,7 +163,7 @@ public class CartManager {
                 temp.setCount(temp.getCount() - 1);
             }
         }
-        EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
         EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
     }
 
@@ -219,7 +221,7 @@ public class CartManager {
             OrderGood.Product product = new OrderGood.Product();
             product.setId_product(good.getId_product());
             product.setCount(good.getCount());
-            good.setCount(0);
+//            good.setCount(0);
             if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
                 List<OrderGood.Attribute> attributes = new ArrayList<>();
                 for (int j = 0; j < good.getAttributeList().size(); j++) {
@@ -231,8 +233,8 @@ public class CartManager {
                     attr.setId_product_attribute(attribute.getId_product_attribute());
                     attr.setCount(attribute.getCount());
                     attributes.add(attr);
-                    attribute.setCount(0);
-                    attribute.setSel_count(0);
+//                    attribute.setCount(0);
+//                    attribute.setSel_count(0);
                 }
                 product.setAttributes(attributes);
             }
@@ -248,8 +250,8 @@ public class CartManager {
                     form.setId_product_item(formula.getId_product_item());
                     form.setCount(formula.getCount());
                     formulas.add(form);
-                    formula.setCount(0);
-                    formula.setSel_count(0);
+//                    formula.setCount(0);
+//                    formula.setSel_count(0);
                 }
                 product.setFormuals(formulas);
             }

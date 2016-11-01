@@ -130,8 +130,10 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                             if (errcode == 200) {
                                 startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
                                 finish();
+                                ToastUtil.showToast(getString(R.string.login_success));
+                            }else {
+                                ToastUtil.showToast(getString(R.string.login_failed));
                             }
-                            ToastUtil.showToast(errmsg);
                             return false;
                         }
                     });

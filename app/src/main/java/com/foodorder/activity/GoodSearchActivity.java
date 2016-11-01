@@ -1,5 +1,6 @@
 package com.foodorder.activity;
 
+import android.content.Context;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.GoodDao;
 import com.foodorder.db.bean.Good;
+import com.foodorder.dialog.NormalDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
@@ -186,19 +188,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                     setupPop.showPopup();
                 } else {
 //                    DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, "", ""));
-                    API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
-                        @Override
-                        public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
-                            if (errcode == 200) {
-                                CartManager.ins().clear();
-                                EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
-                                EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
-                                EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
-                            }
-                            ToastUtil.showToast(errmsg);
-                            return false;
-                        }
-                    });
+                    showOrderGoodDialog(this, id_order, number, persons);
                 }
 
                 break;
@@ -334,5 +324,39 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     private void clearCode() {
         search_content = "";
         search();
+    }
+
+    public void showOrderGoodDialog(Context context, final String id_order, final String number, final String persons) {
+        NormalDialog dialog = new NormalDialog(context);
+        dialog.setTitle(R.string.good_order_dialog_title);
+        dialog.setTextDes(RT.getString(R.string.good_order_dialog_desc));
+        dialog.setButton1(RT.getString(R.string.action_cancel), new NormalDialog.DialogButtonOnClickListener() {
+            @Override
+            public void onClick(View button, NormalDialog dialog) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setButton2(getString(R.string.action_ok), new NormalDialog.DialogButtonOnClickListener() {
+            @Override
+            public void onClick(View button, NormalDialog dialog) {
+                dialog.dismiss();
+                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
+                    @Override
+                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        if (errcode == 200) {
+                            CartManager.ins().clear();
+                            EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
+                            EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
+                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                            ToastUtil.showToast(RT.getString(R.string.good_order_success));
+                        } else {
+                            ToastUtil.showToast(RT.getString(R.string.good_order_failed));
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+        dialog.show();
     }
 }
