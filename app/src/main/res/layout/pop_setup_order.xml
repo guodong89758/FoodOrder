@@ -38,15 +38,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingBottom="40dp"
         android:paddingTop="40dp">
 
         <LinearLayout
             android:id="@+id/ll_number"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,7 +61,7 @@
                 android:id="@+id/et_num"
                 android:layout_width="80dp"
                 android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search_input_blue"
                 android:gravity="center"
                 android:singleLine="true"
@@ -70,11 +72,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -83,38 +85,45 @@
                 android:textColor="@color/black_80"
                 android:textSize="15dp" />
 
-            <TextView
-                android:id="@+id/tv_minus"
-                android:layout_width="@dimen/button_count_size"
-                android:layout_height="@dimen/button_count_size"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/button_minus"
-                android:clickable="true"
-                android:gravity="center"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tv_count"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/bg_search_input_blue"
-                android:gravity="center"
-                android:minWidth="80dp"
-                android:text="1"
-                android:textColor="@color/black_80"
-                android:textSize="15dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_add"
-                android:layout_width="@dimen/button_count_size"
-                android:layout_height="@dimen/button_count_size"
-                android:background="@drawable/button_add"
-                android:clickable="true"
-                android:gravity="center"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_minus"
+                    android:layout_width="@dimen/button_count_size"
+                    android:layout_height="@dimen/button_count_size"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/button_minus"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/bg_search_input_blue"
+                    android:gravity="center"
+                    android:minWidth="80dp"
+                    android:text="1"
+                    android:textColor="@color/black_80"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/tv_add"
+                    android:layout_width="@dimen/button_count_size"
+                    android:layout_height="@dimen/button_count_size"
+                    android:background="@drawable/button_add"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
