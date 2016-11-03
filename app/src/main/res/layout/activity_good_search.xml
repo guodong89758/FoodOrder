@@ -27,7 +27,7 @@
 
     <android.support.v7.widget.GridLayout
         android:id="@+id/gl_keybord"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/good_type_list_bg_color"
@@ -137,10 +137,27 @@
             android:layout_height="1px"
             android:background="@color/black_10" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_code"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp" />
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_code"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <TextView
+                android:id="@+id/tv_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_keycode_selector"
+                android:gravity="center"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/black_80"
+                android:textSize="16dp"
+                android:visibility="gone" />
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"

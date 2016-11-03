@@ -19,9 +19,11 @@ import com.foodorder.contant.AppKey;
 import com.foodorder.logic.UserManager;
 import com.foodorder.pop.LoginUserPop;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.WeakHandler;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.PreferenceHelper;
+import com.foodorder.util.SoftKeyboardUtil;
 import com.foodorder.util.ToastUtil;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -98,6 +100,20 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
         } else {
             rb_fr.setChecked(true);
         }
+
+        if (UserManager.getInstance().getUserList().size() == 1) {
+            tv_username.setText(UserManager.getInstance().getUserList().get(0));
+        } else {
+            tv_username.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (tv_username != null) {
+                        tv_username.performClick();
+                    }
+                }
+            }, 500);
+
+        }
     }
 
     @Override
@@ -110,6 +126,7 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_login:
+                SoftKeyboardUtil.hideSoftKeyboard(et_password);
                 String username = tv_username.getText().toString();
                 String password = et_password.getText().toString();
                 if (TextUtils.isEmpty(username)) {
@@ -131,7 +148,7 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                                 startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
                                 finish();
                                 ToastUtil.showToast(getString(R.string.login_success));
-                            }else {
+                            } else {
                                 ToastUtil.showToast(getString(R.string.login_failed));
                             }
                             return false;
@@ -159,7 +176,7 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                 }, Manifest.permission.CAMERA);
                 break;
             case R.id.tv_username:
-                if (UserManager.getInstance().getUserList() != null && UserManager.getInstance().getUserList().size() > 0) {
+                if (UserManager.getInstance().getUserList() != null && UserManager.getInstance().getUserList().size() > 1) {
                     LoginUserPop userPop = new LoginUserPop(this);
                     userPop.setOnUserSelectedListener(this);
                     userPop.showPopup(tv_username);
@@ -172,6 +189,15 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
     @Override
     public void selectedUser(String username) {
         tv_username.setText(username);
+        et_password.requestFocus();
+        new WeakHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                et_password.requestFocus();
+                SoftKeyboardUtil.showSoftKeyboard(et_password);
+            }
+        }, 500);
+
     }
 
 

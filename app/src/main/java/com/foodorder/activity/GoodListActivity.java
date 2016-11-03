@@ -247,7 +247,7 @@ public class GoodListActivity extends BaseActivity {
                     formulaPop.showPopup();
                     break;
                 case EventTag.POPUP_ATTRIBUTE_SHOW:
-                    AttributePop attrPop = new AttributePop(GoodListActivity.this, (Good) dataobj);
+                    AttributePop attrPop = new AttributePop(GoodListActivity.this, (Good) dataobj, arg2);
                     attrPop.showPopup();
                     break;
             }
@@ -560,6 +560,19 @@ public class GoodListActivity extends BaseActivity {
         clear.setOnClickListener(this);
         selectAdapter = new SelectAdapter(this, CartManager.ins().cartData);
         rvSelected.setAdapter(selectAdapter);
+        selectAdapter.setOnItemClickListener(new SelectAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Good good) {
+                if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
+                    FormulaPop formulaPop = new FormulaPop(GoodListActivity.this, good, FormulaPop.TYPE_UPDATE);
+                    formulaPop.showPopup();
+                } else if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
+                    AttributePop attrPop = new AttributePop(GoodListActivity.this, good, AttributePop.TYPE_UPDATE);
+                    attrPop.showPopup();
+                }
+
+            }
+        });
         return view;
     }
 
@@ -597,7 +610,7 @@ public class GoodListActivity extends BaseActivity {
                             clearCart();
                             EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
-                        }else {
+                        } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));
                         }
                         return false;

@@ -25,7 +25,8 @@ import com.foodorder.util.PhoneUtil;
  * Created by guodong on 2016/5/31 12:05.
  */
 public class AttributePop extends PopupWindow implements View.OnClickListener {
-
+    public static final int TYPE_MENU = 1; //菜单中使用
+    public static final int TYPE_UPDATE = 2; //购物车中修改使用
     private Context mContext;
     private TextView tv_name, tv_desc;
     private ImageButton ib_close;
@@ -33,10 +34,12 @@ public class AttributePop extends PopupWindow implements View.OnClickListener {
     private ListView lv_attr;
     private AttributeAdapter attrAdapter;
     private Good good;
+    private int type;
 
-    public AttributePop(Context context, Good good) {
+    public AttributePop(Context context, Good good, int type) {
         this.mContext = context;
         this.good = good;
+        this.type = type;
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setHeight(RT.getScreenHeight() * 3 / 5);
         setFocusable(true);
@@ -85,7 +88,9 @@ public class AttributePop extends PopupWindow implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.btn_ok:
-                CartManager.ins().add(good, true);
+                if(type == TYPE_MENU) {
+                    CartManager.ins().add(good, true);
+                }
                 dismiss();
                 break;
         }

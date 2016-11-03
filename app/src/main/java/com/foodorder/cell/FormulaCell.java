@@ -74,7 +74,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
         }
         tv_name.setText(name);
         tv_count.setText(String.valueOf(formula.getCount()));
-        if (type == FormulaPop.TYPE_MENU) {
+        if (type == FormulaPop.TYPE_MENU || type == FormulaPop.TYPE_UPDATE) {
             tv_add.setVisibility(View.VISIBLE);
             tv_minus.setVisibility(View.VISIBLE);
         } else {

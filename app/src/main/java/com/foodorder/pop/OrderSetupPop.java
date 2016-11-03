@@ -21,8 +21,10 @@ import com.foodorder.R;
 import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.dialog.NormalDialog;
+import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.WeakHandler;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
@@ -84,6 +86,14 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
             ll_number.setVisibility(View.GONE);
         } else {
             ll_number.setVisibility(View.VISIBLE);
+            et_num.requestFocus();
+            new WeakHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SoftKeyboardUtil.showSoftKeyboard(et_num);
+                }
+            }, 500);
+
         }
     }
 
@@ -106,7 +116,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
 
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
                 String persons = tv_count.getText().toString().trim();
-//                DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
+                DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
                 showOrderGoodDialog(mContext, id_order, number, persons);
 //                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
 //                    @Override

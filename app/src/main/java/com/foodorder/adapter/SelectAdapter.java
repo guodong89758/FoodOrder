@@ -38,9 +38,21 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Good item = dataList.get(position);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        final Good item = dataList.get(position);
+        if (item == null) {
+            return;
+        }
         holder.bindData(item);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickListener != null) {
+                    clickListener.onItemClick(position, item);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -96,5 +108,15 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
             tvCost.setText(nf.format(item.getCount() * item.getPrice()));
             tvCount.setText(String.valueOf(item.getCount()));
         }
+    }
+
+    private OnItemClickListener clickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, Good good);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.clickListener = listener;
     }
 }

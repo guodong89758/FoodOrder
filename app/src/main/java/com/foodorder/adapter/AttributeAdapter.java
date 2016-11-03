@@ -15,6 +15,7 @@ import com.foodorder.db.bean.Good;
 public class AttributeAdapter extends FOAdapter {
 
     private Good good;
+    private int type;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -23,6 +24,7 @@ public class AttributeAdapter extends FOAdapter {
         }
         if (convertView instanceof AttributeCell) {
             AttributeCell cell = (AttributeCell) convertView;
+            cell.setType(type);
             cell.setGood(good);
             cell.onGetData(getItem(position), position, this);
         }
@@ -31,5 +33,9 @@ public class AttributeAdapter extends FOAdapter {
 
     public void setGood(Good good) {
         this.good = good;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

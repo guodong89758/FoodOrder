@@ -17,6 +17,7 @@ import com.foodorder.activity.GoodListActivity;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
+import com.foodorder.pop.AttributePop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.BitmapLoader;
@@ -194,7 +195,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                     if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
                         EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, item);
                     } else if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
-                        EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, item);
+                        EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
                     }
 
                     break;

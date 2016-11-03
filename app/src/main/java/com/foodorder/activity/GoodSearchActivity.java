@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.adapter.GoodSearchAdapter;
@@ -49,6 +51,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
     private GridLayout gl_keybord;
     private RecyclerView rv_good, rv_code;
     private Button btn_pack;
+    private TextView tv_empty;
     private KeycodeAdapter keycodeAdapter;
     private GoodSearchAdapter goodAdapter;
     private List<Good> codeData;
@@ -72,6 +75,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         rv_good = (RecyclerView) findViewById(R.id.rv_good);
         rv_code = (RecyclerView) findViewById(R.id.rv_code);
         btn_pack = (Button) findViewById(R.id.btn_pack);
+        tv_empty = (TextView) findViewById(R.id.tv_empty);
         findViewById(R.id.btn_1).setOnClickListener(this);
         findViewById(R.id.btn_2).setOnClickListener(this);
         findViewById(R.id.btn_3).setOnClickListener(this);
@@ -86,6 +90,8 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         findViewById(R.id.btn_send).setOnClickListener(this);
         findViewById(R.id.btn_0).setOnClickListener(this);
         btn_pack.setOnClickListener(this);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) gl_keybord.getLayoutParams();
+        params.width = RT.getScreenWidth();
 
         EventManager.ins().registListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
         EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
@@ -116,6 +122,18 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
             btn_pack.setTextColor(getResources().getColor(R.color.black_50));
             btn_pack.setText(getString(R.string.good_check_pack_false));
         }
+        goodAdapter.setOnItemClickListener(new GoodSearchAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, Good good) {
+                if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
+                    FormulaPop formulaPop = new FormulaPop(GoodSearchActivity.this, good, FormulaPop.TYPE_UPDATE);
+                    formulaPop.showPopup();
+                } else if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
+                    AttributePop attrPop = new AttributePop(GoodSearchActivity.this, good, AttributePop.TYPE_UPDATE);
+                    attrPop.showPopup();
+                }
+            }
+        });
     }
 
     @Override
@@ -226,7 +244,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                     formulaPop.showPopup();
                     break;
                 case EventTag.POPUP_ATTRIBUTE_SHOW:
-                    AttributePop attrPop = new AttributePop(GoodSearchActivity.this, (Good) dataobj);
+                    AttributePop attrPop = new AttributePop(GoodSearchActivity.this, (Good) dataobj, arg2);
                     attrPop.showPopup();
                     break;
             }
@@ -235,6 +253,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 
     private void search() {
         if (TextUtils.isEmpty(search_content)) {
+            tv_empty.setText("");
             if (codeData != null && keycodeAdapter != null) {
                 codeData.clear();
                 keycodeAdapter.notifyDataSetChanged();
@@ -253,6 +272,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
             public void onCompleted() {
                 if (codeData != null && codeData.size() > 0) {
 //                    if (keycodeAdapter == null) {
+                    tv_empty.setVisibility(View.GONE);
                     keycodeAdapter = new KeycodeAdapter(GoodSearchActivity.this, codeData);
                     keycodeAdapter.setOnItemClickListener(GoodSearchActivity.this);
                     rv_code.setAdapter(keycodeAdapter);
@@ -260,6 +280,8 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 //                        keycodeAdapter.notifyItemRangeChanged(0, codeData.size() - 1);
 //                    }
                 } else {
+                    tv_empty.setVisibility(View.VISIBLE);
+                    tv_empty.setText(search_content);
                     if (keycodeAdapter != null) {
                         keycodeAdapter.notifyDataSetChanged();
                     }
@@ -295,7 +317,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                     EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, good);
                 } else {
                     if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
-                        EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, 0, good);
+                        EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, good);
                     }
                 }
                 clearCode();

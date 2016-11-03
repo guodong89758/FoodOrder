@@ -23,6 +23,7 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
     private TextView tv_name, tv_add, tv_minus, tv_count;
     private Attribute attr;
     private Good good;
+    private int type;
 
     public AttributeCell(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -71,6 +72,10 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
 
     public void setGood(Good good) {
         this.good = good;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     private void add() {

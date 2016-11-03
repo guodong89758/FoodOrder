@@ -32,7 +32,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
 
     private Context mContext;
     List<Good> mDataList;
-    private Good item;
+//    private Good item;
 
     public GoodSearchAdapter(Context mContext, List<Good> mDataList) {
         this.mContext = mContext;
@@ -53,22 +53,30 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
     }
 
     @Override
-    public void onBindViewHolder(GoodViewHolder holder, int position) {
-        item = mDataList.get(position);
+    public void onBindViewHolder(GoodViewHolder holder, final int position) {
+        final Good item = mDataList.get(position);
         if (item == null) {
             return;
         }
         holder.bindData(item);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickListener != null) {
+                    clickListener.onItemClick(position, item);
+                }
+            }
+        });
 
     }
 
     public static class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView img;
         public TextView name, price, tv_code, tvAdd, tv_specification, tvMinus, tvCount;
-        private Good item;
         private boolean hasAttribute = false;
         private boolean hasFormula = false;
         private NumberFormat nf;
+        private Good item;
 
         public GoodViewHolder(View itemView) {
             super(itemView);
@@ -199,5 +207,14 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
         }
     }
 
+    private OnItemClickListener clickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, Good good);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.clickListener = listener;
+    }
 
 }

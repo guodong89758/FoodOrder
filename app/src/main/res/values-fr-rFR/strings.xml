@@ -1,79 +1,79 @@
 <resources>
     <string name="app_name">weshop</string>
-    <string name="app_exit">Cliquez de nouveau pour sortir de l\'application</string>
-    <string name="language">Langue:</string>
-    <string name="language_zh">Chinois</string>
+    <string name="app_exit">Encore une fois pour Quiter</string>
+    <string name="language">Languages:</string>
+    <string name="language_zh">中文</string>
     <string name="language_fr">Français</string>
 
     <!-- empty layout -->
-    <string name="def_empty_data_text">Il n\'y a pas de contenu</string>
-    <string name="def_net_error_text">Le réseau ne donne pas de force</string>
+    <string name="def_empty_data_text">Pas de donnees</string>
+    <string name="def_net_error_text">Appuyer pour Actualiser</string>
     <string name="def_empty_button_retry">Réessayer</string>
-    <string name="def_data_loading">De chargement&#8230;</string>
+    <string name="def_data_loading">Chargement&#8230;</string>
 
     <!-- action -->
-    <string name="action_ok">Déterminer</string>
+    <string name="action_ok">OK</string>
     <string name="action_cancel">Annuler</string>
     <string name="action_send">Envoyer</string>
-    <string name="action_back">Reculez</string>
-    <string name="action_clear">Vide</string>
-    <string name="prompt">Pointe</string>
-    <string name="zxing_title">Le Code bidimensionnel</string>
+    <string name="action_back">Retour</string>
+    <string name="action_clear">Vider</string>
+    <string name="prompt">Rappel</string>
+    <string name="zxing_title">QR Code</string>
 
     <!-- login -->
-    <string name="login_title">Débarquement</string>
-    <string name="login_username">Nom d\'utilisateur</string>
-    <string name="login_password">Mot de passe</string>
-    <string name="login_username_empty">Nom d\'utilisateur ne doit pas être vide</string>
-    <string name="login_password_empty">Le mot de passe ne doit pas être vide</string>
-    <string name="login_success">Atterrissage réussi</string>
-    <string name="login_failed">La défaillance de connexion</string>
+    <string name="login_title">Connexion</string>
+    <string name="login_username">Identifiant</string>
+    <string name="login_password">Code</string>
+    <string name="login_username_empty">Identifiant ne peut pas etre vide</string>
+    <string name="login_password_empty">Mots de passe ne peut pas etre vide</string>
+    <string name="login_success">Connexion réussi</string>
+    <string name="login_failed">Connexion echec</string>
 
     <!-- order -->
-    <string name="order_title">Ordre</string>
-    <string name="order_tab_1">Manger</string>
-    <string name="order_tab_2">Emballage</string>
-    <string name="order_list_empty">Les données de commande de pas</string>
+    <string name="order_title">Commandes</string>
+    <string name="order_tab_1">Sur place</string>
+    <string name="order_tab_2">Emporter</string>
+    <string name="order_list_empty">Pas de commande</string>
 
     <!-- goodlist -->
     <string name="good_title">Menu</string>
-    <string name="good_check_pack">Emballage</string>
-    <string name="good_check_pack_false">Non emballé</string>
-    <string name="good_search_title">Facile à manger</string>
-    <string name="good_specification">Spécifications</string>
-    <string name="good_send_setup_title">Numéro de table et le nombre</string>
-    <string name="good_taihao_tip">Numéro:</string>
-    <string name="good_person_tip">Nombre:</string>
-    <string name="good_taihao_empty">Numéro de table ne doit pas être vide</string>
-    <string name="good_order_success">Seul le succès</string>
-    <string name="good_order_failed">A échoué</string>
-    <string name="good_order_dialog_title">Ordre</string>
-    <string name="good_order_dialog_desc">Confirmer ordre immédiatement?</string>
+    <string name="good_check_pack">Emporter</string>
+    <string name="good_check_pack_false">Sur place</string>
+    <string name="good_search_title">Rapide</string>
+    <string name="good_specification">Option</string>
+    <string name="good_send_setup_title">Table et couverts</string>
+    <string name="good_taihao_tip">Table:</string>
+    <string name="good_person_tip">Couvert:</string>
+    <string name="good_taihao_empty">Table est obligatoire</string>
+    <string name="good_order_success">Succès</string>
+    <string name="good_order_failed">Échec</string>
+    <string name="good_order_dialog_title">Commander</string>
+    <string name="good_order_dialog_desc">Confirmation de commander？</string>
 
     <!-- formula -->
-    <string name="formula_max_count_desc">Plus de choix%dUn</string>
+    <string name="formula_max_count_desc">Maximum %d </string>
 
     <!-- cart -->
-    <string name="cart_title">Chariot de supermarché</string>
-    <string name="cart_clear">Vide</string>
-    <string name="cart_clear_dialog_title">Chariot vide</string>
-    <string name="cart_clear_dialog_desc">Tu veux vider le panier？</string>
+    <string name="cart_title">Panier</string>
+    <string name="cart_clear">Vider</string>
+    <string name="cart_clear_dialog_title">Vider le panier</string>
+    <string name="cart_clear_dialog_desc">Vider le panier？</string>
 
     <!-- order -->
-    <string name="order_info_title">Pour de plus amples informations, ordre</string>
-    <string name="order_taihao_label">Numéro de table:</string>
-    <string name="order_person_num_label">Nombre:</string>
-    <string name="order_num_label">Numéro d\'ordre:</string>
-    <string name="order_action_title">De l\'ordre de fonctionnement</string>
-    <string name="order_action_1">Rappel</string>
+    <string name="order_info_title">Detail de commande</string>
+    <string name="order_taihao_label">Table:</string>
+    <string name="order_person_num_label">Couverts:</string>
+    <string name="order_num_label">N° commande:</string>
+    <string name="order_action_title">Actions</string>
+    <string name="order_action_1">Suivant</string>
     <string name="order_action_2">Imprimer</string>
-    <string name="order_eatin_search_hint">Saisissez un numéro de table</string>
-    <string name="order_pack_search_hint">Saisissez le numéro d\'ordre</string>
+    <string name="order_eatin_search_hint">N° de table est obligatoire</string>
+    <string name="order_pack_search_hint">N° de la commande est obligatoire</string>
 
 
     <!-- error -->
-    <string name="error_http_request">Le réseau ne donne pas de force</string>
+    <string name="error_http_request">Problème de réseau</string>
     <!-- splash -->
-    <string name="splash_initing">Initialiser...</string>
+    <string name="splash_initing">Chargement...</string>
 
 </resources>

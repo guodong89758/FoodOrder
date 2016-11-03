@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
+    android:descendantFocusability="blocksDescendants"
     android:padding="10dp">
 
     <LinearLayout
@@ -15,9 +16,9 @@
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="商品名"
             android:layout_marginRight="150dp"
             android:singleLine="true"
+            android:text="商品名"
             android:textColor="@color/black_80"
             android:textSize="15dp" />
 
