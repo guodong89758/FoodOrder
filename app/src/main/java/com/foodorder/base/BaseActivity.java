@@ -54,6 +54,14 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         mLoadingDialog.show();
     }
 
+    protected void showLoadingDialog(boolean canCancel) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(this);
+        }
+        mLoadingDialog.setCancelable(canCancel);
+        mLoadingDialog.show();
+    }
+
     protected void showLoadingDialog(int resid) {
         if (mLoadingDialog == null) {
             mLoadingDialog = new LoadingDialog(this);

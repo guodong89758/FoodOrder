@@ -603,12 +603,17 @@ public class GoodListActivity extends BaseActivity {
             @Override
             public void onClick(View button, NormalDialog dialog) {
                 dialog.dismiss();
+                showLoadingDialog(false);
                 API_Food.ins().orderGood(TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        hideLoadingDialog();
                         if (errcode == 200) {
                             clearCart();
                             EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                            Intent intent = new Intent(GoodListActivity.this, OrdersActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));

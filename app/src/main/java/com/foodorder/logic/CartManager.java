@@ -185,7 +185,7 @@ public class CartManager {
         if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
             for (int j = 0; j < good.getAttributeList().size(); j++) {
                 Attribute attribute = good.getAttributeList().get(j);
-                if (attribute.getCount() == 0) {
+                if (attribute.getCount() == 0 && attribute.getSel_count() == 0) {
                     continue;
                 }
                 attribute.setCount(0);
@@ -195,7 +195,7 @@ public class CartManager {
         if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
             for (int j = 0; j < good.getFormulaList().size(); j++) {
                 Formula formula = good.getFormulaList().get(j);
-                if (formula.getCount() == 0) {
+                if (formula.getCount() == 0 && formula.getSel_count() == 0) {
                     continue;
                 }
                 formula.setCount(0);

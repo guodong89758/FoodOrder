@@ -2,6 +2,7 @@ package com.foodorder.pop;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.text.method.ReplacementTransformationMethod;
@@ -18,8 +19,10 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
+import com.foodorder.activity.OrdersActivity;
 import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
+import com.foodorder.dialog.LoadingDialog;
 import com.foodorder.dialog.NormalDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
@@ -172,15 +175,20 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
             @Override
             public void onClick(View button, NormalDialog dialog) {
                 dialog.dismiss();
+                showLoadingDialog(false);
                 API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        hideLoadingDialog();
                         if (errcode == 200) {
                             CartManager.ins().clear();
                             EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
                             EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
                             EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
+                            Intent intent = new Intent(mContext, OrdersActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            mContext.startActivity(intent);
                         } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));
                         }
@@ -220,4 +228,19 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
 
     }
 
+    private LoadingDialog mLoadingDialog;
+
+    protected void showLoadingDialog(boolean canCancel) {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new LoadingDialog(mContext);
+        }
+        mLoadingDialog.setCancelable(canCancel);
+        mLoadingDialog.show();
+    }
+
+    protected void hideLoadingDialog() {
+        if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
+            mLoadingDialog.dismiss();
+        }
+    }
 }

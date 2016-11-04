@@ -1,6 +1,7 @@
 package com.foodorder.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -362,14 +363,19 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
             @Override
             public void onClick(View button, NormalDialog dialog) {
                 dialog.dismiss();
+                showLoadingDialog(false);
                 API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                        hideLoadingDialog();
                         if (errcode == 200) {
                             CartManager.ins().clear();
                             EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
                             EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
                             EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                            Intent intent = new Intent(GoodSearchActivity.this, OrdersActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));

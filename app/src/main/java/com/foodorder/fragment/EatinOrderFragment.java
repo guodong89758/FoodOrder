@@ -126,9 +126,9 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
                     orderAdapter.setOnItemClickListener(EatinOrderFragment.this);
                     orderAdapter.setOnItemLongClickListener(EatinOrderFragment.this);
                     rv_eatin.setAdapter(orderAdapter);
-                    if(orderData.size() > 0){
+                    if (orderData.size() > 0) {
                         emptyLayout.showContent();
-                    }else{
+                    } else {
                         emptyLayout.showEmpty();
                     }
                 }
@@ -143,7 +143,13 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
 
                 }
             });
-        } else {
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!RT.DEBUG) {
             API_Food.ins().getOrderList(TAG, getOrderListCallback);
         }
     }
