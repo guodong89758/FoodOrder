@@ -8,14 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="订单编号:"
+            android:text="@string/order_id"
             android:textColor="@color/black_80"
             android:textSize="15dp" />
 
@@ -38,7 +36,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="创建时间:"
+            android:text="@string/order_time"
             android:textColor="@color/black_80"
             android:textSize="15dp" />
 
@@ -62,7 +60,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="台号:"
+            android:text="@string/order_taihao_label"
             android:textColor="@color/black_80"
             android:textSize="15dp" />
 
@@ -86,7 +84,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="人数:"
+            android:text="@string/order_person_num_label"
             android:textColor="@color/black_80"
             android:textSize="15dp" />
 

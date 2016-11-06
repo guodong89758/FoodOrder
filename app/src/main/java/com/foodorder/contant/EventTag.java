@@ -12,6 +12,7 @@ public class EventTag {
     public static final int GET_SERVER_DOMAIN_FROM_ZXING = 0x05; //二维码扫描服务ip
     public static final int ORDER_LIST_REFRESH = 0x06; //订单列表刷新
     public static final int ORDER_PACK_LIST_REFRESH = 0x07; //打包订单列表刷新
+    public static final int ACTIVITY_FINISH = 0x08; //关闭activity
 
 
 }

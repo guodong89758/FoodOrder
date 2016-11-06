@@ -51,9 +51,11 @@
             android:clickable="true"
             android:gravity="center"
             android:onClick="onClick"
-            android:text="加菜"
+            android:singleLine="true"
+            android:textAllCaps="false"
+            android:text="@string/order_add_good"
             android:textColor="@color/white"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:visibility="visible" />
 
     </RelativeLayout>

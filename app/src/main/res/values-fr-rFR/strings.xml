@@ -69,6 +69,9 @@
     <string name="order_action_2">Imprimer</string>
     <string name="order_eatin_search_hint">N° de table est obligatoire</string>
     <string name="order_pack_search_hint">N° de la commande est obligatoire</string>
+    <string name="order_add_good">Rajouter</string>
+    <string name="order_id">No:</string>
+    <string name="order_time">creation:</string>
 
 
     <!-- error -->

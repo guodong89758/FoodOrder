@@ -25,7 +25,6 @@ import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.pop.FormulaPop;
 import com.foodorder.pop.OrderSetupPop;
-import com.foodorder.runtime.ActivityManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
@@ -376,7 +375,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 //                            Intent intent = new Intent(GoodSearchActivity.this, OrdersActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                            startActivity(intent);
-                            ActivityManager.ins().finishActivity(GoodListActivity.class);
+                            EventManager.ins().sendEvent(EventTag.ACTIVITY_FINISH, 0, 0, null);
                             finish();
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {

@@ -14,11 +14,14 @@ import com.foodorder.R;
 import com.foodorder.adapter.OrderGoodAdapter;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.contant.AppKey;
+import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventListener;
+import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.StringUtil;
@@ -102,6 +105,7 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
                 API_Food.ins().getOrderInfo(TAG, id_order, infoCallback);
             }
         });
+        EventManager.ins().registListener(EventTag.ACTIVITY_FINISH, eventListener);
     }
 
     @Override
@@ -163,6 +167,7 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(TAG);
+        EventManager.ins().removeListener(EventTag.ACTIVITY_FINISH, eventListener);
     }
 
     @Override
@@ -200,6 +205,17 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
             pop.showPopup();
         }
     }
+
+    EventListener eventListener = new EventListener() {
+        @Override
+        public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
+            switch (what) {
+                case EventTag.ACTIVITY_FINISH:
+                    finish();
+                    break;
+            }
+        }
+    };
 
     JsonResponseCallback infoCallback = new JsonResponseCallback() {
         @Override

@@ -18,13 +18,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
-import com.foodorder.activity.GoodListActivity;
 import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.dialog.LoadingDialog;
 import com.foodorder.dialog.NormalDialog;
 import com.foodorder.logic.CartManager;
-import com.foodorder.runtime.ActivityManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.WeakHandler;
 import com.foodorder.runtime.event.EventManager;
@@ -188,7 +186,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
 //                            Intent intent = new Intent(mContext, OrdersActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                            mContext.startActivity(intent);
-                            ActivityManager.ins().finishActivity(GoodListActivity.class);
+                            EventManager.ins().sendEvent(EventTag.ACTIVITY_FINISH, 0, 0, null);
                             ((Activity) mContext).finish();
                         } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));

@@ -26,6 +26,7 @@ import com.foodorder.db.bean.Order;
 import com.foodorder.dialog.OrderActionDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
@@ -87,6 +88,7 @@ public class OrderEatinSearchActivity extends BaseActivity implements BaseRecycl
         });
 
         et_search.addTextChangedListener(textWatcher);
+        EventManager.ins().registListener(EventTag.ACTIVITY_FINISH, eventListener);
     }
 
     @Override
@@ -100,6 +102,7 @@ public class OrderEatinSearchActivity extends BaseActivity implements BaseRecycl
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(TAG);
+        EventManager.ins().removeListener(EventTag.ACTIVITY_FINISH, eventListener);
     }
 
     @Override
@@ -140,6 +143,17 @@ public class OrderEatinSearchActivity extends BaseActivity implements BaseRecycl
         }
         return true;
     }
+
+    EventListener eventListener = new EventListener() {
+        @Override
+        public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
+            switch (what) {
+                case EventTag.ACTIVITY_FINISH:
+                    finish();
+                    break;
+            }
+        }
+    };
 
     private void showActionDialog(Order order) {
         if (order == null) {

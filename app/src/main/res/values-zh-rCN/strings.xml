@@ -69,6 +69,9 @@
     <string name="order_action_2">打印</string>
     <string name="order_eatin_search_hint">请输入台号</string>
     <string name="order_pack_search_hint">请输入订单号</string>
+    <string name="order_add_good">加菜</string>
+    <string name="order_id">订单编号:</string>
+    <string name="order_time">创建时间:</string>
 
 
     <!-- error -->

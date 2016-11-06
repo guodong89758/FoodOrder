@@ -22,6 +22,7 @@ import com.foodorder.runtime.RT;
 import com.foodorder.runtime.WeakHandler;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.PreferenceHelper;
 import com.foodorder.util.SoftKeyboardUtil;
 import com.foodorder.util.ToastUtil;
@@ -94,7 +95,7 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
     public void initData() {
 //        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, UserManager.getInstance().getUserList());
 //        tv_username.setAdapter(arrayAdapter);
-        String language = PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, "zh");
+        String language = PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, PhoneUtil.isZh() ? "zh" : "fr");
         if (language.equals("zh")) {
             rb_zh.setChecked(true);
         } else {

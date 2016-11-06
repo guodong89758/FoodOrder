@@ -22,6 +22,7 @@ import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.ServerManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.PreferenceHelper;
 import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
@@ -62,7 +63,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void initView() {
         EventManager.ins().registListener(EventTag.GET_SERVER_DOMAIN_FROM_ZXING, eventListener);
-        switchLanguage(PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, "zh"));
+        switchLanguage(PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, PhoneUtil.isZh() ? "zh" : "fr"));
     }
 
     @Override

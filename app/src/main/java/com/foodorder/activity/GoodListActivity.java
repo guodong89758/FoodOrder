@@ -65,6 +65,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
+import static com.foodorder.contant.EventTag.ACTIVITY_FINISH;
 import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 
 
@@ -155,6 +156,7 @@ public class GoodListActivity extends BaseActivity {
                 }
             }
         });
+        EventManager.ins().registListener(ACTIVITY_FINISH, eventListener);
     }
 
     @Override
@@ -232,6 +234,7 @@ public class GoodListActivity extends BaseActivity {
         super.onDestroy();
         CartManager.ins().clear();
         EventManager.ins().removeListener(EventTag.GOOD_LIST_REFRESH, eventListener);
+        EventManager.ins().removeListener(EventTag.ACTIVITY_FINISH, eventListener);
         OkHttpUtils.getInstance().cancelTag(TAG);
     }
 
@@ -249,6 +252,9 @@ public class GoodListActivity extends BaseActivity {
                 case EventTag.POPUP_ATTRIBUTE_SHOW:
                     AttributePop attrPop = new AttributePop(GoodListActivity.this, (Good) dataobj, arg2);
                     attrPop.showPopup();
+                    break;
+                case EventTag.ACTIVITY_FINISH:
+                    finish();
                     break;
             }
         }
@@ -614,6 +620,7 @@ public class GoodListActivity extends BaseActivity {
 //                            Intent intent = new Intent(GoodListActivity.this, OrdersActivity.class);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                            startActivity(intent);
+                            EventManager.ins().sendEvent(EventTag.ACTIVITY_FINISH, 0, 0, null);
                             finish();
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {
