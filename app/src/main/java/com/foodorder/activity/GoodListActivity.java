@@ -610,10 +610,11 @@ public class GoodListActivity extends BaseActivity {
                         hideLoadingDialog();
                         if (errcode == 200) {
                             clearCart();
-                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
-                            Intent intent = new Intent(GoodListActivity.this, OrdersActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+//                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+//                            Intent intent = new Intent(GoodListActivity.this, OrdersActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(intent);
+                            finish();
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));

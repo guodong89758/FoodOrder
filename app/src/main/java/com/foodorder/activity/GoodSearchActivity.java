@@ -1,7 +1,6 @@
 package com.foodorder.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +25,7 @@ import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.pop.FormulaPop;
 import com.foodorder.pop.OrderSetupPop;
+import com.foodorder.runtime.ActivityManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
@@ -373,9 +373,11 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                             EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
                             EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
                             EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
-                            Intent intent = new Intent(GoodSearchActivity.this, OrdersActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
+//                            Intent intent = new Intent(GoodSearchActivity.this, OrdersActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(intent);
+                            ActivityManager.ins().finishActivity(GoodListActivity.class);
+                            finish();
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));

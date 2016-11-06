@@ -116,6 +116,7 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    EventManager.ins().sendEvent(EventTag.ORDER_PACK_LIST_REFRESH, 0, 0, null);
                     orderData = RT.ins().getDaoSession().getOrderDao().queryBuilder().where(OrderDao.Properties.Type.eq(AppKey.ORDER_TYPE_SURPLACE)).build().list();
                     subscriber.onCompleted();
                 }

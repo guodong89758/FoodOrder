@@ -2,7 +2,6 @@ package com.foodorder.pop;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.text.method.ReplacementTransformationMethod;
@@ -19,13 +18,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
-import com.foodorder.activity.OrdersActivity;
+import com.foodorder.activity.GoodListActivity;
 import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.dialog.LoadingDialog;
 import com.foodorder.dialog.NormalDialog;
-import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
+import com.foodorder.runtime.ActivityManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.WeakHandler;
 import com.foodorder.runtime.event.EventManager;
@@ -119,7 +118,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
 
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
                 String persons = tv_count.getText().toString().trim();
-                DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
+//                DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
                 showOrderGoodDialog(mContext, id_order, number, persons);
 //                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
 //                    @Override
@@ -186,9 +185,11 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
                             EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
                             EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
                             ToastUtil.showToast(RT.getString(R.string.good_order_success));
-                            Intent intent = new Intent(mContext, OrdersActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            mContext.startActivity(intent);
+//                            Intent intent = new Intent(mContext, OrdersActivity.class);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            mContext.startActivity(intent);
+                            ActivityManager.ins().finishActivity(GoodListActivity.class);
+                            ((Activity) mContext).finish();
                         } else {
                             ToastUtil.showToast(RT.getString(R.string.good_order_failed));
                         }

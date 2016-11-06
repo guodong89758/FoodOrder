@@ -28,13 +28,11 @@ import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
-import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.EmptyLayout;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 import com.lzy.okhttputils.OkHttpUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -105,45 +103,6 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
         super.onActivityCreated(savedInstanceState);
         if (orderData == null) {
             orderData = new ArrayList<>();
-        }
-
-        if (RT.DEBUG) {
-            Observable.create(new Observable.OnSubscribe<Object>() {
-                @Override
-                public void call(Subscriber<? super Object> subscriber) {
-                    String order_json = StringUtil.getJson(getActivity(), "orders.json");
-                    try {
-                        OrdersParse.parseJson(new JSONObject(order_json));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    orderData = RT.ins().getDaoSession().getOrderDao().loadAll();
-                    subscriber.onCompleted();
-                }
-            }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
-                @Override
-                public void onCompleted() {
-                    orderAdapter = new PackOrderAdapter(getActivity(), orderData);
-                    orderAdapter.setOnItemClickListener(PackOrderFragment.this);
-                    orderAdapter.setOnItemLongClickListener(PackOrderFragment.this);
-                    rv_pack.setAdapter(orderAdapter);
-                    if (orderData.size() > 0) {
-                        emptyLayout.showContent();
-                    } else {
-                        emptyLayout.showEmpty();
-                    }
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    DLOG.e(e.getMessage());
-                }
-
-                @Override
-                public void onNext(Object o) {
-
-                }
-            });
         }
     }
 
@@ -223,7 +182,11 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
         public void handleMessage(int what, int arg1, int arg2, Object dataobj) {
             switch (what) {
                 case EventTag.ORDER_PACK_LIST_REFRESH:
-                    parseJson();
+                    if (RT.DEBUG) {
+                        testData();
+                    } else {
+                        parseJson();
+                    }
                     break;
             }
         }
@@ -268,6 +231,46 @@ public class PackOrderFragment extends BaseFragment implements SwipeRefreshLayou
                     emptyLayout.showEmpty();
                 }
 
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                DLOG.e(e.getMessage());
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+        });
+    }
+
+
+    private void testData() {
+        Observable.create(new Observable.OnSubscribe<Object>() {
+            @Override
+            public void call(Subscriber<? super Object> subscriber) {
+//                String order_json = StringUtil.getJson(getActivity(), "orders.json");
+//                try {
+//                    OrdersParse.parseJson(new JSONObject(order_json));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+                orderData = RT.ins().getDaoSession().getOrderDao().queryBuilder().where(OrderDao.Properties.Type.eq(AppKey.ORDER_TYPE_EMPORTER)).build().list();
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Object>() {
+            @Override
+            public void onCompleted() {
+                orderAdapter = new PackOrderAdapter(getActivity(), orderData);
+                orderAdapter.setOnItemClickListener(PackOrderFragment.this);
+                orderAdapter.setOnItemLongClickListener(PackOrderFragment.this);
+                rv_pack.setAdapter(orderAdapter);
+                if (orderData.size() > 0) {
+                    emptyLayout.showContent();
+                } else {
+                    emptyLayout.showEmpty();
+                }
             }
 
             @Override

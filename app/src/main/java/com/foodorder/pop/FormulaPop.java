@@ -90,6 +90,10 @@ public class FormulaPop extends PopupWindow implements View.OnClickListener {
                 dismiss();
                 break;
             case R.id.btn_ok:
+                if (type == TYPE_ORDER) {
+                    dismiss();
+                    return;
+                }
                 if (good != null && good.getAttributeList() != null && good.getAttributeList().size() > 0) {
                     EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, type, good);
                 } else {
