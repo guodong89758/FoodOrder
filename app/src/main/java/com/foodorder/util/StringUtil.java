@@ -46,7 +46,7 @@ public class StringUtil {
         long mostTime = 0;
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = dateFormat.parse("2016-11-13 00:00:00");
+            Date date = dateFormat.parse("2016-11-20 00:00:00");
             mostTime = date.getTime();
         } catch (ParseException e) {
             e.printStackTrace();

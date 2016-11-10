@@ -27,8 +27,8 @@ public class OrdersParse {
         }
 
         JSONArray orderArray = data.optJSONArray("Orders");
+        RT.ins().getDaoSession().getOrderDao().deleteAll();
         if (orderArray != null && orderArray.length() > 0) {
-            RT.ins().getDaoSession().getOrderDao().deleteAll();
             for (int i = 0; i < orderArray.length(); i++) {
                 JSONObject orderJson = orderArray.optJSONObject(i);
                 String id_order = orderJson.optString("id_order");
