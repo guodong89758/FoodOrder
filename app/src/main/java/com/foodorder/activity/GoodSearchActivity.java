@@ -30,6 +30,7 @@ import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 
@@ -92,6 +93,36 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         btn_pack.setOnClickListener(this);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) gl_keybord.getLayoutParams();
         params.width = RT.getScreenWidth();
+
+        int btn_width = (RT.getScreenWidth() - PhoneUtil.dipToPixel(10, this)) / 4;
+        GridLayout.LayoutParams params1 = (GridLayout.LayoutParams) findViewById(R.id.btn_1).getLayoutParams();
+        params1.width = btn_width;
+        GridLayout.LayoutParams params2 = (GridLayout.LayoutParams) findViewById(R.id.btn_2).getLayoutParams();
+        params2.width = btn_width;
+        GridLayout.LayoutParams params3 = (GridLayout.LayoutParams) findViewById(R.id.btn_3).getLayoutParams();
+        params3.width = btn_width;
+        GridLayout.LayoutParams params4 = (GridLayout.LayoutParams) findViewById(R.id.btn_4).getLayoutParams();
+        params4.width = btn_width;
+        GridLayout.LayoutParams params5 = (GridLayout.LayoutParams) findViewById(R.id.btn_5).getLayoutParams();
+        params5.width = btn_width;
+        GridLayout.LayoutParams params6 = (GridLayout.LayoutParams) findViewById(R.id.btn_6).getLayoutParams();
+        params6.width = btn_width;
+        GridLayout.LayoutParams params7 = (GridLayout.LayoutParams) findViewById(R.id.btn_7).getLayoutParams();
+        params7.width = btn_width;
+        GridLayout.LayoutParams params8 = (GridLayout.LayoutParams) findViewById(R.id.btn_8).getLayoutParams();
+        params8.width = btn_width;
+        GridLayout.LayoutParams params9 = (GridLayout.LayoutParams) findViewById(R.id.btn_9).getLayoutParams();
+        params9.width = btn_width;
+        GridLayout.LayoutParams params0 = (GridLayout.LayoutParams) findViewById(R.id.btn_0).getLayoutParams();
+        params0.width = btn_width;
+        GridLayout.LayoutParams params_back = (GridLayout.LayoutParams) findViewById(R.id.btn_back).getLayoutParams();
+        params_back.width = btn_width;
+        GridLayout.LayoutParams params_clear = (GridLayout.LayoutParams) findViewById(R.id.btn_clear).getLayoutParams();
+        params_clear.width = btn_width;
+        GridLayout.LayoutParams params_pack = (GridLayout.LayoutParams) findViewById(R.id.btn_pack).getLayoutParams();
+        params_pack.width = btn_width * 2;
+        GridLayout.LayoutParams params_send = (GridLayout.LayoutParams) findViewById(R.id.btn_send).getLayoutParams();
+        params_send.width = btn_width;
 
         EventManager.ins().registListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
         EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
