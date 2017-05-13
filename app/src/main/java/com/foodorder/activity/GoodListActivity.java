@@ -419,7 +419,11 @@ public class GoodListActivity extends BaseActivity {
 //                    setupPop.showPopup();
 //                } else {
 //                    DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
+                if (CartManager.ins().cartData != null && CartManager.ins().cartData.size() > 0) {
                     showOrderGoodDialog(this, id_order, number, persons);
+                } else {
+                    ToastUtil.showBottomToast(getString(R.string.cart_empty));
+                }
 //                }
 
                 break;

@@ -59,6 +59,7 @@
     <string name="cart_clear">Vider</string>
     <string name="cart_clear_dialog_title">Vider le panier</string>
     <string name="cart_clear_dialog_desc">Vider le panier？</string>
+    <string name="cart_empty">Le chariot est vide</string>
 
     <!-- order -->
     <string name="order_info_title">Detail de commande</string>

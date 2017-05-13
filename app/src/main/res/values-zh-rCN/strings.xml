@@ -59,6 +59,7 @@
     <string name="cart_clear">清空</string>
     <string name="cart_clear_dialog_title">清空购物车</string>
     <string name="cart_clear_dialog_desc">是否确认要清空购物车？</string>
+    <string name="cart_empty">购物车为空</string>
 
     <!-- order -->
     <string name="order_info_title">订单详情</string>

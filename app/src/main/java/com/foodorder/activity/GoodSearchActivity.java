@@ -49,7 +49,7 @@ import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener {
     private GridLayout gl_keybord;
     private RecyclerView rv_good, rv_code;
-//    private Button btn_pack;
+    //    private Button btn_pack;
     private TextView tv_empty;
     private KeycodeAdapter keycodeAdapter;
     private GoodSearchAdapter goodAdapter;
@@ -233,7 +233,11 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 //                    setupPop.showPopup();
 //                } else {
 //                    DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, "", ""));
+                if (CartManager.ins().cartData != null && CartManager.ins().cartData.size() > 0) {
                     showOrderGoodDialog(this, id_order, number, persons);
+                } else {
+                    ToastUtil.showBottomToast(getString(R.string.cart_empty));
+                }
 //                }
 
                 break;
