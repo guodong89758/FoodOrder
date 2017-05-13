@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.foodorder.R;
@@ -65,7 +66,8 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Good item;
-        private TextView tvCost, tvCount, tvAdd, tvMinus, tvName, tvCode;
+        private TextView tvCost, tvCount, tvName, tvCode;
+        private ImageButton tvAdd, tvMinus;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -73,8 +75,8 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
             tvCode = (TextView) itemView.findViewById(R.id.tvCode);
             tvCost = (TextView) itemView.findViewById(R.id.tvCost);
             tvCount = (TextView) itemView.findViewById(R.id.count);
-            tvMinus = (TextView) itemView.findViewById(R.id.tvMinus);
-            tvAdd = (TextView) itemView.findViewById(R.id.tvAdd);
+            tvMinus = (ImageButton) itemView.findViewById(R.id.tvMinus);
+            tvAdd = (ImageButton) itemView.findViewById(R.id.tvAdd);
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
         }

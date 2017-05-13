@@ -54,19 +54,19 @@ public class CartManager {
     }
 
     //添加商品
-    public void add(Good item, boolean refreshGoodList) {
+    public synchronized void add(Good item, boolean refreshGoodList) {
 
         int groupCount = groupSelect.get(item.getPosition());
         if (groupCount == 0) {
-            groupSelect.append(item.getPosition(), 1);
+            groupSelect.put(item.getPosition(), 1);
         } else {
-            groupSelect.append(item.getPosition(), ++groupCount);
+            groupSelect.put(item.getPosition(), ++groupCount);
         }
 
         Good temp = cartList.get(item.getId().intValue());
         if (temp == null) {
             item.setCount(1);
-            cartList.append(item.getId().intValue(), item);
+            cartList.put(item.getId().intValue(), item);
             if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
                 Good newGood = item.clone();
                 cartData.add(newGood);
@@ -88,25 +88,77 @@ public class CartManager {
     }
 
     //移除商品
-    public void remove(Good item, boolean refreshGoodList) {
+    public synchronized void remove(Good item, boolean refreshGoodList) {
 
         int groupCount = groupSelect.get(item.getPosition());
         if (groupCount == 1) {
             groupSelect.delete(item.getPosition());
         } else if (groupCount > 1) {
-            groupSelect.append(item.getPosition(), --groupCount);
+            groupSelect.put(item.getPosition(), --groupCount);
         }
 
         Good temp = cartList.get(item.getId().intValue());
         if (temp != null) {
             if (temp.getCount() < 2) {
                 cartList.remove(item.getId().intValue());
-                cartData.remove(item);
-            } else {
                 if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                    int index = cartData.size() - 1;
+                    for (int i = index; i >= 0; i--) {
+                        Good cartGood = cartData.get(i);
+                        if (cartGood.getId() == temp.getId()) {
+                            cartData.remove(cartGood);
+                            break;
+                        }
+                    }
+                } else {
                     cartData.remove(item);
                 }
+            } else {
+                if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                    int index = cartData.size() - 1;
+                    for (int i = index; i >= 0; i--) {
+                        Good cartGood = cartData.get(i);
+                        if (cartGood.getId() == temp.getId()) {
+                            cartData.remove(cartGood);
+                            break;
+                        }
+                    }
+                }
                 temp.setCount(temp.getCount() - 1);
+            }
+        }
+        EventManager.ins().sendEvent(GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
+        EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, refreshGoodList);
+    }
+
+    /**
+     * 清空选择菜品数量
+     *
+     * @param item
+     * @param refreshGoodList
+     */
+    public synchronized void clearGood(Good item, boolean refreshGoodList) {
+
+        int groupCount = groupSelect.get(item.getPosition());
+        if (groupCount == item.getCount()) {
+            groupSelect.delete(item.getPosition());
+        } else if (groupCount > 1) {
+            groupSelect.put(item.getPosition(), groupCount - item.getCount());
+        }
+
+        Good temp = cartList.get(item.getId().intValue());
+        if (temp != null) {
+            cartList.remove(item.getId().intValue());
+            if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                int index = cartData.size() - 1;
+                for (int i = index; i >= 0; i--) {
+                    Good cartGood = cartData.get(i);
+                    if (cartGood.getId() == temp.getId()) {
+                        cartData.remove(cartGood);
+                    }
+                }
+            } else {
+                cartData.remove(item);
             }
         }
         EventManager.ins().sendEvent(GOOD_LIST_REFRESH, 0, 0, refreshGoodList);
@@ -118,15 +170,15 @@ public class CartManager {
 
         int groupCount = groupSelect.get(item.getPosition());
         if (groupCount == 0) {
-            groupSelect.append(item.getPosition(), 1);
+            groupSelect.put(item.getPosition(), 1);
         } else {
-            groupSelect.append(item.getPosition(), ++groupCount);
+            groupSelect.put(item.getPosition(), ++groupCount);
         }
 
         Good temp = cartList.get(item.getId().intValue());
         if (temp == null) {
             item.setCount(1);
-            cartList.append(item.getId().intValue(), item);
+            cartList.put(item.getId().intValue(), item);
             cartData.add(item);
         } else {
             if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
@@ -145,7 +197,7 @@ public class CartManager {
         if (groupCount == 1) {
             groupSelect.delete(item.getPosition());
         } else if (groupCount > 1) {
-            groupSelect.append(item.getPosition(), --groupCount);
+            groupSelect.put(item.getPosition(), --groupCount);
         }
 
         Good temp = cartList.get(item.getId().intValue());

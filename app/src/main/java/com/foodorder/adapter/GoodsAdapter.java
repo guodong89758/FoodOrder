@@ -9,7 +9,9 @@ import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodorder.R;
@@ -22,11 +24,14 @@ import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.BitmapLoader;
 import com.foodorder.util.PhoneUtil;
+import com.foodorder.widget.SwipeMenuLayout;
 
 import java.text.NumberFormat;
 import java.util.List;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+
+import static com.foodorder.R.id.count;
 
 
 public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapter {
@@ -100,22 +105,31 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
     }
 
     class ItemViewHolder implements View.OnClickListener {
+        private SwipeMenuLayout swipe_layout;
+        private LinearLayout ll_content;
         private ImageView img;
         private TextView name, price, tv_code, tvAdd, tv_specification, tvMinus, tvCount;
+        private Button btn_delete;
         private Good item;
 
         public ItemViewHolder(View itemView) {
+            swipe_layout = (SwipeMenuLayout) itemView.findViewById(R.id.swipe_layout);
+            ll_content = (LinearLayout) itemView.findViewById(R.id.ll_content);
             img = (ImageView) itemView.findViewById(R.id.img);
             name = (TextView) itemView.findViewById(R.id.tvName);
             price = (TextView) itemView.findViewById(R.id.tvPrice);
             tv_code = (TextView) itemView.findViewById(R.id.tv_code);
-            tvCount = (TextView) itemView.findViewById(R.id.count);
+            tvCount = (TextView) itemView.findViewById(count);
             tvMinus = (TextView) itemView.findViewById(R.id.tvMinus);
             tvAdd = (TextView) itemView.findViewById(R.id.tvAdd);
             tv_specification = (TextView) itemView.findViewById(R.id.tv_specification);
+            btn_delete = (Button) itemView.findViewById(R.id.btn_delete);
+
+            ll_content.setOnClickListener(this);
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
             tv_specification.setOnClickListener(this);
+            btn_delete.setOnClickListener(this);
         }
 
         public void bindData(Good item) {
@@ -130,32 +144,34 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             name.setText(good_name);
             tv_code.setText(item.getReference());
             item.setCount(CartManager.ins().getSelectedItemCountById(item.getId().intValue()));
-            tvCount.setText(String.valueOf(item.getCount()));
+            tvCount.setText(String.valueOf(item.getCount()) + "x");
             price.setText(nf.format(item.getPrice()));
             if (item.getCount() < 1) {
                 tvCount.setVisibility(View.GONE);
-                tvMinus.setVisibility(View.GONE);
+                swipe_layout.setSwipeEnable(false);
+//                tvMinus.setVisibility(View.GONE);
             } else {
                 tvCount.setVisibility(View.VISIBLE);
-                tvMinus.setVisibility(View.VISIBLE);
+                swipe_layout.setSwipeEnable(true);
+//                tvMinus.setVisibility(View.VISIBLE);
             }
-            if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
-                hasFormula = true;
-            } else {
-                hasFormula = false;
-            }
-            if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
-                hasAttribute = true;
-            } else {
-                hasAttribute = false;
-            }
-            if (hasFormula || hasAttribute) {
-                tv_specification.setVisibility(View.VISIBLE);
-                tvAdd.setVisibility(View.GONE);
-            } else {
-                tv_specification.setVisibility(View.GONE);
-                tvAdd.setVisibility(View.VISIBLE);
-            }
+//            if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+//                hasFormula = true;
+//            } else {
+//                hasFormula = false;
+//            }
+//            if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+//                hasAttribute = true;
+//            } else {
+//                hasAttribute = false;
+//            }
+//            if (hasFormula || hasAttribute) {
+//                tv_specification.setVisibility(View.VISIBLE);
+//                tvAdd.setVisibility(View.GONE);
+//            } else {
+//                tv_specification.setVisibility(View.GONE);
+//                tvAdd.setVisibility(View.VISIBLE);
+//            }
 
         }
 
@@ -163,19 +179,29 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
         public void onClick(View v) {
             GoodListActivity activity = mContext;
             switch (v.getId()) {
+                case R.id.ll_content:
                 case R.id.tvAdd: {
-                    int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
-                    if (count < 1) {
-                        tvMinus.setAnimation(getShowAnimation());
-                        tvMinus.setVisibility(View.VISIBLE);
-                        tvCount.setVisibility(View.VISIBLE);
+                    swipe_layout.setSwipeEnable(true);
+                    if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                        if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+                            EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, item);
+                        } else if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+                            EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
+                        }
+                    } else {
+                        int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
+                        if (count < 1) {
+//                            tvMinus.setAnimation(getShowAnimation());
+//                            tvMinus.setVisibility(View.VISIBLE);
+                            tvCount.setVisibility(View.VISIBLE);
+                        }
+                        CartManager.ins().add(item, false);
+//                        count++;
+                        tvCount.setText(String.valueOf(item.getCount()) + "x");
+                        int[] loc = new int[2];
+                        v.getLocationInWindow(loc);
+                        activity.playAnimation(loc);
                     }
-                    CartManager.ins().add(item, false);
-                    count++;
-                    tvCount.setText(String.valueOf(item.getCount()));
-                    int[] loc = new int[2];
-                    v.getLocationInWindow(loc);
-                    activity.playAnimation(loc);
                 }
                 break;
                 case R.id.tvMinus: {
@@ -187,7 +213,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                     }
                     count--;
                     CartManager.ins().remove(item, false);//activity.getSelectedItemCountById(item.id)
-                    tvCount.setText(String.valueOf(item.getCount()));
+                    tvCount.setText(String.valueOf(item.getCount()) + "x");
 
                 }
                 break;
@@ -198,6 +224,12 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                         EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
                     }
 
+                    break;
+                case R.id.btn_delete:
+                    swipe_layout.setSwipeEnable(false);
+                    swipe_layout.smoothClose();
+                    CartManager.ins().clearGood(item, false);
+                    tvCount.setText("");
                     break;
                 default:
                     break;

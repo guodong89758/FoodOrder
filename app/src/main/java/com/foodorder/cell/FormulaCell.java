@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,7 +24,8 @@ import java.util.List;
 
 public class FormulaCell extends LinearLayout implements ListCell, View.OnClickListener {
     private RelativeLayout rl_title;
-    private TextView tv_type, tv_max_count, tv_name, tv_add, tv_minus, tv_count;
+    private TextView tv_type, tv_max_count, tv_name, tv_count;
+    private ImageButton tv_add, tv_minus;
     private Formula formula;
     private Good good;
     private int type;
@@ -39,8 +41,8 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
         tv_type = (TextView) findViewById(R.id.tv_type);
         tv_max_count = (TextView) findViewById(R.id.tv_max_count);
         tv_name = (TextView) findViewById(R.id.tv_name);
-        tv_add = (TextView) findViewById(R.id.tv_add);
-        tv_minus = (TextView) findViewById(R.id.tv_minus);
+        tv_add = (ImageButton) findViewById(R.id.tv_add);
+        tv_minus = (ImageButton) findViewById(R.id.tv_minus);
         tv_count = (TextView) findViewById(R.id.tv_count);
 
         tv_add.setOnClickListener(this);

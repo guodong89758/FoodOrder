@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:background="#fff"
     android:descendantFocusability="blocksDescendants"
-    android:padding="10dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -41,14 +42,14 @@
         android:layout_centerVertical="true"
         android:gravity="right">
 
-        <TextView
+        <ImageButton
             android:id="@+id/tvMinus"
             android:layout_width="@dimen/button_count_size"
-            android:layout_height="@dimen/button_count_size"
-            android:background="@drawable/button_minus"
+            android:layout_height="50dp"
+            android:src="@drawable/button_minus"
             android:clickable="true"
-            android:gravity="center"
-            android:textStyle="bold" />
+            android:background="@color/transparent"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/count"
@@ -61,14 +62,14 @@
             android:textColor="@color/blue_color"
             android:textSize="15dp" />
 
-        <TextView
+        <ImageButton
             android:id="@+id/tvAdd"
             android:layout_width="@dimen/button_count_size"
-            android:layout_height="@dimen/button_count_size"
-            android:background="@drawable/button_add"
+            android:layout_height="50dp"
+            android:src="@drawable/button_add"
+            android:background="@color/transparent"
             android:clickable="true"
-            android:gravity="center"
-            android:textStyle="bold" />
+            android:gravity="center" />
 
     </LinearLayout>
 

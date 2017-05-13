@@ -17,6 +17,7 @@
     <string name="action_send">Envoyer</string>
     <string name="action_back">Retour</string>
     <string name="action_clear">Vider</string>
+    <string name="action_delete">Supprimer</string>
     <string name="prompt">Rappel</string>
     <string name="zxing_title">QR Code</string>
 

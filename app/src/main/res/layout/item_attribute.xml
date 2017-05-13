@@ -7,15 +7,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="商品名"
-            android:singleLine="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="80dp"
+            android:singleLine="true"
+            android:text="商品名"
             android:textColor="@color/black_80"
             android:textSize="15dp" />
 
@@ -27,14 +29,12 @@
             android:layout_centerVertical="true"
             android:gravity="right">
 
-            <TextView
+            <ImageButton
                 android:id="@+id/tv_minus"
                 android:layout_width="@dimen/button_count_size"
-                android:layout_height="@dimen/button_count_size"
-                android:background="@drawable/button_minus"
-                android:clickable="true"
-                android:gravity="center"
-                android:textStyle="bold" />
+                android:layout_height="45dp"
+                android:background="@color/transparent"
+                android:src="@drawable/button_minus" />
 
             <TextView
                 android:id="@+id/tv_count"
@@ -47,14 +47,12 @@
                 android:textColor="@color/black_80"
                 android:textSize="15dp" />
 
-            <TextView
+            <ImageButton
                 android:id="@+id/tv_add"
                 android:layout_width="@dimen/button_count_size"
-                android:layout_height="@dimen/button_count_size"
-                android:background="@drawable/button_add"
-                android:clickable="true"
-                android:gravity="center"
-                android:textStyle="bold" />
+                android:layout_height="45dp"
+                android:background="@color/transparent"
+                android:src="@drawable/button_add" />
         </LinearLayout>
     </RelativeLayout>
 

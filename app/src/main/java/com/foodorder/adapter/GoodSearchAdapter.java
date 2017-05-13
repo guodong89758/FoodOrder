@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,7 +50,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
 
     @Override
     public GoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new GoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_goods, null));
+        return new GoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_goods_search, null));
     }
 
     @Override
@@ -72,7 +73,8 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
 
     public static class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView img;
-        public TextView name, price, tv_code, tvAdd, tv_specification, tvMinus, tvCount;
+        public TextView name, price, tv_code, tv_specification, tvCount;
+        ImageButton tvMinus, tvAdd;
         private boolean hasAttribute = false;
         private boolean hasFormula = false;
         private NumberFormat nf;
@@ -85,8 +87,8 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
             price = (TextView) itemView.findViewById(R.id.tvPrice);
             tv_code = (TextView) itemView.findViewById(R.id.tv_code);
             tvCount = (TextView) itemView.findViewById(R.id.count);
-            tvMinus = (TextView) itemView.findViewById(R.id.tvMinus);
-            tvAdd = (TextView) itemView.findViewById(R.id.tvAdd);
+            tvMinus = (ImageButton) itemView.findViewById(R.id.tvMinus);
+            tvAdd = (ImageButton) itemView.findViewById(R.id.tvAdd);
             tv_specification = (TextView) itemView.findViewById(R.id.tv_specification);
 
             tvMinus.setOnClickListener(this);
@@ -111,6 +113,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
 //            item.setCount(CartManager.ins().getSelectedItemCountById(item.getId().intValue()));
             tvCount.setText(String.valueOf(item.getCount()));
             price.setText(nf.format(item.getPrice()));
+            tvAdd.setVisibility(View.VISIBLE);
             if (item.getCount() < 1) {
                 tvCount.setVisibility(View.GONE);
                 tvMinus.setVisibility(View.GONE);

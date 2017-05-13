@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_def_image" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="已加入肯德基豪华套餐"
+            android:textColor="@color/black_80"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName"
+            android:textColor="@color/black_40"
+            android:textSize="12dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="￥ 100"
+                android:textColor="@color/price_color"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/tvPrice"
+                android:gravity="right">
+
+                <ImageButton
+                    android:id="@+id/tvMinus"
+                    android:layout_width="@dimen/button_count_size"
+                    android:layout_height="40dp"
+                    android:background="@color/transparent"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/button_minus"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="23dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="center"
+                    android:minWidth="@dimen/button_count_size"
+                    android:text="0"
+                    android:textColor="@color/black_80"
+                    android:textSize="15dp" />
+
+                <ImageButton
+                    android:id="@+id/tvAdd"
+                    android:layout_width="@dimen/button_count_size"
+                    android:layout_height="40dp"
+                    android:background="@color/transparent"
+                    android:scaleType="fitEnd"
+                    android:src="@drawable/button_add" />
+
+                <TextView
+                    android:id="@+id/tv_specification"
+                    android:layout_width="35dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/bg_btn_specification_selector"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@string/good_specification"
+                    android:textColor="@color/specification_text_color"
+                    android:textSize="12dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

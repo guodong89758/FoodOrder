@@ -17,6 +17,7 @@
     <string name="action_send">发送</string>
     <string name="action_back">后退</string>
     <string name="action_clear">清空</string>
+    <string name="action_delete">删除</string>
     <string name="prompt">提示</string>
     <string name="zxing_title">二维码</string>
 
