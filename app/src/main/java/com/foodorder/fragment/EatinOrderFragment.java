@@ -20,8 +20,8 @@ import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.OrderDao;
 import com.foodorder.db.bean.Order;
-import com.foodorder.dialog.OrderActionDialog;
 import com.foodorder.log.DLOG;
+import com.foodorder.logic.PrinterManager;
 import com.foodorder.parse.OrdersParse;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
@@ -183,7 +183,7 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
     public boolean onItemLongClick(View view, int position, long id) {
         Order order = orderData.get(position);
         if (order != null) {
-            showActionDialog(order);
+            PrinterManager.ins().showActionDialog(getActivity(), order);
         }
         return true;
     }
@@ -199,44 +199,6 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         }
     };
 
-    private void showActionDialog(Order order) {
-        if (order == null) {
-            return;
-        }
-        OrderActionDialog dialog = new OrderActionDialog(getActivity(), order);
-        dialog.setButton1(new OrderActionDialog.DialogButtonOnClickListener() {
-            @Override
-            public void onClick(View button, final OrderActionDialog dialog, Order order) {
-                dialog.dismiss();
-//                ToastUtil.showToast(getResources().getString(R.string.order_action_1));
-                API_Food.ins().remindOrder(TAG, order.getId_order(), new JsonResponseCallback() {
-                    @Override
-                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
-                        if (errcode == 200) {
-                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
-                        }
-                        ToastUtil.showToast(errmsg);
-                        return false;
-                    }
-                });
-            }
-        });
-        dialog.setButton2(new OrderActionDialog.DialogButtonOnClickListener() {
-            @Override
-            public void onClick(View button, OrderActionDialog dialog, Order order) {
-                dialog.dismiss();
-//                ToastUtil.showToast(getResources().getString(R.string.order_action_2));
-                API_Food.ins().printOrder(TAG, order.getId_order(), new JsonResponseCallback() {
-                    @Override
-                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
-                        ToastUtil.showToast(errmsg);
-                        return false;
-                    }
-                });
-            }
-        });
-        dialog.show();
-    }
 
     JsonResponseCallback getOrderListCallback = new JsonResponseCallback() {
         @Override

@@ -21,4 +21,7 @@ public class AppKey {
     public static final int GOOD_LIST_ADD = 2; //加菜
 
     public static final String ORDER_ID = "order_id";
+
+    public static final int PRINTER_CUIDAN = 1; //催单
+    public static final int PRINTER_DAYIN = 2; //打印
 }

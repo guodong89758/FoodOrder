@@ -79,4 +79,7 @@
     <!-- splash -->
     <string name="splash_initing">初始化...</string>
 
+    <!-- 打印机 -->
+    <string name="printer_title">打印机</string>
+
 </resources>

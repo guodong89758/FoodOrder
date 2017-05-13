@@ -79,4 +79,7 @@
     <!-- splash -->
     <string name="splash_initing">Chargement...</string>
 
+    <!-- 打印机 -->
+    <string name="printer_title">Printer</string>
+
 </resources>
