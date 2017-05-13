@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,6 @@ import android.view.animation.CycleInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AbsListView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -41,7 +38,6 @@ import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.pop.FormulaPop;
-import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
@@ -81,7 +77,7 @@ public class GoodListActivity extends BaseActivity {
     private BottomSheetLayout bottomSheetLayout;
     private View bottomSheet;
     private StickyListHeadersListView listView;
-    private CheckBox cb_pack;
+//    private CheckBox cb_pack;
 
     private List<GoodType> goodTypeList;
     private List<Good> goodList;
@@ -117,7 +113,7 @@ public class GoodListActivity extends BaseActivity {
         anim_mask_layout = (RelativeLayout) findViewById(R.id.containerLayout);
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomSheetLayout);
         listView = (StickyListHeadersListView) findViewById(R.id.itemListView);
-        cb_pack = (CheckBox) findViewById(R.id.cb_pack);
+//        cb_pack = (CheckBox) findViewById(R.id.cb_pack);
 
         ib_back.setOnClickListener(this);
         ib_search.setOnClickListener(this);
@@ -146,16 +142,16 @@ public class GoodListActivity extends BaseActivity {
         imgCart.setVisibility(View.GONE);
         EventManager.ins().registListener(EventTag.GOOD_LIST_REFRESH, eventListener);
 
-        cb_pack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    CartManager.ins().isPack = true;
-                } else {
-                    CartManager.ins().isPack = false;
-                }
-            }
-        });
+//        cb_pack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    CartManager.ins().isPack = true;
+//                } else {
+//                    CartManager.ins().isPack = false;
+//                }
+//            }
+//        });
         EventManager.ins().registListener(ACTIVITY_FINISH, eventListener);
     }
 
@@ -215,11 +211,11 @@ public class GoodListActivity extends BaseActivity {
         super.onResume();
         EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
         EventManager.ins().registListener(EventTag.POPUP_ATTRIBUTE_SHOW, eventListener);
-        if (CartManager.ins().isPack) {
-            cb_pack.setChecked(true);
-        } else {
-            cb_pack.setChecked(false);
-        }
+//        if (CartManager.ins().isPack) {
+//            cb_pack.setChecked(true);
+//        } else {
+//            cb_pack.setChecked(false);
+//        }
     }
 
     @Override
@@ -390,7 +386,6 @@ public class GoodListActivity extends BaseActivity {
                 break;
             case R.id.ib_search:
                 Intent intent = new Intent(this, GoodSearchActivity.class);
-                intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_ADD);
                 intent.putExtra(AppKey.ID_ORDER, id_order);
                 intent.putExtra(AppKey.ORDER_NUMBER, number);
                 intent.putExtra(AppKey.ORDER_PERSON, persons);
@@ -419,13 +414,13 @@ public class GoodListActivity extends BaseActivity {
                 dialog.show();
                 break;
             case R.id.btn_send:
-                if (TextUtils.isEmpty(id_order)) {
-                    OrderSetupPop setupPop = new OrderSetupPop(GoodListActivity.this, id_order);
-                    setupPop.showPopup();
-                } else {
+//                if (TextUtils.isEmpty(id_order)) {
+//                    OrderSetupPop setupPop = new OrderSetupPop(GoodListActivity.this, id_order);
+//                    setupPop.showPopup();
+//                } else {
 //                    DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
                     showOrderGoodDialog(this, id_order, number, persons);
-                }
+//                }
 
                 break;
             default:

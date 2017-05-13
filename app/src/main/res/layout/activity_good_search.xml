@@ -113,16 +113,17 @@
             android:id="@+id/btn_0"
             style="@style/KeyBordStyle"
             android:text="0"
+            app:layout_columnSpan="3"
             app:layout_gravity="fill" />
 
-        <Button
-            android:id="@+id/btn_pack"
-            style="@style/KeyBordStyle"
-            android:background="@drawable/bg_pack_checked_false"
-            android:text="@string/good_check_pack_false"
-            android:textColor="@color/black_60"
-            app:layout_columnSpan="2"
-            app:layout_gravity="fill" />
+        <!--<Button-->
+            <!--android:id="@+id/btn_pack"-->
+            <!--style="@style/KeyBordStyle"-->
+            <!--android:background="@drawable/bg_pack_checked_false"-->
+            <!--android:text="@string/good_check_pack_false"-->
+            <!--android:textColor="@color/black_60"-->
+            <!--app:layout_columnSpan="2"-->
+            <!--app:layout_gravity="fill" />-->
     </android.support.v7.widget.GridLayout>
 
     <LinearLayout

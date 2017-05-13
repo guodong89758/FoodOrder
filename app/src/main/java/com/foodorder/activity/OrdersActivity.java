@@ -14,6 +14,7 @@ import com.foodorder.contant.AppKey;
 import com.foodorder.fragment.EatinOrderFragment;
 import com.foodorder.fragment.PackOrderFragment;
 import com.foodorder.logic.CartManager;
+import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.ActivityManager;
 import com.foodorder.util.SmoothSwitchScreenUtil;
 import com.foodorder.util.ToastUtil;
@@ -73,15 +74,23 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
                 }
                 break;
             case R.id.fab_menu:
-                Intent intent = new Intent(OrdersActivity.this, GoodListActivity.class);
                 if (vp_order.getCurrentItem() == 0) {
-                    intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
                     CartManager.ins().isPack = false;
                 } else {
-                    intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
                     CartManager.ins().isPack = true;
                 }
-                startActivity(intent);
+                OrderSetupPop setupPop = new OrderSetupPop(OrdersActivity.this);
+                setupPop.showPopup();
+                setupPop.setOnOrderSetupListener(new OrderSetupPop.OnOrderSetupListener() {
+                    @Override
+                    public void orderSetup(String number, String persons) {
+                        Intent intent = new Intent(OrdersActivity.this, GoodListActivity.class);
+                        intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
+                        intent.putExtra(AppKey.ORDER_NUMBER, number);
+                        intent.putExtra(AppKey.ORDER_PERSON, persons);
+                        startActivity(intent);
+                    }
+                });
                 break;
         }
     }

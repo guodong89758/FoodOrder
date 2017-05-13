@@ -19,20 +19,11 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
-import com.foodorder.contant.AppKey;
-import com.foodorder.contant.EventTag;
 import com.foodorder.dialog.LoadingDialog;
-import com.foodorder.dialog.NormalDialog;
 import com.foodorder.logic.CartManager;
-import com.foodorder.runtime.RT;
 import com.foodorder.runtime.WeakHandler;
-import com.foodorder.runtime.event.EventManager;
-import com.foodorder.server.api.API_Food;
-import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.SoftKeyboardUtil;
 import com.foodorder.util.ToastUtil;
-
-import org.json.JSONObject;
 
 import static com.foodorder.runtime.RT.getString;
 
@@ -47,12 +38,11 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
     private TextView tv_minus, tv_count, tv_add;
     private LinearLayout ll_number;
     private Button btn_ok;
-    private String id_order;
     private int count = 1;
+    private OnOrderSetupListener listener;
 
-    public OrderSetupPop(Context context, String id_order) {
+    public OrderSetupPop(Context context) {
         this.mContext = context;
-        this.id_order = id_order;
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         setFocusable(true);
@@ -119,21 +109,9 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
 
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
                 String persons = tv_count.getText().toString().trim();
-//                DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, number, persons));
-                showOrderGoodDialog(mContext, id_order, number, persons);
-//                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
-//                    @Override
-//                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
-//                        if (errcode == 200) {
-//                            CartManager.ins().clear();
-//                            EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
-//                            EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
-//                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
-//                        }
-//                        ToastUtil.showToast(errmsg);
-//                        return false;
-//                    }
-//                });
+                if (listener != null) {
+                    listener.orderSetup(number, persons);
+                }
                 dismiss();
                 break;
             case R.id.tv_add:
@@ -161,47 +139,6 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
         backgroundAlpha(0.5f);
     }
 
-    public void showOrderGoodDialog(Context context, final String id_order, final String number, final String persons) {
-        NormalDialog dialog = new NormalDialog(context);
-        dialog.setTitle(R.string.good_order_dialog_title);
-        dialog.setTextDes(getString(R.string.good_order_dialog_desc));
-        dialog.setButton1(getString(R.string.action_cancel), new NormalDialog.DialogButtonOnClickListener() {
-            @Override
-            public void onClick(View button, NormalDialog dialog) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setButton2(getString(R.string.action_ok), new NormalDialog.DialogButtonOnClickListener() {
-            @Override
-            public void onClick(View button, NormalDialog dialog) {
-                dialog.dismiss();
-                showLoadingDialog(false);
-                API_Food.ins().orderGood(AppKey.HTTP_TAG, CartManager.ins().getOrderGoodJson(CartManager.ins().isPack, id_order, number, persons), new JsonResponseCallback() {
-                    @Override
-                    public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
-                        hideLoadingDialog();
-                        if (errcode == 200) {
-                            CartManager.ins().clear();
-                            EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
-                            EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);
-                            EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
-                            ToastUtil.showToast(RT.getString(R.string.good_order_success));
-//                            Intent intent = new Intent(mContext, OrdersActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            mContext.startActivity(intent);
-                            EventManager.ins().sendEvent(EventTag.ACTIVITY_FINISH, 0, 0, null);
-                            ((Activity) mContext).finish();
-                        } else {
-                            ToastUtil.showToast(RT.getString(R.string.good_order_failed));
-                        }
-                        return false;
-                    }
-                });
-            }
-        });
-        dialog.show();
-    }
-
 
     /**
      * 设置添加屏幕的背景透明度
@@ -212,6 +149,14 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
         WindowManager.LayoutParams lp = ((Activity) mContext).getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
         ((Activity) mContext).getWindow().setAttributes(lp);
+    }
+
+    public interface OnOrderSetupListener {
+        void orderSetup(String number, String persons);
+    }
+
+    public void setOnOrderSetupListener(OnOrderSetupListener listener) {
+        this.listener = listener;
     }
 
     public class AllCapTransformationMethod extends ReplacementTransformationMethod {

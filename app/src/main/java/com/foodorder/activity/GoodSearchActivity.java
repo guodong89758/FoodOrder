@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,7 +23,6 @@ import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.pop.FormulaPop;
-import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
@@ -51,13 +49,12 @@ import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener {
     private GridLayout gl_keybord;
     private RecyclerView rv_good, rv_code;
-    private Button btn_pack;
+//    private Button btn_pack;
     private TextView tv_empty;
     private KeycodeAdapter keycodeAdapter;
     private GoodSearchAdapter goodAdapter;
     private List<Good> codeData;
     private String search_content = "";
-    private int list_type = AppKey.GOOD_LIST_MENU;
     private String id_order = "";
     private String number = "";
     private String persons = "";
@@ -75,7 +72,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         gl_keybord = (GridLayout) findViewById(R.id.gl_keybord);
         rv_good = (RecyclerView) findViewById(R.id.rv_good);
         rv_code = (RecyclerView) findViewById(R.id.rv_code);
-        btn_pack = (Button) findViewById(R.id.btn_pack);
+//        btn_pack = (Button) findViewById(btn_pack);
         tv_empty = (TextView) findViewById(R.id.tv_empty);
         findViewById(R.id.btn_1).setOnClickListener(this);
         findViewById(R.id.btn_2).setOnClickListener(this);
@@ -90,7 +87,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         findViewById(R.id.btn_9).setOnClickListener(this);
         findViewById(R.id.btn_send).setOnClickListener(this);
         findViewById(R.id.btn_0).setOnClickListener(this);
-        btn_pack.setOnClickListener(this);
+//        btn_pack.setOnClickListener(this);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) gl_keybord.getLayoutParams();
         params.width = RT.getScreenWidth();
 
@@ -114,13 +111,13 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         GridLayout.LayoutParams params9 = (GridLayout.LayoutParams) findViewById(R.id.btn_9).getLayoutParams();
         params9.width = btn_width;
         GridLayout.LayoutParams params0 = (GridLayout.LayoutParams) findViewById(R.id.btn_0).getLayoutParams();
-        params0.width = btn_width;
+        params0.width = btn_width * 3;
         GridLayout.LayoutParams params_back = (GridLayout.LayoutParams) findViewById(R.id.btn_back).getLayoutParams();
         params_back.width = btn_width;
         GridLayout.LayoutParams params_clear = (GridLayout.LayoutParams) findViewById(R.id.btn_clear).getLayoutParams();
         params_clear.width = btn_width;
-        GridLayout.LayoutParams params_pack = (GridLayout.LayoutParams) findViewById(R.id.btn_pack).getLayoutParams();
-        params_pack.width = btn_width * 2;
+//        GridLayout.LayoutParams params_pack = (GridLayout.LayoutParams) findViewById(R.id.btn_pack).getLayoutParams();
+//        params_pack.width = btn_width * 2;
         GridLayout.LayoutParams params_send = (GridLayout.LayoutParams) findViewById(R.id.btn_send).getLayoutParams();
         params_send.width = btn_width;
 
@@ -135,7 +132,6 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 
     @Override
     public void initData() {
-        list_type = getIntent().getIntExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
         id_order = getIntent().getStringExtra(AppKey.ID_ORDER);
         number = getIntent().getStringExtra(AppKey.ORDER_NUMBER);
         persons = getIntent().getStringExtra(AppKey.ORDER_PERSON);
@@ -144,15 +140,15 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         }
         goodAdapter = new GoodSearchAdapter(GoodSearchActivity.this, CartManager.ins().cartData);
         rv_good.setAdapter(goodAdapter);
-        if (CartManager.ins().isPack) {
-            btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_true);
-            btn_pack.setTextColor(getResources().getColor(R.color.white));
-            btn_pack.setText(getString(R.string.good_check_pack));
-        } else {
-            btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_false);
-            btn_pack.setTextColor(getResources().getColor(R.color.black_50));
-            btn_pack.setText(getString(R.string.good_check_pack_false));
-        }
+//        if (CartManager.ins().isPack) {
+//            btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_true);
+//            btn_pack.setTextColor(getResources().getColor(R.color.white));
+//            btn_pack.setText(getString(R.string.good_check_pack));
+//        } else {
+//            btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_false);
+//            btn_pack.setTextColor(getResources().getColor(R.color.black_50));
+//            btn_pack.setText(getString(R.string.good_check_pack_false));
+//        }
         goodAdapter.setOnItemClickListener(new GoodSearchAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, Good good) {
@@ -232,32 +228,32 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                 search();
                 break;
             case R.id.btn_send:
-                if (TextUtils.isEmpty(id_order)) {
-                    OrderSetupPop setupPop = new OrderSetupPop(GoodSearchActivity.this, id_order);
-                    setupPop.showPopup();
-                } else {
+//                if (TextUtils.isEmpty(id_order)) {
+//                    OrderSetupPop setupPop = new OrderSetupPop(GoodSearchActivity.this, id_order);
+//                    setupPop.showPopup();
+//                } else {
 //                    DLOG.json(CartManager.ins().getOrderGoodJson(false, id_order, "", ""));
                     showOrderGoodDialog(this, id_order, number, persons);
-                }
+//                }
 
                 break;
             case R.id.btn_0:
                 search_content = search_content + "0";
                 search();
                 break;
-            case R.id.btn_pack:
-                if (CartManager.ins().isPack) {
-                    CartManager.ins().isPack = false;
-                    btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_false);
-                    btn_pack.setTextColor(getResources().getColor(R.color.black_50));
-                    btn_pack.setText(getString(R.string.good_check_pack_false));
-                } else {
-                    CartManager.ins().isPack = true;
-                    btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_true);
-                    btn_pack.setTextColor(getResources().getColor(R.color.white));
-                    btn_pack.setText(getString(R.string.good_check_pack));
-                }
-                break;
+//            case btn_pack:
+//                if (CartManager.ins().isPack) {
+//                    CartManager.ins().isPack = false;
+//                    btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_false);
+//                    btn_pack.setTextColor(getResources().getColor(R.color.black_50));
+//                    btn_pack.setText(getString(R.string.good_check_pack_false));
+//                } else {
+//                    CartManager.ins().isPack = true;
+//                    btn_pack.setBackgroundResource(R.drawable.bg_pack_checked_true);
+//                    btn_pack.setTextColor(getResources().getColor(R.color.white));
+//                    btn_pack.setText(getString(R.string.good_check_pack));
+//                }
+//                break;
         }
     }
 
