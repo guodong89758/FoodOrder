@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
+import android.text.method.DigitsKeyListener;
 import android.text.method.ReplacementTransformationMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -74,6 +75,8 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
         btn_ok = (Button) view.findViewById(R.id.btn_ok);
         ll_number = (LinearLayout) view.findViewById(R.id.ll_number);
 
+        String digits = "0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        et_num.setKeyListener(DigitsKeyListener.getInstance(digits));
         et_num.setTransformationMethod(new AllCapTransformationMethod());
 
 

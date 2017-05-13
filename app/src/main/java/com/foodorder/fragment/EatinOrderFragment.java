@@ -106,13 +106,14 @@ public class EatinOrderFragment extends BaseFragment implements SwipeRefreshLayo
         if (orderData == null) {
             orderData = new ArrayList<>();
         }
+
         if (RT.DEBUG) {
             Observable.create(new Observable.OnSubscribe<Object>() {
                 @Override
                 public void call(Subscriber<? super Object> subscriber) {
                     String order_json = StringUtil.getJson(getActivity(), "orders.json");
                     try {
-                        OrdersParse.parseJson(new JSONObject(order_json));
+                        OrdersParse.parseJson(new JSONObject(order_json).optJSONObject("data"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

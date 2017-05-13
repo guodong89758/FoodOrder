@@ -10,25 +10,14 @@ import com.foodorder.runtime.RT;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import static android.R.attr.data;
-
 /**
  * Created by guodong on 16/9/20.
  */
 public class AppInitParse {
 
-    public static void parseJson(JSONObject json) {
-        if (json == null) {
+    public static void parseJson(JSONObject data) {
+        if (data == null) {
             return;
-        }
-        JSONObject data;
-        if (RT.DEBUG) {
-            data = json.optJSONObject("data");
-            if (data == null) {
-                return;
-            }
-        } else {
-            data = json;
         }
 
         //用户信息

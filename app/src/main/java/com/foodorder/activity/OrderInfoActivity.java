@@ -120,7 +120,7 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
                 public void call(Subscriber<? super Object> subscriber) {
                     String order_json = StringUtil.getJson(OrderInfoActivity.this, "order.json");
                     try {
-                        parseJson(new JSONObject(order_json));
+                        parseJson(new JSONObject(order_json).optJSONObject("data"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -160,7 +160,6 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
         } else {
             API_Food.ins().getOrderInfo(TAG, id_order, infoCallback);
         }
-
     }
 
     @Override
@@ -246,18 +245,12 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
         }
     };
 
-    public void parseJson(JSONObject json) {
-        if (json == null) {
+    public void parseJson(JSONObject data) {
+        if (data == null) {
             return;
         }
         if (goodData != null) {
             goodData.clear();
-        }
-        JSONObject data = null;
-        if (RT.DEBUG) {
-            data = json.optJSONObject("data");
-        } else {
-            data = json;
         }
         this.id_order = data.optString("id_order");
         this.time = data.optString("time");
