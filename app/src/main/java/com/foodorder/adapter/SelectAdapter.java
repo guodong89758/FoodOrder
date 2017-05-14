@@ -1,5 +1,6 @@
 package com.foodorder.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.foodorder.R;
-import com.foodorder.activity.GoodListActivity;
 import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
@@ -19,17 +19,17 @@ import java.util.List;
 
 
 public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder> {
-    private GoodListActivity activity;
+    private Context mContext;
     private List<Good> dataList;
     private NumberFormat nf;
     private LayoutInflater mInflater;
 
-    public SelectAdapter(GoodListActivity activity, List<Good> dataList) {
-        this.activity = activity;
+    public SelectAdapter(Context context, List<Good> dataList) {
+        this.mContext = context;
         this.dataList = dataList;
         nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
-        mInflater = LayoutInflater.from(activity);
+        mInflater = LayoutInflater.from(mContext);
     }
 
     @Override

@@ -6,8 +6,10 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.LinearInterpolator;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,7 +26,7 @@ import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.foodorder.R;
-import com.foodorder.adapter.GoodsAdapter;
+import com.foodorder.adapter.GoodsPadAdapter;
 import com.foodorder.adapter.SelectAdapter;
 import com.foodorder.adapter.TypeAdapter;
 import com.foodorder.base.BaseActivity;
@@ -48,6 +49,8 @@ import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
 import com.lzy.okhttputils.OkHttpUtils;
+import com.tonicartos.superslim.GridSLM;
+import com.tonicartos.superslim.LayoutManager;
 
 import org.json.JSONObject;
 
@@ -60,31 +63,30 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 import static com.foodorder.contant.EventTag.ACTIVITY_FINISH;
 import static com.foodorder.contant.EventTag.POPUP_FORMULA_SHOW;
 
 
-public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener{
-    private static final String TAG = "GoodListActivity";
+public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAdapter.OnItemClickListener {
+    private static final String TAG = "GoodListPadActivity";
     private ImageButton ib_back, ib_search;
     private RelativeLayout rl_cart;
     private ImageView imgCart, iv_cart_empty;
     private ViewGroup anim_mask_layout;
     private RecyclerView rvType, rvSelected;
+    private RecyclerView rv_good;
     private TextView tvCount, tvCost;
     private Button btn_send;
     private BottomSheetLayout bottomSheetLayout;
     private View bottomSheet;
-    private StickyListHeadersListView listView;
 //    private CheckBox cb_pack;
 
     private List<GoodType> goodTypeList;
     private List<Good> goodList;
     private SparseIntArray groupSelect;
 
-    private GoodsAdapter myAdapter;
+    private GoodsPadAdapter myAdapter;
     private SelectAdapter selectAdapter;
     private TypeAdapter typeAdapter;
 
@@ -97,7 +99,7 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_good_list;
+        return R.layout.activity_good_list_pad;
     }
 
     @Override
@@ -109,29 +111,27 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
         tvCount = (TextView) findViewById(R.id.tvCount);
         tvCost = (TextView) findViewById(R.id.tvCost);
         btn_send = (Button) findViewById(R.id.btn_send);
-        rvType = (RecyclerView) findViewById(R.id.typeRecyclerView);
+        rvType = (RecyclerView) findViewById(R.id.rv_type);
         imgCart = (ImageView) findViewById(R.id.imgCart);
         anim_mask_layout = (RelativeLayout) findViewById(R.id.containerLayout);
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomSheetLayout);
-        listView = (StickyListHeadersListView) findViewById(R.id.itemListView);
+        rv_good = (RecyclerView) findViewById(R.id.rv_good);
 //        cb_pack = (CheckBox) findViewById(R.id.cb_pack);
 
         ib_back.setOnClickListener(this);
         ib_search.setOnClickListener(this);
         btn_send.setOnClickListener(this);
         rvType.setLayoutManager(new LinearLayoutManager(this));
-        rvType.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(getResources().getColor(R.color.black_10)).size(1).build());
+        rvType.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(ContextCompat.getColor(this, R.color.black_10)).size(1).build());
+        rv_good.setLayoutManager(new LayoutManager(this));
+        rv_good.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(ContextCompat.getColor(this, R.color.black_10)).size(1).build());
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        rv_good.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
                 if (goodList != null && goodList.size() > 0) {
-                    Good item = goodList.get(firstVisibleItem);
+                    Good item = goodList.get(((LayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition());
                     if (typeAdapter != null && typeAdapter.selectTypeId != item.getPosition()) {
                         typeAdapter.selectTypeId = item.getPosition();
                         typeAdapter.notifyDataSetChanged();
@@ -143,16 +143,6 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
         imgCart.setVisibility(View.GONE);
         EventManager.ins().registListener(EventTag.GOOD_LIST_REFRESH, eventListener);
 
-//        cb_pack.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    CartManager.ins().isPack = true;
-//                } else {
-//                    CartManager.ins().isPack = false;
-//                }
-//            }
-//        });
         EventManager.ins().registListener(ACTIVITY_FINISH, eventListener);
     }
 
@@ -179,7 +169,33 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
             @Override
             public void call(Subscriber<? super Object> subscriber) {
                 goodTypeList = RT.ins().getDaoSession().getGoodTypeDao().loadAll();
-                goodList = RT.ins().getDaoSession().getGoodDao().loadAll();
+                List<Good> goodTempList = RT.ins().getDaoSession().getGoodDao().loadAll();
+                if (goodTempList != null && goodTempList.size() > 0) {
+                    String lastHead = "";
+                    int sectionFirstPosition = 0;
+                    int headCount = 0;
+                    for (int i = 0; i < goodTempList.size(); i++) {
+                        Good good = goodTempList.get(i);
+                        if (!TextUtils.equals(lastHead, good.getId_category())) {
+                            Good title = new Good();
+                            sectionFirstPosition = i + headCount;
+                            title.setSectionFirstPosition(sectionFirstPosition);
+                            title.setSectionManager(GridSLM.ID);
+                            title.setTitle(true);
+                            title.setFr_category_name(good.getFr_category_name());
+                            title.setZh_category_name(good.getZh_category_name());
+                            title.setId_category(good.getId_category());
+                            title.setPosition(good.getPosition());
+                            headCount += 1;
+                            lastHead = good.getId_category();
+                            goodList.add(title);
+                        }
+                        good.setSectionFirstPosition(sectionFirstPosition);
+                        good.setSectionManager(GridSLM.ID);
+                        good.setTitle(false);
+                        goodList.add(good);
+                    }
+                }
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.newThread())
@@ -187,12 +203,12 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onCompleted() {
-                        typeAdapter = new TypeAdapter(GoodListActivity.this, goodTypeList);
+                        typeAdapter = new TypeAdapter(GoodListPadActivity.this, goodTypeList);
+                        typeAdapter.setOnItemClickListener(GoodListPadActivity.this);
                         rvType.setAdapter(typeAdapter);
-                        typeAdapter.setOnItemClickListener(GoodListActivity.this);
 
-                        myAdapter = new GoodsAdapter(goodList, GoodListActivity.this);
-                        listView.setAdapter(myAdapter);
+                        myAdapter = new GoodsPadAdapter(GoodListPadActivity.this, goodList);
+                        rv_good.setAdapter(myAdapter);
                     }
 
                     @Override
@@ -244,11 +260,11 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
                     update((Boolean) dataobj);
                     break;
                 case EventTag.POPUP_FORMULA_SHOW:
-                    FormulaPop formulaPop = new FormulaPop(GoodListActivity.this, (Good) dataobj, FormulaPop.TYPE_MENU);
+                    FormulaPop formulaPop = new FormulaPop(GoodListPadActivity.this, (Good) dataobj, FormulaPop.TYPE_MENU);
                     formulaPop.showPopup();
                     break;
                 case EventTag.POPUP_ATTRIBUTE_SHOW:
-                    AttributePop attrPop = new AttributePop(GoodListActivity.this, (Good) dataobj, arg2);
+                    AttributePop attrPop = new AttributePop(GoodListPadActivity.this, (Good) dataobj, arg2);
                     attrPop.showPopup();
                     break;
                 case EventTag.ACTIVITY_FINISH:
@@ -552,7 +568,7 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
     }
 
     public void onTypeClicked(int typeId) {
-        listView.setSelection(getSelectedPosition(typeId));
+        rv_good.getLayoutManager().scrollToPosition(getSelectedPosition(typeId));
     }
 
     private int getSelectedPosition(int typeId) {
@@ -579,10 +595,10 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
             @Override
             public void onItemClick(int position, Good good) {
                 if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
-                    FormulaPop formulaPop = new FormulaPop(GoodListActivity.this, good, FormulaPop.TYPE_UPDATE);
+                    FormulaPop formulaPop = new FormulaPop(GoodListPadActivity.this, good, FormulaPop.TYPE_UPDATE);
                     formulaPop.showPopup();
                 } else if (good.getAttributeList() != null && good.getAttributeList().size() > 0) {
-                    AttributePop attrPop = new AttributePop(GoodListActivity.this, good, AttributePop.TYPE_UPDATE);
+                    AttributePop attrPop = new AttributePop(GoodListPadActivity.this, good, AttributePop.TYPE_UPDATE);
                     attrPop.showPopup();
                 }
 
@@ -642,4 +658,5 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
         });
         dialog.show();
     }
+
 }

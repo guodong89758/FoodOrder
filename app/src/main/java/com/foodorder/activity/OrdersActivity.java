@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -16,11 +17,12 @@ import com.foodorder.fragment.PackOrderFragment;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.ActivityManager;
+import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.SmoothSwitchScreenUtil;
 import com.foodorder.util.ToastUtil;
 
 public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
-
+    private Toolbar toolbar;
     private ImageButton ib_search;
     private TabLayout tab_layout;
     private ViewPager vp_order;
@@ -41,11 +43,15 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
 
     @Override
     public void initView() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         ib_search = (ImageButton) findViewById(R.id.ib_search);
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
         vp_order = (ViewPager) findViewById(R.id.vp_order);
         fab_menu = (FloatingActionButton) findViewById(R.id.fab_menu);
 
+        setSupportActionBar(toolbar);
+        tab_layout.setTabMode(TabLayout.MODE_FIXED);
+        tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
         ib_search.setOnClickListener(this);
         fab_menu.setOnClickListener(this);
     }
@@ -58,8 +64,8 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
         vp_order.setAdapter(orderAdapter);
         vp_order.setCurrentItem(0);
         tab_layout.setupWithViewPager(vp_order);
-
         vp_order.addOnPageChangeListener(this);
+
 
     }
 
@@ -84,7 +90,12 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
                 setupPop.setOnOrderSetupListener(new OrderSetupPop.OnOrderSetupListener() {
                     @Override
                     public void orderSetup(String number, String persons) {
-                        Intent intent = new Intent(OrdersActivity.this, GoodListActivity.class);
+                        Intent intent = null;
+                        if (PhoneUtil.isPad(OrdersActivity.this)) {
+                            intent = new Intent(OrdersActivity.this, GoodListPadActivity.class);
+                        } else {
+                            intent = new Intent(OrdersActivity.this, GoodListActivity.class);
+                        }
                         intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
                         intent.putExtra(AppKey.ORDER_NUMBER, number);
                         intent.putExtra(AppKey.ORDER_PERSON, persons);

@@ -61,6 +61,12 @@ public class Good implements Cloneable {
     private boolean isFormula;
     @Transient
     private int count;
+    @Transient
+    private int sectionManager;
+    @Transient
+    private int sectionFirstPosition;
+    @Transient
+    private boolean isTitle;
     @ToMany(referencedJoinProperty = "id_product")
     private List<Attribute> attributeList;
     @ToMany(referencedJoinProperty = "id_product")
@@ -247,6 +253,30 @@ public class Good implements Cloneable {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public int getSectionManager() {
+        return sectionManager;
+    }
+
+    public void setSectionManager(int sectionManager) {
+        this.sectionManager = sectionManager;
+    }
+
+    public int getSectionFirstPosition() {
+        return sectionFirstPosition;
+    }
+
+    public void setSectionFirstPosition(int sectionFirstPosition) {
+        this.sectionFirstPosition = sectionFirstPosition;
+    }
+
+    public boolean isTitle() {
+        return isTitle;
+    }
+
+    public void setTitle(boolean title) {
+        isTitle = title;
     }
 
     /**

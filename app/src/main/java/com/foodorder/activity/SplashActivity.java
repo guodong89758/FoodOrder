@@ -80,7 +80,8 @@ public class SplashActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    AppInitParse.parseJson(json);
+                    AppInitParse.parseJson(json.optJSONObject("data"));
+                    RT.ins().getDaoSession().getOrderDao().deleteAll();
 
                     subscriber.onCompleted();
                 }
@@ -102,33 +103,30 @@ public class SplashActivity extends BaseActivity {
                 }
             });
         } else {
-            if (StringUtil.checkTime()) {
-                ServerManager.SERVER_DOMAIN = PreferenceHelper.ins().getStringShareData(AppKey.SERVER_DOMAIN, "");
-                if (TextUtils.isEmpty(ServerManager.SERVER_DOMAIN)) {
-                    Dexter.checkPermission(new PermissionListener() {
-                        @Override
-                        public void onPermissionGranted(PermissionGrantedResponse response) {
-                            startActivity(new Intent(SplashActivity.this, ScanActivity.class));
-                        }
+            ServerManager.SERVER_DOMAIN = PreferenceHelper.ins().getStringShareData(AppKey.SERVER_DOMAIN, "");
+            if (TextUtils.isEmpty(ServerManager.SERVER_DOMAIN)) {
+                Dexter.checkPermission(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        startActivity(new Intent(SplashActivity.this, ScanActivity.class));
+                    }
 
-                        @Override
-                        public void onPermissionDenied(PermissionDeniedResponse response) {
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
 
-                        }
+                    }
 
-                        @Override
-                        public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-                            if (token != null) {
-                                token.continuePermissionRequest();
-                            }
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        if (token != null) {
+                            token.continuePermissionRequest();
                         }
-                    }, Manifest.permission.CAMERA);
-                } else {
-                    API_Food.ins().getGoodMenu(TAG, initCallbck);
-                }
+                    }
+                }, Manifest.permission.CAMERA);
+            } else {
+                API_Food.ins().getGoodMenu(TAG, initCallbck);
             }
         }
-
 
     }
 

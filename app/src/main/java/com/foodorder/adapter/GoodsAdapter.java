@@ -198,9 +198,9 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                         CartManager.ins().add(item, false);
 //                        count++;
                         tvCount.setText(String.valueOf(item.getCount()) + "x");
-                        int[] loc = new int[2];
-                        v.getLocationInWindow(loc);
-                        activity.playAnimation(loc);
+//                        int[] loc = new int[2];
+//                        v.getLocationInWindow(loc);
+//                        activity.playAnimation(loc);
                     }
                 }
                 break;
