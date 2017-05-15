@@ -82,7 +82,7 @@
                         android:minWidth="@dimen/button_count_size"
                         android:text="0"
                         android:textColor="@color/black_80"
-                        android:textSize="15dp" />
+                        android:textSize="20dp" />
 
                     <TextView
                         android:id="@+id/tvAdd"

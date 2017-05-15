@@ -26,9 +26,12 @@ import java.util.List;
 public class PrinterManager {
 
     private volatile static PrinterManager instance;
+    private List<Printer> printerList;
+    private List<Printer> postList;
 
     private PrinterManager() {
-
+        printerList = new ArrayList<>();
+        postList = new ArrayList<>();
     }
 
     public static PrinterManager ins() {
@@ -42,8 +45,36 @@ public class PrinterManager {
         return instance;
     }
 
-    public void remindOrder(String order_id) {
-        API_Food.ins().remindOrder(AppKey.HTTP_TAG, order_id, new JsonResponseCallback() {
+    public void addPrinter(Printer printer) {
+        printerList.add(printer);
+    }
+
+    public void addPost(Printer post) {
+        postList.add(post);
+    }
+
+    public List<Printer> getPrinterList() {
+        return printerList;
+    }
+
+    public List<Printer> getPostList() {
+        return postList;
+    }
+
+    public void clearPrinterList() {
+        if (printerList != null) {
+            printerList.clear();
+        }
+    }
+
+    public void clearPostList() {
+        if (postList != null) {
+            postList.clear();
+        }
+    }
+
+    public void remindOrder(String order_id, String posts) {
+        API_Food.ins().remindOrder(AppKey.HTTP_TAG, order_id, posts, new JsonResponseCallback() {
             @Override
             public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                 if (errcode == 200) {
@@ -55,8 +86,8 @@ public class PrinterManager {
         });
     }
 
-    public void printOrder(String order_id) {
-        API_Food.ins().printOrder(AppKey.HTTP_TAG, order_id, new JsonResponseCallback() {
+    public void printOrder(String order_id, String printers) {
+        API_Food.ins().printOrder(AppKey.HTTP_TAG, order_id, printers, new JsonResponseCallback() {
             @Override
             public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                 ToastUtil.showToast(errmsg);
@@ -74,8 +105,15 @@ public class PrinterManager {
             @Override
             public void onClick(View button, final OrderActionDialog dialog, Order order) {
                 dialog.dismiss();
-                showPrinterDialog(context, AppKey.PRINTER_CUIDAN, order.getId_order());
-//                ToastUtil.showToast(getResources().getString(R.string.order_action_1));
+                if (postList.size() > 1) {
+                    showPrinterDialog(context, AppKey.PRINTER_CUIDAN, order.getId_order());
+                } else {
+                    if (postList.size() == 1) {
+                        remindOrder(order.getId_order(), postList.get(0).getName());
+                    } else {
+                        remindOrder(order.getId_order(), "");
+                    }
+                }
 
             }
         });
@@ -83,8 +121,16 @@ public class PrinterManager {
             @Override
             public void onClick(View button, OrderActionDialog dialog, Order order) {
                 dialog.dismiss();
-                showPrinterDialog(context, AppKey.PRINTER_DAYIN, order.getId_order());
-//                ToastUtil.showToast(getResources().getString(R.string.order_action_2));
+                if (printerList.size() > 1) {
+                    showPrinterDialog(context, AppKey.PRINTER_DAYIN, order.getId_order());
+                } else {
+                    if (printerList.size() == 1) {
+                        printOrder(order.getId_order(), printerList.get(0).getName());
+                        ToastUtil.showBottomToast(printerList.get(0).getName());
+                    } else {
+                        printOrder(order.getId_order(), "");
+                    }
+                }
 
             }
         });
@@ -92,22 +138,22 @@ public class PrinterManager {
     }
 
     public void showPrinterDialog(Context context, int fromType, final String order_id) {
-        List<Printer> printerList = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            Printer printer = new Printer();
-            printer.setId(String.valueOf(i + 1));
-            printerList.add(printer);
+        List<Printer> curList = null;
+        if (fromType == AppKey.PRINTER_CUIDAN) {
+            curList = postList;
+        } else if (fromType == AppKey.PRINTER_DAYIN) {
+            curList = printerList;
         }
-        PrinterDialog printerDialog = new PrinterDialog(context, fromType, printerList);
+        PrinterDialog printerDialog = new PrinterDialog(context, fromType, curList);
         printerDialog.show();
         printerDialog.setOnCheckListener(new PrinterDialog.OnCheckListener() {
             @Override
             public void onCheck(int type, String printer) {
                 ToastUtil.showBottomToast(printer);
                 if (type == AppKey.PRINTER_CUIDAN) {
-                    remindOrder(order_id);
+                    remindOrder(order_id, printer);
                 } else if (type == AppKey.PRINTER_DAYIN) {
-                    printOrder(order_id);
+                    printOrder(order_id, printer);
                 }
             }
         });

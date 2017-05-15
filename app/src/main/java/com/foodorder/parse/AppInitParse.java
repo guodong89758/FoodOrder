@@ -4,6 +4,8 @@ import com.foodorder.db.bean.Attribute;
 import com.foodorder.db.bean.Formula;
 import com.foodorder.db.bean.Good;
 import com.foodorder.db.bean.GoodType;
+import com.foodorder.entry.Printer;
+import com.foodorder.logic.PrinterManager;
 import com.foodorder.logic.UserManager;
 import com.foodorder.runtime.RT;
 
@@ -37,22 +39,33 @@ public class AppInitParse {
         //打印
         JSONArray printerArray = data.optJSONArray("Printers");
         if (printerArray != null && printerArray.length() > 0) {
+            PrinterManager.ins().clearPrinterList();
             for (int i = 0; i < printerArray.length(); i++) {
                 JSONObject printerJson = printerArray.optJSONObject(i);
                 String id_printer = printerJson.optString("id_printer");
                 String name = printerJson.optString("name");
+                Printer printer = new Printer();
+                printer.setId(id_printer);
+                printer.setName(name);
+                PrinterManager.ins().addPrinter(printer);
             }
         }
 
         //催单
         JSONArray postArray = data.optJSONArray("Posts");
         if (postArray != null && postArray.length() > 0) {
+            PrinterManager.ins().clearPostList();
             for (int i = 0; i < postArray.length(); i++) {
                 JSONObject postJson = postArray.optJSONObject(i);
-                String id_printer = postJson.optString("id_post");
+                String id_post = postJson.optString("id_post");
                 String name = postJson.optString("name");
+                Printer printer = new Printer();
+                printer.setId(id_post);
+                printer.setName(name);
+                PrinterManager.ins().addPost(printer);
             }
         }
+
         //菜单信息
         JSONArray categoryArray = data.optJSONArray("Categories");
         if (categoryArray != null && categoryArray.length() > 0) {

@@ -1,5 +1,7 @@
 package com.foodorder.server.api;
 
+import android.text.TextUtils;
+
 import com.foodorder.server.HttpMethod;
 import com.foodorder.server.NetworkInterface;
 import com.foodorder.server.callback.ResponseCallback;
@@ -106,9 +108,12 @@ public class API_Food {
      * @param id_order
      * @param callback
      */
-    public void printOrder(String tag, String id_order, ResponseCallback callback) {
+    public void printOrder(String tag, String id_order, String printers, ResponseCallback callback) {
         HttpParams params = new HttpParams();
         params.put("id_order", id_order);
+        if (!TextUtils.isEmpty(printers)) {
+            params.put("printers", printers);
+        }
         NetworkInterface.ins().connected(HttpMethod.GET, PRINT_ORDER, tag, params, callback);
     }
 
@@ -119,9 +124,12 @@ public class API_Food {
      * @param id_order
      * @param callback
      */
-    public void remindOrder(String tag, String id_order, ResponseCallback callback) {
+    public void remindOrder(String tag, String id_order, String posts, ResponseCallback callback) {
         HttpParams params = new HttpParams();
         params.put("id_order", id_order);
+        if (!TextUtils.isEmpty(posts)) {
+            params.put("posts", posts);
+        }
         NetworkInterface.ins().connected(HttpMethod.GET, REMIND_ORDER, tag, params, callback);
     }
 

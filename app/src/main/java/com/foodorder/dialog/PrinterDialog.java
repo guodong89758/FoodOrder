@@ -123,9 +123,9 @@ public class PrinterDialog extends Dialog implements View.OnClickListener, BaseR
             Printer printer = printerList.get(i);
             if (printer.isChecked()) {
                 if (TextUtils.isEmpty(printers)) {
-                    printers = printer.getId();
+                    printers = printer.getName();
                 } else {
-                    printers = printers + "," + printer.getId();
+                    printers = printers + "," + printer.getName();
                 }
             }
         }

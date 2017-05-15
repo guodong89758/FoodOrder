@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class Printer implements Serializable {
 
     private String id;
+    private String name;
     private boolean isChecked;
 
     public String getId() {
@@ -25,5 +26,13 @@ public class Printer implements Serializable {
 
     public void setChecked(boolean checked) {
         isChecked = checked;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

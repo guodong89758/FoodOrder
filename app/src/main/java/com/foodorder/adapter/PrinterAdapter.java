@@ -38,7 +38,7 @@ public class PrinterAdapter extends BaseRecyclerAdapter<PrinterAdapter.PrinterVi
         if (data == null) {
             return;
         }
-        holder.tv_printer.setText("打印机" + position);
+        holder.tv_printer.setText(data.getName());
         if (fromType == AppKey.PRINTER_DAYIN) {
             holder.iv_check.setVisibility(View.GONE);
         } else {
