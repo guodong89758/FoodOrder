@@ -69,6 +69,22 @@
         "login": "CHEF"
       }
     ],
+    "Printers": [
+      {
+        "id_printer": "DE55AEF790DF46F6B19AC87D5A498942",
+        "name": "caisse"
+      }
+    ],
+    "Posts": [
+      {
+        "id_post": "83D202B703F14C1E9ECA114085C4CCD3",
+        "name": "cuisine"
+      },
+      {
+        "id_post": "BE82B23A440345C6B2434409670EE386",
+        "name": "bar"
+      }
+    ],
     "Categories": [
       {
         "id_category": "4580D69C05964D4B99CFFCCAFEB0FC97",

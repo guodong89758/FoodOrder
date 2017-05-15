@@ -33,6 +33,26 @@ public class AppInitParse {
                 UserManager.getInstance().addUsername(login);
             }
         }
+
+        //打印
+        JSONArray printerArray = data.optJSONArray("Printers");
+        if (printerArray != null && printerArray.length() > 0) {
+            for (int i = 0; i < printerArray.length(); i++) {
+                JSONObject printerJson = printerArray.optJSONObject(i);
+                String id_printer = printerJson.optString("id_printer");
+                String name = printerJson.optString("name");
+            }
+        }
+
+        //催单
+        JSONArray postArray = data.optJSONArray("Posts");
+        if (postArray != null && postArray.length() > 0) {
+            for (int i = 0; i < postArray.length(); i++) {
+                JSONObject postJson = postArray.optJSONObject(i);
+                String id_printer = postJson.optString("id_post");
+                String name = postJson.optString("name");
+            }
+        }
         //菜单信息
         JSONArray categoryArray = data.optJSONArray("Categories");
         if (categoryArray != null && categoryArray.length() > 0) {
