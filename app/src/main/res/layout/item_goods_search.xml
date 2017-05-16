@@ -70,13 +70,13 @@
                 <TextView
                     android:id="@+id/count"
                     android:layout_width="wrap_content"
-                    android:layout_height="23dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="bottom"
                     android:gravity="center"
                     android:minWidth="@dimen/button_count_size"
                     android:text="0"
                     android:textColor="@color/black_80"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/count_size" />
 
                 <ImageButton
                     android:id="@+id/tvAdd"

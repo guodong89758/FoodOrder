@@ -1,10 +1,17 @@
 package com.foodorder.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.CycleInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,6 +20,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
+import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.runtime.RT;
@@ -24,6 +32,8 @@ import com.tonicartos.superslim.GridSLM;
 
 import java.text.NumberFormat;
 import java.util.List;
+
+import static com.foodorder.R.id.count;
 
 /**
  * Created by guodong on 2017/5/14.
@@ -131,14 +141,15 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             name = (TextView) itemView.findViewById(R.id.tvName);
             price = (TextView) itemView.findViewById(R.id.tvPrice);
             tv_code = (TextView) itemView.findViewById(R.id.tv_code);
-            tvCount = (TextView) itemView.findViewById(R.id.count);
+            tvCount = (TextView) itemView.findViewById(count);
             btn_delete = (Button) itemView.findViewById(R.id.btn_delete);
 
             ll_content.setOnClickListener(this);
             btn_delete.setOnClickListener(this);
         }
 
-        public void bindData(Good item) {
+        public void bindData(final Good item) {
+            DLOG.d("bindData");
             this.item = item;
             BitmapLoader.ins().loadImage(item.getImage_url(), R.drawable.ic_def_image, img);
             String good_name = "";
@@ -159,6 +170,7 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 tvCount.setVisibility(View.VISIBLE);
                 swipe_layout.setSwipeEnable(true);
             }
+            tvCount.setTag(item.getId_product());
 
         }
 
@@ -175,12 +187,38 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
                         }
                     } else {
+                        if (!TextUtils.equals(item.getId_product(), tvCount.getTag().toString())) {
+                            return;
+                        }
                         int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
                         if (count < 1) {
                             tvCount.setVisibility(View.VISIBLE);
                         }
-                        CartManager.ins().add(item, true);
+                        CartManager.ins().add(item, false);
                         tvCount.setText(String.valueOf(item.getCount()) + "x");
+                        AnimatorSet animatorSet = createAnimator(tvCount);
+                        animatorSet.start();
+                        animatorSet.addListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                GoodsPadAdapter.this.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        });
                     }
 
                     break;
@@ -194,6 +232,34 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 default:
                     break;
             }
+        }
+
+        private AnimatorSet createAnimator(View view) {
+            ObjectAnimator num_anim_x = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 0.5f);
+            num_anim_x.setDuration(50);
+            ObjectAnimator num_anim_y = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 0.5f);
+            num_anim_y.setDuration(50);
+            ObjectAnimator num_anim_x1 = ObjectAnimator.ofFloat(view, "scaleX", 0.5f, 1.0f);
+            num_anim_x1.setInterpolator(new AnticipateOvershootInterpolator());
+            num_anim_x1.setDuration(50);
+            ObjectAnimator num_anim_y1 = ObjectAnimator.ofFloat(view, "scaleY", 0.5f, 1.0f);
+            num_anim_y1.setInterpolator(new AnticipateOvershootInterpolator());
+            num_anim_y1.setDuration(50);
+            ObjectAnimator num_anim_x2 = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 1.1f);
+            num_anim_x2.setInterpolator(new CycleInterpolator(1f));
+            num_anim_x2.setDuration(50);
+            ObjectAnimator num_anim_y2 = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 1.1f);
+            num_anim_y2.setInterpolator(new CycleInterpolator(1f));
+            num_anim_y2.setDuration(50);
+
+            AnimatorSet animator = new AnimatorSet();
+            animator.play(num_anim_x).with(num_anim_y);
+            animator.play(num_anim_y).before(num_anim_x1);
+            animator.play(num_anim_x1).with(num_anim_y1);
+            animator.play(num_anim_y1).before(num_anim_x2);
+            animator.play(num_anim_x2).with(num_anim_y2);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            return animator;
         }
     }
 }

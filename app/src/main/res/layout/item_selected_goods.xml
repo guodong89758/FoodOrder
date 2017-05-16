@@ -60,7 +60,7 @@
             android:minWidth="@dimen/button_count_size"
             android:text="0"
             android:textColor="@color/blue_color"
-            android:textSize="15dp" />
+            android:textSize="@dimen/count_size" />
 
         <ImageButton
             android:id="@+id/tvAdd"

@@ -24,6 +24,7 @@ import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
+import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.EmptyLayout;
@@ -181,7 +182,12 @@ public class OrderInfoActivity extends BaseActivity implements AdapterView.OnIte
                 } else {
                     CartManager.ins().isPack = false;
                 }
-                Intent intent = new Intent(OrderInfoActivity.this, GoodListActivity.class);
+                Intent intent = null;
+                if (PhoneUtil.isPad(OrderInfoActivity.this)) {
+                    intent = new Intent(OrderInfoActivity.this, GoodListPadActivity.class);
+                } else {
+                    intent = new Intent(OrderInfoActivity.this, GoodListActivity.class);
+                }
                 intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_ADD);
                 intent.putExtra(AppKey.ID_ORDER, id_order);
                 if (type.equals(AppKey.ORDER_TYPE_SURPLACE)) {

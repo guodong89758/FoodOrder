@@ -1,11 +1,16 @@
 package com.foodorder.adapter;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.CycleInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.BaseAdapter;
@@ -198,6 +203,8 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                         CartManager.ins().add(item, false);
 //                        count++;
                         tvCount.setText(String.valueOf(item.getCount()) + "x");
+                        AnimatorSet animatorSet = createAnimator(tvCount);
+                        animatorSet.start();
 //                        int[] loc = new int[2];
 //                        v.getLocationInWindow(loc);
 //                        activity.playAnimation(loc);
@@ -235,6 +242,34 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                     break;
             }
         }
+    }
+
+    private AnimatorSet createAnimator(View view) {
+        ObjectAnimator num_anim_x = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 0.5f);
+        num_anim_x.setDuration(50);
+        ObjectAnimator num_anim_y = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 0.5f);
+        num_anim_y.setDuration(50);
+        ObjectAnimator num_anim_x1 = ObjectAnimator.ofFloat(view, "scaleX", 0.5f, 1.0f);
+        num_anim_x1.setInterpolator(new AnticipateOvershootInterpolator());
+        num_anim_x1.setDuration(50);
+        ObjectAnimator num_anim_y1 = ObjectAnimator.ofFloat(view, "scaleY", 0.5f, 1.0f);
+        num_anim_y1.setInterpolator(new AnticipateOvershootInterpolator());
+        num_anim_y1.setDuration(50);
+        ObjectAnimator num_anim_x2 = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 1.1f);
+        num_anim_x2.setInterpolator(new CycleInterpolator(1f));
+        num_anim_x2.setDuration(50);
+        ObjectAnimator num_anim_y2 = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 1.1f);
+        num_anim_y2.setInterpolator(new CycleInterpolator(1f));
+        num_anim_y2.setDuration(50);
+
+        AnimatorSet animator = new AnimatorSet();
+        animator.play(num_anim_x).with(num_anim_y);
+        animator.play(num_anim_y).before(num_anim_x1);
+        animator.play(num_anim_x1).with(num_anim_y1);
+        animator.play(num_anim_y1).before(num_anim_x2);
+        animator.play(num_anim_x2).with(num_anim_y2);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        return animator;
     }
 
     private Animation getShowAnimation() {

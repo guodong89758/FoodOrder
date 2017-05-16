@@ -458,46 +458,6 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
         }
     }
 
-//    //添加商品
-//    public void add(Good item, boolean refreshGoodList) {
-//
-//        int groupCount = groupSelect.get(item.getPosition());
-//        if (groupCount == 0) {
-//            groupSelect.append(item.getPosition(), 1);
-//        } else {
-//            groupSelect.append(item.getPosition(), ++groupCount);
-//        }
-//
-//        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
-//        if (temp == null) {
-//            item.setCount(1);
-//            CartManager.ins().cartList.append(item.getId().intValue(), item);
-//        } else {
-//            temp.setCount(temp.getCount() + 1);
-//        }
-//        update(refreshGoodList);
-//    }
-//
-//    //移除商品
-//    public void remove(Good item, boolean refreshGoodList) {
-//
-//        int groupCount = groupSelect.get(item.getPosition());
-//        if (groupCount == 1) {
-//            groupSelect.delete(item.getPosition());
-//        } else if (groupCount > 1) {
-//            groupSelect.append(item.getPosition(), --groupCount);
-//        }
-//
-//        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
-//        if (temp != null) {
-//            if (temp.getCount() < 2) {
-//                CartManager.ins().cartList.remove(item.getId().intValue());
-//            } else {
-//                item.setCount(item.getCount() - 1);
-//            }
-//        }
-//        update(refreshGoodList);
-//    }
 
     //刷新布局 总价、购买数量等
     private void update(boolean refreshGoodList) {
@@ -543,20 +503,6 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
 
     }
 
-    //    //根据商品id获取当前商品的采购数量
-//    public int getSelectedItemCountById(int id) {
-//        Good temp = CartManager.ins().cartList.get(id);
-//        if (temp == null) {
-//            return 0;
-//        }
-//        return temp.getCount();
-//    }
-//
-//    //根据类别Id获取属于当前类别的数量
-//    public int getSelectedGroupCountByTypeId(int typeId) {
-//        return groupSelect.get(typeId);
-//    }
-//
     //根据类别id获取分类的Position 用于滚动左侧的类别列表
     public int getSelectedGroupPosition(int typeId) {
         for (int i = 0; i < goodTypeList.size(); i++) {
