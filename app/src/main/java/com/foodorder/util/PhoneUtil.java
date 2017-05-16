@@ -73,7 +73,8 @@ public class PhoneUtil {
     }
 
     public static boolean isPad(Activity activity) {
-        return isMoreThan6Inch(activity) && isScreenSizeLarge(activity);
+        return isMoreThan6Inch(activity);
+//        return isMoreThan6Inch(activity) && isScreenSizeLarge(activity);
     }
 
     /**
