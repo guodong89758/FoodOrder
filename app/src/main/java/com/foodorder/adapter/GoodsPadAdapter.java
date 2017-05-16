@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,18 +85,10 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 type_name = good.getFr_category_name();
             }
             ((TextView) holder.itemView).setText(type_name);
-//            GridSLM.LayoutParams params = GridSLM.LayoutParams.from(holder.itemView.getLayoutParams());
-//            params.headerDisplay =  LayoutManager.LayoutParams.HEADER_STICKY;
-//            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//            params.headerEndMarginIsAuto = false;
-//            params.headerStartMarginIsAuto = false;
-//            params.setSlm(good.getSectionManager());
-//            params.setFirstPosition(good.getSectionFirstPosition());
-//            holder.itemView.setLayoutParams(params);
 
         } else if (getItemViewType(position) == TYPE_CONTENT) {
             GoodViewHolder holder = (GoodViewHolder) mHolder;
-            holder.bindData(good);
+            holder.bindData(good, position);
             params.width = (RT.getScreenWidth() - PhoneUtil.dipToPixel(100, mContext)) / 3;
 
         }
@@ -105,8 +96,6 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         params.setNumColumns(3);
         params.setFirstPosition(good.getSectionFirstPosition());
         mHolder.itemView.setLayoutParams(params);
-
-
     }
 
     @Override
@@ -132,6 +121,7 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView name, price, tv_code, tvCount;
         Button btn_delete;
         Good item;
+        int position;
 
         public GoodViewHolder(View itemView) {
             super(itemView);
@@ -148,9 +138,10 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             btn_delete.setOnClickListener(this);
         }
 
-        public void bindData(final Good item) {
+        public void bindData(final Good item, final int position) {
             DLOG.d("bindData");
             this.item = item;
+            this.position = position;
             BitmapLoader.ins().loadImage(item.getImage_url(), R.drawable.ic_def_image, img);
             String good_name = "";
             if (PhoneUtil.isZh()) {
@@ -170,8 +161,6 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 tvCount.setVisibility(View.VISIBLE);
                 swipe_layout.setSwipeEnable(true);
             }
-            tvCount.setTag(item.getId_product());
-
         }
 
 
@@ -187,9 +176,6 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
                         }
                     } else {
-                        if (!TextUtils.equals(item.getId_product(), tvCount.getTag().toString())) {
-                            return;
-                        }
                         int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
                         if (count < 1) {
                             tvCount.setVisibility(View.VISIBLE);
@@ -206,7 +192,6 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                             @Override
                             public void onAnimationEnd(Animator animation) {
-                                GoodsPadAdapter.this.notifyDataSetChanged();
                             }
 
                             @Override
