@@ -45,11 +45,11 @@
         <ImageButton
             android:id="@+id/tvMinus"
             android:layout_width="@dimen/button_count_size"
-            android:layout_height="50dp"
-            android:src="@drawable/button_minus"
-            android:clickable="true"
+            android:layout_height="@dimen/cart_item_height"
             android:background="@color/transparent"
-            android:gravity="center" />
+            android:clickable="true"
+            android:gravity="center"
+            android:src="@drawable/button_minus" />
 
         <TextView
             android:id="@+id/count"
@@ -65,11 +65,11 @@
         <ImageButton
             android:id="@+id/tvAdd"
             android:layout_width="@dimen/button_count_size"
-            android:layout_height="50dp"
-            android:src="@drawable/button_add"
+            android:layout_height="@dimen/cart_item_height"
             android:background="@color/transparent"
             android:clickable="true"
-            android:gravity="center" />
+            android:gravity="center"
+            android:src="@drawable/button_add" />
 
     </LinearLayout>
 
