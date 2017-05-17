@@ -182,7 +182,6 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
 
         @Override
         public void onClick(View v) {
-            GoodListActivity activity = mContext;
             switch (v.getId()) {
                 case R.id.ll_content:
                 case R.id.tvAdd: {

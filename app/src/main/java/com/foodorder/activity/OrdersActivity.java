@@ -17,7 +17,6 @@ import com.foodorder.fragment.PackOrderFragment;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.ActivityManager;
-import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.SmoothSwitchScreenUtil;
 import com.foodorder.util.ToastUtil;
 
@@ -91,11 +90,11 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
                     @Override
                     public void orderSetup(String number, String persons) {
                         Intent intent = null;
-                        if (PhoneUtil.isPad(OrdersActivity.this)) {
-                            intent = new Intent(OrdersActivity.this, GoodListPadActivity.class);
-                        } else {
-                            intent = new Intent(OrdersActivity.this, GoodListActivity.class);
-                        }
+//                        if (PhoneUtil.isPad(OrdersActivity.this)) {
+                            intent = new Intent(OrdersActivity.this, GoodListPadActivity1.class);
+//                        } else {
+//                            intent = new Intent(OrdersActivity.this, GoodListActivity.class);
+//                        }
                         intent.putExtra(AppKey.GOOD_LIST_TYPE, AppKey.GOOD_LIST_MENU);
                         intent.putExtra(AppKey.ORDER_NUMBER, number);
                         intent.putExtra(AppKey.ORDER_PERSON, persons);
