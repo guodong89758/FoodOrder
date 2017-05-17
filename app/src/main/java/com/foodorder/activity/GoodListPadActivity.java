@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +17,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.foodorder.R;
-import com.foodorder.adapter.GoodsPadAdapter;
+import com.foodorder.adapter.GoodsPadAdapter1;
 import com.foodorder.adapter.SelectAdapter;
 import com.foodorder.adapter.TypeAdapter;
 import com.foodorder.base.BaseActivity;
@@ -48,9 +48,8 @@ import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
+import com.foodorder.widget.stickygrid.StickyGridHeadersGridView;
 import com.lzy.okhttputils.OkHttpUtils;
-import com.tonicartos.superslim.GridSLM;
-import com.tonicartos.superslim.LayoutManager;
 
 import org.json.JSONObject;
 
@@ -75,7 +74,7 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
     private ImageView imgCart, iv_cart_empty;
     private ViewGroup anim_mask_layout;
     private RecyclerView rvType, rvSelected;
-    private RecyclerView rv_good;
+    private StickyGridHeadersGridView gv_good;
     private TextView tvCount, tvCost;
     private Button btn_send;
     private BottomSheetLayout bottomSheetLayout;
@@ -86,7 +85,7 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
     private List<Good> goodList;
     private SparseIntArray groupSelect;
 
-    private GoodsPadAdapter myAdapter;
+    private GoodsPadAdapter1 myAdapter;
     private SelectAdapter selectAdapter;
     private TypeAdapter typeAdapter;
 
@@ -115,7 +114,7 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
         imgCart = (ImageView) findViewById(R.id.imgCart);
         anim_mask_layout = (RelativeLayout) findViewById(R.id.containerLayout);
         bottomSheetLayout = (BottomSheetLayout) findViewById(R.id.bottomSheetLayout);
-        rv_good = (RecyclerView) findViewById(R.id.rv_good);
+        gv_good = (StickyGridHeadersGridView) findViewById(R.id.gv_good);
 //        cb_pack = (CheckBox) findViewById(R.id.cb_pack);
 
         ib_back.setOnClickListener(this);
@@ -123,23 +122,26 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
         btn_send.setOnClickListener(this);
         rvType.setLayoutManager(new LinearLayoutManager(this));
         rvType.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(ContextCompat.getColor(this, R.color.black_10)).size(1).build());
-        rv_good.setLayoutManager(new LayoutManager(this));
-        rv_good.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this).color(ContextCompat.getColor(this, R.color.black_10)).size(1).build());
 
-        rv_good.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        gv_good.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (goodList != null && goodList.size() > 0) {
-                    Good item = goodList.get(((LayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition());
-                    if (typeAdapter != null && typeAdapter.selectTypeId != item.getPosition()) {
-                        typeAdapter.selectTypeId = item.getPosition();
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (gv_good.getAdapter() != null) {
+                    int position = (int) (gv_good.getAdapter().getHeaderId(firstVisibleItem)) + 1;
+                    if (typeAdapter != null && typeAdapter.selectTypeId != position) {
+                        typeAdapter.selectTypeId = position;
                         typeAdapter.notifyDataSetChanged();
-                        rvType.smoothScrollToPosition(getSelectedGroupPosition(item.getPosition()));
+                        rvType.smoothScrollToPosition(getSelectedGroupPosition(position));
                     }
                 }
             }
         });
+
         imgCart.setVisibility(View.GONE);
         EventManager.ins().registListener(EventTag.GOOD_LIST_REFRESH, eventListener);
 
@@ -169,33 +171,7 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
             @Override
             public void call(Subscriber<? super Object> subscriber) {
                 goodTypeList = RT.ins().getDaoSession().getGoodTypeDao().loadAll();
-                List<Good> goodTempList = RT.ins().getDaoSession().getGoodDao().loadAll();
-                if (goodTempList != null && goodTempList.size() > 0) {
-                    String lastHead = "";
-                    int sectionFirstPosition = 0;
-                    int headCount = 0;
-                    for (int i = 0; i < goodTempList.size(); i++) {
-                        Good good = goodTempList.get(i);
-                        if (!TextUtils.equals(lastHead, good.getId_category())) {
-                            Good title = new Good();
-                            sectionFirstPosition = i + headCount;
-                            title.setSectionFirstPosition(sectionFirstPosition);
-                            title.setSectionManager(GridSLM.ID);
-                            title.setTitle(true);
-                            title.setFr_category_name(good.getFr_category_name());
-                            title.setZh_category_name(good.getZh_category_name());
-                            title.setId_category(good.getId_category());
-                            title.setPosition(good.getPosition());
-                            headCount += 1;
-                            lastHead = good.getId_category();
-                            goodList.add(title);
-                        }
-                        good.setSectionFirstPosition(sectionFirstPosition);
-                        good.setSectionManager(GridSLM.ID);
-                        good.setTitle(false);
-                        goodList.add(good);
-                    }
-                }
+                goodList = RT.ins().getDaoSession().getGoodDao().loadAll();
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.newThread())
@@ -207,8 +183,8 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
                         typeAdapter.setOnItemClickListener(GoodListPadActivity.this);
                         rvType.setAdapter(typeAdapter);
 
-                        myAdapter = new GoodsPadAdapter(GoodListPadActivity.this, goodList);
-                        rv_good.setAdapter(myAdapter);
+                        myAdapter = new GoodsPadAdapter1(GoodListPadActivity.this, goodList);
+                        gv_good.setAdapter(myAdapter);
                     }
 
                     @Override
@@ -458,6 +434,46 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
         }
     }
 
+//    //添加商品
+//    public void add(Good item, boolean refreshGoodList) {
+//
+//        int groupCount = groupSelect.get(item.getPosition());
+//        if (groupCount == 0) {
+//            groupSelect.append(item.getPosition(), 1);
+//        } else {
+//            groupSelect.append(item.getPosition(), ++groupCount);
+//        }
+//
+//        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
+//        if (temp == null) {
+//            item.setCount(1);
+//            CartManager.ins().cartList.append(item.getId().intValue(), item);
+//        } else {
+//            temp.setCount(temp.getCount() + 1);
+//        }
+//        update(refreshGoodList);
+//    }
+//
+//    //移除商品
+//    public void remove(Good item, boolean refreshGoodList) {
+//
+//        int groupCount = groupSelect.get(item.getPosition());
+//        if (groupCount == 1) {
+//            groupSelect.delete(item.getPosition());
+//        } else if (groupCount > 1) {
+//            groupSelect.append(item.getPosition(), --groupCount);
+//        }
+//
+//        Good temp = CartManager.ins().cartList.get(item.getId().intValue());
+//        if (temp != null) {
+//            if (temp.getCount() < 2) {
+//                CartManager.ins().cartList.remove(item.getId().intValue());
+//            } else {
+//                item.setCount(item.getCount() - 1);
+//            }
+//        }
+//        update(refreshGoodList);
+//    }
 
     //刷新布局 总价、购买数量等
     private void update(boolean refreshGoodList) {
@@ -514,7 +530,10 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
     }
 
     public void onTypeClicked(int typeId) {
-        rv_good.getLayoutManager().scrollToPosition(getSelectedPosition(typeId));
+        if (gv_good.getAdapter() != null) {
+            gv_good.setSelection(gv_good.getAdapter().getGridViewPositionFromHeaderId(typeId - 1));
+        }
+
     }
 
     private int getSelectedPosition(int typeId) {

@@ -50,11 +50,12 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_good"
+            <com.foodorder.widget.stickygrid.StickyGridHeadersGridView
+                android:id="@+id/gv_good"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#fff"/>
+                android:background="@color/white"
+                android:numColumns="3" />
         </LinearLayout>
     </com.flipboard.bottomsheet.BottomSheetLayout>
 
