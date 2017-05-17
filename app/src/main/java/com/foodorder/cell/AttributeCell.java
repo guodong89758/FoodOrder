@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.foodorder.R;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 
 public class AttributeCell extends LinearLayout implements ListCell, View.OnClickListener {
+    private RelativeLayout rl_content;
     private TextView tv_name, tv_count;
     private ImageButton tv_add, tv_minus;
     private Attribute attr;
@@ -34,11 +36,13 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        rl_content = (RelativeLayout) findViewById(R.id.rl_content);
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_add = (ImageButton) findViewById(R.id.tv_add);
         tv_minus = (ImageButton) findViewById(R.id.tv_minus);
         tv_count = (TextView) findViewById(R.id.tv_count);
 
+        rl_content.setOnClickListener(this);
         tv_add.setOnClickListener(this);
         tv_minus.setOnClickListener(this);
     }
@@ -63,6 +67,7 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.rl_content:
             case R.id.tv_add:
                 add();
                 break;

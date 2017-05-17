@@ -47,7 +47,7 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/title_height_size"
             android:layout_below="@+id/rl_title"
             app:tabBackground="@color/white"
             app:tabIndicatorColor="@color/blue_color"

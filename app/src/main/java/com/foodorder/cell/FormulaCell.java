@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 public class FormulaCell extends LinearLayout implements ListCell, View.OnClickListener {
-    private RelativeLayout rl_title;
+    private RelativeLayout rl_title, rl_content;
     private TextView tv_type, tv_max_count, tv_name, tv_count;
     private ImageButton tv_add, tv_minus;
     private Formula formula;
@@ -38,6 +38,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
     protected void onFinishInflate() {
         super.onFinishInflate();
         rl_title = (RelativeLayout) findViewById(R.id.rl_title);
+        rl_content = (RelativeLayout) findViewById(R.id.rl_content);
         tv_type = (TextView) findViewById(R.id.tv_type);
         tv_max_count = (TextView) findViewById(R.id.tv_max_count);
         tv_name = (TextView) findViewById(R.id.tv_name);
@@ -45,6 +46,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
         tv_minus = (ImageButton) findViewById(R.id.tv_minus);
         tv_count = (TextView) findViewById(R.id.tv_count);
 
+        rl_content.setOnClickListener(this);
         tv_add.setOnClickListener(this);
         tv_minus.setOnClickListener(this);
     }
@@ -89,6 +91,7 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.rl_content:
             case R.id.tv_add:
                 add();
                 break;

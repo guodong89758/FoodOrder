@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         android:layout_width="match_parent"
         android:layout_height="@dimen/formulat_item_height"
         android:paddingLeft="10dp"
@@ -19,7 +20,7 @@
             android:singleLine="true"
             android:text="商品名"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/formulat_item_text_size" />
 
         <LinearLayout
             android:id="@+id/ll_count"

@@ -6,12 +6,12 @@
     <TextView
         android:id="@+id/tv_code"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/good_search_keycode_height"
         android:background="@drawable/bg_keycode_selector"
         android:gravity="center"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textColor="@color/black_80"
-        android:textSize="16dp" />
+        android:textSize="@dimen/good_search_keycode_text_size" />
 
 </LinearLayout>

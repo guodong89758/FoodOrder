@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="@dimen/good_type_item_height"
     android:clickable="true">
 
     <View
         android:id="@+id/sign_view"
         android:layout_width="5dp"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/good_type_item_height"
         android:background="@color/blue_color" />
 
     <TextView
@@ -21,7 +21,7 @@
         android:padding="5dp"
         android:text="种类1"
         android:textColor="@color/black_50"
-        android:textSize="12dp" />
+        android:textSize="@dimen/good_type_item_text_size" />
 
     <TextView
         android:id="@+id/tvCount"

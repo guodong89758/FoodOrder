@@ -117,13 +117,13 @@
             app:layout_gravity="fill" />
 
         <!--<Button-->
-            <!--android:id="@+id/btn_pack"-->
-            <!--style="@style/KeyBordStyle"-->
-            <!--android:background="@drawable/bg_pack_checked_false"-->
-            <!--android:text="@string/good_check_pack_false"-->
-            <!--android:textColor="@color/black_60"-->
-            <!--app:layout_columnSpan="2"-->
-            <!--app:layout_gravity="fill" />-->
+        <!--android:id="@+id/btn_pack"-->
+        <!--style="@style/KeyBordStyle"-->
+        <!--android:background="@drawable/bg_pack_checked_false"-->
+        <!--android:text="@string/good_check_pack_false"-->
+        <!--android:textColor="@color/black_60"-->
+        <!--app:layout_columnSpan="2"-->
+        <!--app:layout_gravity="fill" />-->
     </android.support.v7.widget.GridLayout>
 
     <LinearLayout
@@ -145,7 +145,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_code"
                 android:layout_width="match_parent"
-                android:layout_height="40dp" />
+                android:layout_height="@dimen/good_search_keycode_height" />
 
             <TextView
                 android:id="@+id/tv_empty"
