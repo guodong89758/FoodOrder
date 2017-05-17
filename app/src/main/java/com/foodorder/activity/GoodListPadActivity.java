@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.foodorder.R;
-import com.foodorder.adapter.GoodsPadAdapter1;
+import com.foodorder.adapter.GoodsPadAdapter;
 import com.foodorder.adapter.SelectAdapter;
 import com.foodorder.adapter.TypeAdapter;
 import com.foodorder.base.BaseActivity;
@@ -85,7 +85,7 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
     private List<Good> goodList;
     private SparseIntArray groupSelect;
 
-    private GoodsPadAdapter1 myAdapter;
+    private GoodsPadAdapter myAdapter;
     private SelectAdapter selectAdapter;
     private TypeAdapter typeAdapter;
 
@@ -183,7 +183,7 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
                         typeAdapter.setOnItemClickListener(GoodListPadActivity.this);
                         rvType.setAdapter(typeAdapter);
 
-                        myAdapter = new GoodsPadAdapter1(GoodListPadActivity.this, goodList);
+                        myAdapter = new GoodsPadAdapter(GoodListPadActivity.this, goodList);
                         gv_good.setAdapter(myAdapter);
                     }
 

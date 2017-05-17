@@ -1,6 +1,5 @@
 package com.foodorder.adapter;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -11,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.CycleInterpolator;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
-import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.runtime.RT;
@@ -27,22 +27,19 @@ import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.BitmapLoader;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.widget.SwipeMenuLayout;
-import com.tonicartos.superslim.GridSLM;
+import com.foodorder.widget.stickygrid.StickyGridHeadersSimpleAdapter;
 
 import java.text.NumberFormat;
 import java.util.List;
-
-import static com.foodorder.R.id.count;
 
 /**
  * Created by guodong on 2017/5/14.
  */
 
-public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final int TYPE_TITLE = 1;
-    private static final int TYPE_CONTENT = 2;
+public class GoodsPadAdapter extends BaseAdapter implements StickyGridHeadersSimpleAdapter {
     private Context mContext;
     public NumberFormat nf;
+    private LayoutInflater mInflater;
     private List<Good> goodList;
 
     public GoodsPadAdapter(Context context, List<Good> goodList) {
@@ -50,67 +47,63 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.goodList = goodList;
         nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
+        mInflater = LayoutInflater.from(mContext);
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return goodList.get(position).isTitle() ? TYPE_TITLE : TYPE_CONTENT;
+    public long getHeaderId(int position) {
+        return goodList.get(position).getPosition();
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder holder = null;
-        if (viewType == TYPE_TITLE) {
-            holder = new TitleViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_header_view, parent, false));
-        } else if (viewType == TYPE_CONTENT) {
-            holder = new GoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_goods_pad, null));
+    public View getHeaderView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_header_view, parent, false);
         }
-        return holder;
+        String type_name = "";
+        if (PhoneUtil.isZh()) {
+            type_name = goodList.get(position).getZh_category_name();
+        } else {
+            type_name = goodList.get(position).getFr_category_name();
+        }
+        ((TextView) (convertView)).setText(type_name);
+        return convertView;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder mHolder, int position) {
-        Good good = goodList.get(position);
-        if (good == null) {
-            return;
-        }
-
-        GridSLM.LayoutParams params = GridSLM.LayoutParams.from(mHolder.itemView.getLayoutParams());
-        if (getItemViewType(position) == TYPE_TITLE) {
-            TitleViewHolder holder = (TitleViewHolder) mHolder;
-            String type_name = "";
-            if (PhoneUtil.isZh()) {
-                type_name = good.getZh_category_name();
-            } else {
-                type_name = good.getFr_category_name();
-            }
-            ((TextView) holder.itemView).setText(type_name);
-
-        } else if (getItemViewType(position) == TYPE_CONTENT) {
-            GoodViewHolder holder = (GoodViewHolder) mHolder;
-            holder.bindData(good, position);
-            params.width = (RT.getScreenWidth() - PhoneUtil.dipToPixel(100, mContext)) / 3;
-
-        }
-        params.setSlm(good.getSectionManager());
-        params.setNumColumns(3);
-        params.setFirstPosition(good.getSectionFirstPosition());
-        mHolder.itemView.setLayoutParams(params);
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         if (goodList == null) {
             return 0;
         }
         return goodList.size();
     }
 
-    class TitleViewHolder extends RecyclerView.ViewHolder {
-
-        public TitleViewHolder(View itemView) {
-            super(itemView);
+    @Override
+    public Object getItem(int position) {
+        if (goodList == null) {
+            return null;
         }
+        return goodList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        GoodViewHolder holder = null;
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.item_goods_pad, parent, false);
+            holder = new GoodViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (GoodViewHolder) convertView.getTag();
+        }
+        Good item = goodList.get(position);
+        holder.bindData(item);
+        return convertView;
     }
 
     class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -121,7 +114,6 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView name, price, tv_code, tvCount;
         Button btn_delete;
         Good item;
-        int position;
 
         public GoodViewHolder(View itemView) {
             super(itemView);
@@ -131,17 +123,18 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             name = (TextView) itemView.findViewById(R.id.tvName);
             price = (TextView) itemView.findViewById(R.id.tvPrice);
             tv_code = (TextView) itemView.findViewById(R.id.tv_code);
-            tvCount = (TextView) itemView.findViewById(count);
+            tvCount = (TextView) itemView.findViewById(R.id.count);
             btn_delete = (Button) itemView.findViewById(R.id.btn_delete);
+
+            AbsListView.LayoutParams params = (AbsListView.LayoutParams) itemView.getLayoutParams();
+            params.width = (RT.getScreenWidth() - PhoneUtil.dipToPixel(100, mContext)) / 3;
 
             ll_content.setOnClickListener(this);
             btn_delete.setOnClickListener(this);
         }
 
-        public void bindData(final Good item, final int position) {
-            DLOG.d("bindData");
+        public void bindData(Good item) {
             this.item = item;
-            this.position = position;
             BitmapLoader.ins().loadImage(item.getImage_url(), R.drawable.ic_def_image, img);
             String good_name = "";
             if (PhoneUtil.isZh()) {
@@ -161,6 +154,7 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 tvCount.setVisibility(View.VISIBLE);
                 swipe_layout.setSwipeEnable(true);
             }
+
         }
 
 
@@ -184,26 +178,6 @@ public class GoodsPadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         tvCount.setText(String.valueOf(item.getCount()) + "x");
                         AnimatorSet animatorSet = createAnimator(tvCount);
                         animatorSet.start();
-                        animatorSet.addListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
-                            }
-                        });
                     }
 
                     break;
