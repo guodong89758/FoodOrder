@@ -22,24 +22,24 @@
         android:lineSpacingExtra="3dp"
         android:text="@string/def_empty_data_text"
         android:textColor="@color/black_40"
-        android:textSize="14sp" />
+        android:textSize="@dimen/popup_content_text_size" />
 
     <Button
         android:id="@+id/btn_null"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="120dp"
-        android:layout_height="35dp"
+        android:layout_height="@dimen/search_edit_height"
         android:layout_marginTop="50dp"
         android:background="@drawable/bg_btn_retry_selector"
         android:text="@string/def_empty_button_retry"
         android:textColor="@color/white"
-        android:textSize="12sp" />
+        android:textSize="@dimen/popup_title_text_size" />
 
     <View
         android:id="@+id/temp_empty_view"
         android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"/>
+        android:layout_height="@dimen/popup_title_height"/>
 
 
 </LinearLayout>

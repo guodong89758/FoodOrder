@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/popup_title_height"
         android:background="@color/blue_color">
 
         <TextView
@@ -20,7 +20,7 @@
             android:singleLine="true"
             android:text="@string/printer_title"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="@dimen/popup_title_text_size" />
 
     </RelativeLayout>
 
@@ -46,12 +46,12 @@
         <Button
             android:id="@+id/btn_ok"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="@dimen/popup_ok_button_height"
             android:background="@drawable/bg_btn_popup_selector"
             android:clickable="true"
             android:text="@string/action_ok"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/popup_ok_button_text_size" />
     </LinearLayout>
 
 

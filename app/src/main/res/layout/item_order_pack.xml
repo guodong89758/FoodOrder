@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:text="@string/order_num_label"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
 
         <TextView
             android:id="@+id/tv_order_num"
@@ -29,7 +29,7 @@
             android:singleLine="true"
             android:text="A020239058093248"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
 
     </LinearLayout>
 
@@ -40,7 +40,7 @@
         android:layout_alignParentRight="true"
         android:text="￥ 100"
         android:textColor="@color/price_color"
-        android:textSize="15dp"
+        android:textSize="@dimen/item_name_text_size"
         android:textStyle="bold" />
 
     <TextView
@@ -52,6 +52,6 @@
         android:layout_marginTop="10dp"
         android:text="08:20"
         android:textColor="@color/black_40"
-        android:textSize="12dp" />
+        android:textSize="@dimen/item_code_text_size" />
 
 </RelativeLayout>

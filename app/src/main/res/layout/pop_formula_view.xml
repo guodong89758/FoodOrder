@@ -7,13 +7,13 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/popup_title_height"
         android:background="@color/blue_color">
 
         <ImageButton
             android:id="@+id/ib_close"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/popup_title_height"
+            android:layout_height="@dimen/popup_title_height"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
             android:src="@drawable/ic_close_white" />
@@ -28,7 +28,7 @@
             android:paddingRight="50dp"
             android:singleLine="true"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="@dimen/popup_title_text_size" />
 
 
     </RelativeLayout>
@@ -36,12 +36,12 @@
     <Button
         android:id="@+id/btn_ok"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/popup_ok_button_height"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bg_btn_popup_selector"
         android:text="@string/action_ok"
         android:textColor="@color/black_80"
-        android:textSize="15dp" />
+        android:textSize="@dimen/popup_ok_button_text_size" />
 
     <View
         android:id="@+id/line_view"

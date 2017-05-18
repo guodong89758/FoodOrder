@@ -12,7 +12,7 @@
         android:gravity="center"
         android:text="@string/prompt"
         android:textColor="@color/black_90"
-        android:textSize="18dp"
+        android:textSize="@dimen/title_text_size"
         android:textStyle="bold"
         android:visibility="gone" />
 
@@ -24,7 +24,7 @@
         android:minHeight="74dp"
         android:padding="10dp"
         android:textColor="@color/black_90"
-        android:textSize="14dp" />
+        android:textSize="@dimen/popup_content_text_size" />
 
     <View
         android:id="@+id/line_1"
@@ -41,13 +41,13 @@
         <Button
             android:id="@+id/btn_2"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/popup_ok_button_height"
             android:layout_weight="1.0"
             android:background="@color/transparent"
             android:gravity="center"
             android:text="@string/action_cancel"
             android:textColor="@color/black_60"
-            android:textSize="12dp" />
+            android:textSize="@dimen/popup_ok_button_text_size" />
 
         <View
             android:id="@+id/line_2"
@@ -58,13 +58,13 @@
         <Button
             android:id="@+id/btn_1"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/popup_ok_button_height"
             android:layout_weight="1.0"
             android:background="@color/transparent"
             android:gravity="center"
             android:text="@string/action_ok"
             android:textColor="@color/black_60"
-            android:textSize="12dp" />
+            android:textSize="@dimen/popup_ok_button_text_size" />
     </LinearLayout>
 
 

@@ -17,16 +17,17 @@
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
             android:text="@string/action_cancel"
+            android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="16dp" />
+            android:textSize="@dimen/search_cancel_button_text_size" />
 
         <EditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="@dimen/search_edit_height"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="48dp"
+            android:layout_marginRight="@dimen/title_height_size"
             android:background="@drawable/bg_search_input"
             android:drawableLeft="@drawable/icon_search_gray"
             android:drawablePadding="10dp"
@@ -40,17 +41,18 @@
             android:textColor="@color/black_80"
             android:textColorHint="@color/black_40"
             android:textCursorDrawable="@drawable/text_cursor_drawable"
-            android:textSize="15dp" />
+            android:textSize="@dimen/popup_title_text_size" />
 
         <ImageButton
             android:id="@+id/ib_clear"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/search_edit_clear_size"
+            android:layout_height="@dimen/search_edit_clear_size"
             android:layout_alignRight="@+id/et_search"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_input_clear" />
+            android:src="@drawable/ic_input_clear"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

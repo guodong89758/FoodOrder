@@ -45,7 +45,7 @@
     <TextView
         android:id="@+id/tv_username"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/login_edit_height"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
@@ -60,7 +60,7 @@
     <EditText
         android:id="@+id/et_password"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/login_edit_height"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
@@ -75,7 +75,7 @@
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/popup_ok_button_height"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="40dp"
@@ -83,7 +83,7 @@
         android:text="@string/login_title"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="16dp" />
+        android:textSize="@dimen/popup_ok_button_text_size" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:text="@string/language"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/popup_title_text_size" />
 
         <RadioGroup
             android:id="@+id/rg_language"
@@ -118,7 +118,7 @@
                 android:paddingLeft="10dp"
                 android:text="@string/language_zh"
                 android:textColor="@color/radio_text_color_selector"
-                android:textSize="14dp" />
+                android:textSize="@dimen/popup_content_text_size" />
 
             <RadioButton
                 android:id="@+id/rb_fr"
@@ -130,7 +130,7 @@
                 android:paddingLeft="10dp"
                 android:text="@string/language_fr"
                 android:textColor="@color/radio_text_color_selector"
-                android:textSize="14dp" />
+                android:textSize="@dimen/popup_content_text_size" />
         </RadioGroup>
     </LinearLayout>
 

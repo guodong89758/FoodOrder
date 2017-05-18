@@ -26,7 +26,7 @@
     <RelativeLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/cart_bottom_height"
         android:layout_alignParentBottom="true"
         android:background="@color/cart_layout_bg"
         android:clickable="true"
@@ -40,7 +40,7 @@
             android:layout_marginLeft="10dp"
             android:text="￥ 0"
             android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textSize="@dimen/cart_bottom_cost_text_size" />
 
         <Button
             android:id="@+id/btn_add"

@@ -17,12 +17,12 @@
         android:layout_marginTop="10dp"
         android:text="@string/def_data_loading"
         android:textColor="@color/black_60"
-        android:textSize="15sp" />
+        android:textSize="@dimen/popup_title_text_size" />
 
     <View
         android:id="@+id/temp_view"
         android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"/>
+        android:layout_height="@dimen/popup_title_height"/>
 
 </LinearLayout>

@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/popup_title_height"
         android:background="@color/blue_color">
 
         <TextView
@@ -20,21 +20,21 @@
             android:singleLine="true"
             android:text="@string/order_action_title"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="@dimen/popup_title_text_size" />
 
     </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_cuidan"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/item_printer_height"
         android:background="@drawable/bg_btn_popup_selector"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:text="@string/order_action_1"
         android:textColor="@color/black_80"
-        android:textSize="16dp" />
+        android:textSize="@dimen/popup_item_text_size" />
 
     <View
         android:layout_width="match_parent"
@@ -44,13 +44,13 @@
     <TextView
         android:id="@+id/tv_print"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/item_printer_height"
         android:background="@drawable/bg_btn_popup_selector"
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:text="@string/order_action_2"
         android:textColor="@color/black_80"
-        android:textSize="16dp" />
+        android:textSize="@dimen/popup_item_text_size" />
 
 </LinearLayout>

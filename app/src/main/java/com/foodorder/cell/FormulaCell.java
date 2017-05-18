@@ -93,6 +93,9 @@ public class FormulaCell extends LinearLayout implements ListCell, View.OnClickL
         switch (v.getId()) {
             case R.id.rl_content:
             case R.id.tv_add:
+                if(type == FormulaPop.TYPE_ORDER){
+                    return;
+                }
                 add();
                 break;
             case R.id.tv_minus:

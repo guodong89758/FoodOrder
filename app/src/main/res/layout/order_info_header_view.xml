@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:text="@string/order_id"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
 
         <TextView
             android:id="@+id/tv_order_num"
@@ -24,7 +24,7 @@
             android:layout_marginLeft="5dp"
             android:text="1293853928749823479283"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="@string/order_time"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
 
         <TextView
             android:id="@+id/tv_time"
@@ -47,7 +47,7 @@
             android:layout_marginLeft="5dp"
             android:text="2016-10-12 12:30"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:text="@string/order_taihao_label"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
 
         <TextView
             android:id="@+id/tv_number"
@@ -71,7 +71,7 @@
             android:layout_marginLeft="5dp"
             android:text="2016-10-12 12:30"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
     </LinearLayout>
 
     <LinearLayout
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:text="@string/order_person_num_label"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
 
         <TextView
             android:id="@+id/tv_person_count"
@@ -95,7 +95,7 @@
             android:layout_marginLeft="5dp"
             android:text="8"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
     </LinearLayout>
 
     <View

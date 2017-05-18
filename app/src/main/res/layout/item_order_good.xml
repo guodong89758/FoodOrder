@@ -7,14 +7,14 @@
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="@dimen/item_pic_size"
+        android:layout_height="@dimen/item_pic_size"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_def_image" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/item_pic_size"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
@@ -24,15 +24,15 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textColor="@color/black_80"
-            android:textSize="15dp" />
+            android:textSize="@dimen/item_name_text_size" />
 
         <TextView
             android:id="@+id/tv_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvName"
+            android:layout_centerVertical="true"
             android:textColor="@color/black_40"
-            android:textSize="12dp" />
+            android:textSize="@dimen/item_code_text_size" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="￥ 100"
                 android:textColor="@color/price_color"
-                android:textSize="16sp"
+                android:textSize="@dimen/item_price_text_size"
                 android:textStyle="bold" />
 
             <TextView
@@ -57,7 +57,7 @@
                 android:minWidth="20dp"
                 android:text="1"
                 android:textColor="@color/black_80"
-                android:textSize="15dp"
+                android:textSize="@dimen/count_size"
                 android:visibility="visible" />
 
         </RelativeLayout>

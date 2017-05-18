@@ -8,13 +8,13 @@
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/popup_title_height"
         android:background="@color/blue_color">
 
         <ImageButton
             android:id="@+id/ib_close"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/popup_title_height"
+            android:layout_height="@dimen/popup_title_height"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
             android:src="@drawable/ic_close_white" />
@@ -30,7 +30,7 @@
             android:singleLine="true"
             android:text="@string/good_send_setup_title"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="@dimen/popup_title_text_size" />
 
     </RelativeLayout>
 
@@ -55,12 +55,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/good_taihao_tip"
                 android:textColor="@color/black_80"
-                android:textSize="15dp" />
+                android:textSize="@dimen/popup_title_text_size" />
 
             <EditText
                 android:id="@+id/et_num"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+                android:layout_width="@dimen/popup_order_setup_et_width"
+                android:layout_height="@dimen/popup_order_setup_et_height"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bg_search_input_blue"
                 android:gravity="center"
@@ -68,7 +68,7 @@
                 android:textColor="@color/black_80"
                 android:textColorHint="@color/black_60"
                 android:textCursorDrawable="@drawable/text_cursor_drawable"
-                android:textSize="15dp" />
+                android:textSize="@dimen/popup_title_text_size" />
         </LinearLayout>
 
         <LinearLayout
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/good_person_tip"
                 android:textColor="@color/black_80"
-                android:textSize="15dp" />
+                android:textSize="@dimen/popup_title_text_size" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -104,16 +104,16 @@
                 <TextView
                     android:id="@+id/tv_count"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/popup_order_setup_et_height"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bg_search_input_blue"
                     android:gravity="center"
-                    android:minWidth="80dp"
+                    android:minWidth="@dimen/popup_order_setup_et_width"
                     android:text="1"
                     android:textColor="@color/black_80"
-                    android:textSize="15dp" />
+                    android:textSize="@dimen/popup_title_text_size" />
 
                 <TextView
                     android:id="@+id/tv_add"
@@ -136,11 +136,11 @@
     <Button
         android:id="@+id/btn_ok"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/popup_ok_button_height"
         android:background="@drawable/bg_btn_popup_selector"
         android:clickable="true"
         android:text="@string/action_ok"
         android:textColor="@color/black_80"
-        android:textSize="15dp" />
+        android:textSize="@dimen/popup_ok_button_text_size" />
 
 </LinearLayout>
