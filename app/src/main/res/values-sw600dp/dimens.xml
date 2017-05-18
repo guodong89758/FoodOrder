@@ -11,7 +11,12 @@
 
     <dimen name="formulat_item_height">70dp</dimen>
     <dimen name="formulat_item_text_size">17dp</dimen>
+
     <dimen name="cart_item_height">70dp</dimen>
+    <dimen name="cart_bottom_height">60dp</dimen>
+    <dimen name="cart_bottom_cost_text_size">25dp</dimen>
+    <dimen name="cart_clear_cost_text_size">14dp</dimen>
+    <dimen name="cart_title_text_size">14dp</dimen>
 
     <dimen name="count_size">18dp</dimen>
     <dimen name="good_search_btn_text_size">18dp</dimen>
@@ -19,4 +24,11 @@
     <dimen name="good_search_keycode_height">50dp</dimen>
     <dimen name="good_type_item_height">60dp</dimen>
     <dimen name="good_type_item_text_size">14dp</dimen>
+
+    <dimen name="tip_min_width">25dp</dimen>
+    <dimen name="tip_min_height">20dp</dimen>
+    <dimen name="tip_text_size">14dp</dimen>
+
+    <dimen name="item_printer_height">70dp</dimen>
+    <dimen name="item_printer_text_size">17dp</dimen>
 </resources>

@@ -74,10 +74,10 @@
     <style name="TipTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minWidth">20dp</item>
-        <item name="android:minHeight">14dp</item>
+        <item name="android:minWidth">@dimen/tip_min_width</item>
+        <item name="android:minHeight">@dimen/tip_min_height</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">10dp</item>
+        <item name="android:textSize">@dimen/tip_text_size</item>
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
         <item name="android:gravity">center</item>
