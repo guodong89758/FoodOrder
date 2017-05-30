@@ -1,5 +1,6 @@
 package com.foodorder.activity;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -15,13 +16,16 @@ import com.foodorder.contant.AppKey;
 import com.foodorder.fragment.EatinOrderFragment;
 import com.foodorder.fragment.PackOrderFragment;
 import com.foodorder.logic.CartManager;
+import com.foodorder.logic.PrinterManager;
 import com.foodorder.pop.OrderSetupPop;
 import com.foodorder.runtime.ActivityManager;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.SmoothSwitchScreenUtil;
 import com.foodorder.util.ToastUtil;
 
+
 public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+    private static final int ENABLE_BLUETOOTH = 1;
     private Toolbar toolbar;
     private ImageButton ib_search;
     private TabLayout tab_layout;
@@ -54,6 +58,8 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
         ib_search.setOnClickListener(this);
         fab_menu.setOnClickListener(this);
+
+        bindPrintService();
     }
 
     @Override
@@ -107,6 +113,12 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
     }
 
     @Override
+    protected void onDestroy() {
+        PrinterManager.ins().destory(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
 
         long current_time = System.currentTimeMillis();
@@ -132,5 +144,28 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+            PrinterManager.ins().bindPrintService(this);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    private void bindPrintService() {
+        BluetoothAdapter blueadapter = BluetoothAdapter.getDefaultAdapter();
+        //确认开启蓝牙
+        if (!blueadapter.isEnabled()) {
+            //请求用户开启
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, ENABLE_BLUETOOTH);
+
+        } else {
+            //蓝牙已开启
+            PrinterManager.ins().bindPrintService(this);
+        }
     }
 }

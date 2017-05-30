@@ -21,6 +21,7 @@ import com.foodorder.db.bean.Good;
 import com.foodorder.dialog.NormalDialog;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
+import com.foodorder.logic.PrinterManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
@@ -412,7 +413,12 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                         hideLoadingDialog();
-                        if (errcode == 200) {
+                        if (errcode == 200 && json != null) {
+                            if(CartManager.ins().isPack){
+                                PrinterManager.ins().printText("Order Number: " + json.optString("order_id"));
+                            }else{
+                                PrinterManager.ins().printText("Number: " + number);
+                            }
                             CartManager.ins().clear();
                             EventManager.ins().sendEvent(EventTag.GOOD_LIST_REFRESH, 0, 0, true);
                             EventManager.ins().sendEvent(EventTag.GOOD_SEARCH_LIST_REFRESH, 0, 0, null);

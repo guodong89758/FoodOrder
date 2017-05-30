@@ -42,6 +42,7 @@
     <dimen name="item_price_text_size">16dp</dimen>
     <dimen name="item_specification_width">35dp</dimen>
     <dimen name="item_specification_height">20dp</dimen>
+    <dimen name="item_bluetooth_height">50dp</dimen>
 
     <dimen name="popup_title_height">50dp</dimen>
     <dimen name="popup_title_text_size">15dp</dimen>

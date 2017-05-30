@@ -30,6 +30,16 @@
     <string name="login_success">登陆成功</string>
     <string name="login_failed">登录失败</string>
 
+    <!-- bluetooth -->
+    <string name="bluetootch_device">选择蓝牙打印机</string>
+    <string name="bluetootch_empty">请选择蓝牙打印机</string>
+    <string name="bluetootch_connect_success">打印机连接成功</string>
+    <string name="bluetootch_connect_failed">打印机连接失败</string>
+    <string name="bluetootch_print_success">打印成功</string>
+    <string name="bluetootch_print_failed">打印失败</string>
+    <string name="bluetootch_bonded">已配对</string>
+    <string name="bluetootch_new">新设备</string>
+
     <!-- order -->
     <string name="order_title">订单</string>
     <string name="order_tab_1">堂吃</string>

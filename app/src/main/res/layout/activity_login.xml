@@ -72,6 +72,22 @@
         android:textColor="@color/black_80"
         android:textSize="16dp" />
 
+    <TextView
+        android:id="@+id/tv_bluetootch"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_edit_height"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:singleLine="true"
+        android:background="@drawable/bg_input_selector"
+        android:gravity="left|center_vertical"
+        android:hint="@string/bluetootch_device"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/black_80"
+        android:textSize="16dp" />
+
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"

@@ -30,6 +30,16 @@
     <string name="login_success">Connexion réussi</string>
     <string name="login_failed">Connexion echec</string>
 
+    <!-- bluetooth -->
+    <string name="bluetootch_device">Sélectionner une imprimante Bluetooth</string>
+    <string name="bluetootch_empty">Veuillez sélectionner une imprimante Bluetooth</string>
+    <string name="bluetootch_connect_success">La connexion de l\'imprimante est réussie</string>
+    <string name="bluetootch_connect_failed">L\'imprimante échoue</string>
+    <string name="bluetootch_print_success">Impression avec succès</string>
+    <string name="bluetootch_print_failed">Impression a échoué</string>
+    <string name="bluetootch_bonded">Couplé</string>
+    <string name="bluetootch_new">De nouveaux équipements</string>
+
     <!-- order -->
     <string name="order_title">Commandes</string>
     <string name="order_tab_1">Sur place</string>

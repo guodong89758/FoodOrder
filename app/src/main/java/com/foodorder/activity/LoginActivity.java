@@ -1,7 +1,12 @@
 package com.foodorder.activity;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.text.TextUtils;
@@ -16,7 +21,9 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.base.BaseActivity;
 import com.foodorder.contant.AppKey;
+import com.foodorder.entry.Bluetooth;
 import com.foodorder.logic.UserManager;
+import com.foodorder.pop.BluetoothPop;
 import com.foodorder.pop.LoginUserPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.runtime.WeakHandler;
@@ -36,17 +43,27 @@ import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 
 public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSelectedListener {
     private static final String TAG = "LoginActivity";
-    //    private AutoCompleteTextView tv_username;
-    private TextView tv_username;
+    public static final int ENABLE_BLUETOOTH = 1;
+    private TextView tv_username, tv_bluetootch;
     private EditText et_password;
     private Button btn_login, btn_zxing;
     private RadioGroup rg_language;
     private RadioButton rb_zh, rb_fr;
+    private BluetoothAdapter blueadapter;
+    private List<Bluetooth> bluetoothList;
+    private DeviceReceiver myDevice = new DeviceReceiver();
+    private ArrayList<String> deviceList_found = new ArrayList<String>();
+    private String lastTitle = "";
+    private BluetoothPop bluetoothPop;
 
     @Override
     protected int getLayoutId() {
@@ -55,8 +72,8 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
 
     @Override
     public void initView() {
-//        tv_username = (AutoCompleteTextView) findViewById(tv_username);
         tv_username = (TextView) findViewById(R.id.tv_username);
+        tv_bluetootch = (TextView) findViewById(R.id.tv_bluetootch);
         et_password = (EditText) findViewById(R.id.et_password);
         btn_login = (Button) findViewById(R.id.btn_login);
         btn_zxing = (Button) findViewById(R.id.btn_zxing);
@@ -67,6 +84,7 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
         btn_login.setOnClickListener(this);
         btn_zxing.setOnClickListener(this);
         tv_username.setOnClickListener(this);
+        tv_bluetootch.setOnClickListener(this);
 
         rg_language.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -89,12 +107,23 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
             }
         });
 
+        //注册蓝牙广播接收者
+        IntentFilter filterStart = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        IntentFilter filterEnd = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(myDevice, filterStart);
+        registerReceiver(myDevice, filterEnd);
+
     }
 
     @Override
     public void initData() {
-//        ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, UserManager.getInstance().getUserList());
-//        tv_username.setAdapter(arrayAdapter);
+        if (bluetoothList == null) {
+            bluetoothList = new ArrayList<>();
+        }
+        String bluetooth = PreferenceHelper.ins().getStringShareData(AppKey.DEFAULT_BLUETOOTCH, "");
+        if (!TextUtils.isEmpty(bluetooth)) {
+            tv_bluetootch.setText(bluetooth);
+        }
         String language = PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, PhoneUtil.isZh() ? "zh" : "fr");
         if (language.equals("zh")) {
             rb_zh.setChecked(true);
@@ -121,6 +150,9 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
     protected void onDestroy() {
         super.onDestroy();
         OkHttpUtils.getInstance().cancelTag(TAG);
+        if (myDevice != null) {
+            unregisterReceiver(myDevice);
+        }
     }
 
     @Override
@@ -130,12 +162,17 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                 SoftKeyboardUtil.hideSoftKeyboard(et_password);
                 String username = tv_username.getText().toString();
                 String password = et_password.getText().toString();
+                String bluetooth = tv_bluetootch.getText().toString();
                 if (TextUtils.isEmpty(username)) {
                     ToastUtil.showToast(getString(R.string.login_username_empty));
                     return;
                 }
                 if (TextUtils.isEmpty(password)) {
                     ToastUtil.showToast(getString(R.string.login_password_empty));
+                    return;
+                }
+                if (TextUtils.isEmpty(bluetooth)) {
+                    ToastUtil.showToast(getString(R.string.bluetootch_empty));
                     return;
                 }
                 if (RT.DEBUG) {
@@ -183,6 +220,9 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                     userPop.showPopup(tv_username);
                 }
                 break;
+            case R.id.tv_bluetootch:
+                setBluetooth();
+                break;
         }
     }
 
@@ -201,6 +241,13 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ENABLE_BLUETOOTH && resultCode == RESULT_OK) {
+            showblueboothlist();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     protected void switchLanguage(String language) {
 
@@ -230,5 +277,107 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
+    }
+
+    private void setBluetooth() {
+        blueadapter = BluetoothAdapter.getDefaultAdapter();
+        //确认开启蓝牙
+        if (!blueadapter.isEnabled()) {
+            //请求用户开启
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, ENABLE_BLUETOOTH);
+
+        } else {
+            //蓝牙已开启
+            showblueboothlist();
+        }
+    }
+
+    private void showblueboothlist() {
+        bluetoothPop = new BluetoothPop(this);
+        bluetoothPop.showPopup(tv_bluetootch);
+        bluetoothPop.setOnBluetoothSelectedListener(new BluetoothPop.OnBluetoothSelectedListener() {
+            @Override
+            public void selectedBluetooth(Bluetooth bluetooth) {
+                String address = bluetooth.getAddress();
+                if (!TextUtils.isEmpty(address)) {
+                    PreferenceHelper.ins().storeShareStringData(AppKey.DEFAULT_BLUETOOTCH, address);
+                    PreferenceHelper.ins().commit();
+                    tv_bluetootch.setText(bluetooth.getAddress());
+                }
+
+            }
+        });
+        findAvalibleDevice();
+    }
+
+    private void findAvalibleDevice() {
+        // TODO Auto-generated method stub
+        //获取可配对蓝牙设备
+        Set<BluetoothDevice> device = blueadapter.getBondedDevices();
+        if (bluetoothList != null) {
+            bluetoothList.clear();
+        }
+
+//        if (blueadapter != null && blueadapter.isDiscovering()) {
+//            adapter1.notifyDataSetChanged();
+//        }
+        if (device.size() > 0) {
+            //存在已经配对过的蓝牙设备
+            for (Iterator<BluetoothDevice> it = device.iterator(); it.hasNext(); ) {
+                BluetoothDevice btd = it.next();
+                Bluetooth bluetooth = new Bluetooth();
+                if (TextUtils.equals(lastTitle, getString(R.string.bluetootch_bonded))) {
+                    bluetooth.setHasTitle(false);
+                } else {
+                    bluetooth.setHasTitle(true);
+                }
+                bluetooth.setType(getString(R.string.bluetootch_bonded));
+                bluetooth.setTitle(btd.getName());
+                bluetooth.setAddress(btd.getAddress());
+                bluetoothList.add(bluetooth);
+                lastTitle = getString(R.string.bluetootch_bonded);
+            }
+            bluetoothPop.setData(bluetoothList);
+
+        }
+
+    }
+
+
+    /**
+     * 蓝牙搜索状态广播监听
+     */
+    private class DeviceReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {    //搜索到新设备
+                BluetoothDevice btd = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                //搜索没有配过对的蓝牙设备
+                if (btd.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    if (!deviceList_found.contains(btd.getName() + '\n' + btd.getAddress())) {
+
+                        deviceList_found.add(btd.getName() + '\n' + btd.getAddress());
+                        Bluetooth bluetooth = new Bluetooth();
+                        if (TextUtils.equals(lastTitle, getString(R.string.bluetootch_new))) {
+                            bluetooth.setHasTitle(false);
+                        } else {
+                            bluetooth.setHasTitle(true);
+                        }
+                        bluetooth.setType(getString(R.string.bluetootch_bonded));
+                        bluetooth.setTitle(btd.getName());
+                        bluetooth.setAddress(btd.getAddress());
+                        bluetoothList.add(bluetooth);
+                        lastTitle = getString(R.string.bluetootch_bonded);
+                    }
+
+                }
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {   //搜索结束
+
+                bluetoothPop.setData(bluetoothList);
+            }
+        }
     }
 }

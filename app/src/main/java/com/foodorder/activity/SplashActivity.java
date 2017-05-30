@@ -103,6 +103,9 @@ public class SplashActivity extends BaseActivity {
                 }
             });
         } else {
+            if (!StringUtil.checkTime()) {
+                return;
+            }
             ServerManager.SERVER_DOMAIN = PreferenceHelper.ins().getStringShareData(AppKey.SERVER_DOMAIN, "");
             if (TextUtils.isEmpty(ServerManager.SERVER_DOMAIN)) {
                 Dexter.checkPermission(new PermissionListener() {

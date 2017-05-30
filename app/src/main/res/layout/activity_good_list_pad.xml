@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="100dp"
             android:text="0.00 €"
             android:textColor="#fff"
             android:textSize="@dimen/cart_bottom_cost_text_size" />
