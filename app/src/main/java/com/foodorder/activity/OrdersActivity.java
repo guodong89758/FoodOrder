@@ -157,6 +157,9 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
 
     private void bindPrintService() {
         BluetoothAdapter blueadapter = BluetoothAdapter.getDefaultAdapter();
+        if (blueadapter == null) {
+            return;
+        }
         //确认开启蓝牙
         if (!blueadapter.isEnabled()) {
             //请求用户开启

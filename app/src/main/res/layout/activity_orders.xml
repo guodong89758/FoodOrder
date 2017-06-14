@@ -84,5 +84,5 @@
         android:layout_marginRight="16dp"
         android:padding="15dp"
         android:src="@drawable/ic_add_white"
-        app:layout_behavior="com.foodorder.widget.ScrollAwareFABBehavior" />
+        app:layout_behavior="com.foodorder.widget.ScrollAwareFABBehaviorDepend" />
 </android.support.design.widget.CoordinatorLayout>
