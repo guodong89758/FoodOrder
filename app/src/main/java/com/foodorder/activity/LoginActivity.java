@@ -176,10 +176,10 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                     startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
                     finish();
                 } else {
-                    if (TextUtils.isEmpty(bluetooth)) {
-                        ToastUtil.showToast(getString(R.string.bluetootch_empty));
-                        return;
-                    }
+//                    if (TextUtils.isEmpty(bluetooth)) {
+//                        ToastUtil.showToast(getString(R.string.bluetootch_empty));
+//                        return;
+//                    }
                     API_Food.ins().login(TAG, username, password, new JsonResponseCallback() {
                         @Override
                         public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {

@@ -27,7 +27,7 @@ public class RT {
 
     public static final String TAG = "RT";
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private static RT self = null;
 

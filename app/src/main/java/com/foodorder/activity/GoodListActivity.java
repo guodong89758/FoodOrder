@@ -624,9 +624,11 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                         hideLoadingDialog();
-                        if (errcode == 200 && json != null) {
+                        if (errcode == 200) {
                             if(CartManager.ins().isPack){
-                                PrinterManager.ins().printText("Order Number: " + json.optString("order_id"));
+                                if(json != null){
+                                    PrinterManager.ins().printText("Order Number: " + json.optString("order_id"));
+                                }
                             }else{
                                 PrinterManager.ins().printText("Number: " + number);
                             }

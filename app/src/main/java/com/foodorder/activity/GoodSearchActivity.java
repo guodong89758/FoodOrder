@@ -93,7 +93,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
         params.width = RT.getScreenWidth();
 
         int btn_width = (RT.getScreenWidth() - PhoneUtil.dipToPixel(10, this)) / 4;
-        int btn_height = RT.getScreenHeight()/12;
+        int btn_height = RT.getScreenHeight() / 12;
         GridLayout.LayoutParams params1 = (GridLayout.LayoutParams) findViewById(R.id.btn_1).getLayoutParams();
         params1.width = btn_width;
         params1.height = btn_height;
@@ -134,7 +134,7 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 //        params_pack.width = btn_width * 2;
         GridLayout.LayoutParams params_send = (GridLayout.LayoutParams) findViewById(R.id.btn_send).getLayoutParams();
         params_send.width = btn_width;
-        params_send.height = btn_height*2;
+        params_send.height = btn_height * 2;
 
         EventManager.ins().registListener(EventTag.GOOD_SEARCH_LIST_REFRESH, eventListener);
         EventManager.ins().registListener(POPUP_FORMULA_SHOW, eventListener);
@@ -413,10 +413,12 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
                     @Override
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                         hideLoadingDialog();
-                        if (errcode == 200 && json != null) {
-                            if(CartManager.ins().isPack){
-                                PrinterManager.ins().printText("Order Number: " + json.optString("order_id"));
-                            }else{
+                        if (errcode == 200) {
+                            if (CartManager.ins().isPack) {
+                                if (json != null) {
+                                    PrinterManager.ins().printText("Order Number: " + json.optString("order_id"));
+                                }
+                            } else {
                                 PrinterManager.ins().printText("Number: " + number);
                             }
                             CartManager.ins().clear();
