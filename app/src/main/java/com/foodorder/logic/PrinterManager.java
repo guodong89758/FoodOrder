@@ -47,7 +47,7 @@ public class PrinterManager {
     private volatile static PrinterManager instance;
     private List<Printer> printerList;
     private List<Printer> postList;
-    private boolean isConnect;
+    public boolean isConnect;
 
     private PrinterManager() {
         printerList = new ArrayList<>();
@@ -91,6 +91,9 @@ public class PrinterManager {
     }
 
     public void destory(Activity activity) {
+        if(binder == null || !isConnect){
+            return;
+        }
         binder.disconnectCurrentPort(new UiExecute() {
 
             @Override
@@ -208,6 +211,9 @@ public class PrinterManager {
 //        } else {
 //            ToastUtil.showBottomToast(RT.getString(R.string.bluetootch_connect_failed));
 //        }
+        if(!isConnect){
+            return;
+        }
         DataForSendToPrinterTSC.setCharsetName("gbk");//不设置，默认为gbk
 
         binder.writeDataByYouself(new UiExecute() {

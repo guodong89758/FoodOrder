@@ -141,8 +141,6 @@ public class RT {
 
                 mIsInit = true;
 
-//                CProcess.startCProcess(application);
-
             }
         }
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -625,11 +626,11 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
                     public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                         hideLoadingDialog();
                         if (errcode == 200) {
-                            if(CartManager.ins().isPack){
-                                if(json != null){
+                            if (CartManager.ins().isPack) {
+                                if (json != null) {
                                     PrinterManager.ins().printText("Order Number: " + json.optString("order_id"));
                                 }
-                            }else{
+                            } else {
                                 PrinterManager.ins().printText("Number: " + number);
                             }
                             clearCart();
@@ -639,9 +640,13 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
 //                            startActivity(intent);
                             EventManager.ins().sendEvent(EventTag.ACTIVITY_FINISH, 0, 0, null);
                             finish();
-                            ToastUtil.showToast(RT.getString(R.string.good_order_success));
+//                            ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {
-                            ToastUtil.showToast(RT.getString(R.string.good_order_failed));
+//                            ToastUtil.showToast(RT.getString(R.string.good_order_failed));
+
+                        }
+                        if (!TextUtils.isEmpty(errmsg)) {
+                            ToastUtil.showToast(errmsg);
                         }
                         return false;
                     }

@@ -20,7 +20,7 @@ public abstract class JsonResponseCallback extends ResponseCallback {
             if (code == 200 && data != null) {
                 return onJsonResponse(data, code, errmsg, id, fromcache);
             } else {
-                return onJsonResponse(null, code, "", id, fromcache);
+                return onJsonResponse(null, code, errmsg, id, fromcache);
             }
         } catch (Exception e) {
             e.printStackTrace();

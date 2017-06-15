@@ -430,9 +430,12 @@ public class GoodSearchActivity extends BaseActivity implements BaseRecyclerAdap
 //                            startActivity(intent);
                             EventManager.ins().sendEvent(EventTag.ACTIVITY_FINISH, 0, 0, null);
                             finish();
-                            ToastUtil.showToast(RT.getString(R.string.good_order_success));
+//                            ToastUtil.showToast(RT.getString(R.string.good_order_success));
                         } else {
-                            ToastUtil.showToast(RT.getString(R.string.good_order_failed));
+//                            ToastUtil.showToast(RT.getString(R.string.good_order_failed));
+                        }
+                        if (!TextUtils.isEmpty(errmsg)) {
+                            ToastUtil.showToast(errmsg);
                         }
                         return false;
                     }
