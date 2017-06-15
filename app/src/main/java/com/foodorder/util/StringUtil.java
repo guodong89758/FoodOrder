@@ -3,14 +3,9 @@ package com.foodorder.util;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.foodorder.log.DLOG;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by guodong on 16/9/18.
@@ -190,24 +185,5 @@ public class StringUtil {
                 outBuffer.append(aChar);
         }
         return outBuffer.toString();
-    }
-
-    public static boolean checkTime() {
-        long mostTime = 0;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = dateFormat.parse("2017-06-30 00:00:00");
-            mostTime = date.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long nowTime = System.currentTimeMillis();
-        DLOG.e("most time = " + mostTime);
-        DLOG.e("now time = " + nowTime);
-        if (nowTime < mostTime) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
