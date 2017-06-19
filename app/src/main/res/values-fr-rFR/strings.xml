@@ -56,6 +56,7 @@
     <string name="good_taihao_tip">Table</string>
     <string name="good_person_tip">Couvert</string>
     <string name="good_taihao_empty">Table est obligatoire</string>
+    <string name="good_taihao_repeat">Table est répété</string>
     <string name="good_order_success">Succès</string>
     <string name="good_order_failed">Échec</string>
     <string name="good_order_dialog_title">Commander</string>

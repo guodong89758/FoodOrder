@@ -106,6 +106,13 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
                     ToastUtil.showToast(getString(R.string.good_taihao_empty));
                     return;
                 }
+//                if(!CartManager.ins().isPack){
+//                    List<Order> orderData = RT.ins().getDaoSession().getOrderDao().queryBuilder().where(OrderDao.Properties.Type.eq(AppKey.ORDER_TYPE_SURPLACE), OrderDao.Properties.Number.eq(number)).build().list();
+//                    if(orderData != null && orderData.size() > 0){
+//                        ToastUtil.showToast(getString(R.string.good_taihao_repeat));
+//                        return;
+//                    }
+//                }
 
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
                 String persons = tv_count.getText().toString().trim();

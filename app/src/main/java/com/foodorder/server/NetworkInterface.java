@@ -83,7 +83,7 @@ public class NetworkInterface {
                     if (RT.DEBUG && !TextUtils.isEmpty(s)) {
                         DLOG.json(AppKey.HTTP_TAG, s);
                     }
-                    callback.onResponse(s.getBytes(), 0, "", 0, false);
+                    callback.onResponse(s, 0, "", 0, false);
                 }
 
                 @Override
@@ -92,7 +92,7 @@ public class NetworkInterface {
                     if (RT.DEBUG && !TextUtils.isEmpty(s)) {
                         DLOG.json(AppKey.HTTP_CACHE_TAG, s);
                     }
-                    callback.onResponse(s.getBytes(), 0, "", 0, true);
+                    callback.onResponse(s, 0, "", 0, true);
                 }
 
                 @Override
@@ -141,7 +141,7 @@ public class NetworkInterface {
                 if (RT.DEBUG && !TextUtils.isEmpty(s)) {
                     DLOG.json(AppKey.HTTP_TAG, s);
                 }
-                callback.onResponse(s.getBytes(), 0, "", 0, false);
+                callback.onResponse(s, 0, "", 0, false);
             }
 
             @Override
@@ -150,7 +150,7 @@ public class NetworkInterface {
                 if (RT.DEBUG && !TextUtils.isEmpty(s)) {
                     DLOG.json(AppKey.HTTP_CACHE_TAG, s);
                 }
-                callback.onResponse(s.getBytes(), 0, "", 0, true);
+                callback.onResponse(s, 0, "", 0, true);
             }
 
             @Override
