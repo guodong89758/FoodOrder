@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flipboard.bottomsheet.BottomSheetLayout;
 import com.foodorder.R;
 import com.foodorder.adapter.GoodsAdapter;
 import com.foodorder.adapter.SelectAdapter;
@@ -48,13 +47,17 @@ import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
+import com.foodorder.widget.DefaultItemTouchHelpCallback;
+import com.foodorder.widget.DefaultItemTouchHelper;
 import com.foodorder.widget.HorizontalDividerItemDecoration;
+import com.foodorder.widget.bottomsheet.BottomSheetLayout;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -577,6 +580,12 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
         clear.setOnClickListener(this);
         selectAdapter = new SelectAdapter(this, CartManager.ins().cartData);
         rvSelected.setAdapter(selectAdapter);
+        DefaultItemTouchHelper itemTouchHelper = new DefaultItemTouchHelper(onItemTouchCallbackListener);
+        itemTouchHelper.attachToRecyclerView(rvSelected);
+        selectAdapter.setItemTouchHelper(itemTouchHelper);
+
+        itemTouchHelper.setDragEnable(true);
+        itemTouchHelper.setSwipeEnable(false);
         selectAdapter.setOnItemClickListener(new SelectAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, Good good) {
@@ -655,4 +664,27 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
         });
         dialog.show();
     }
+
+    private DefaultItemTouchHelpCallback.OnItemTouchCallbackListener onItemTouchCallbackListener = new DefaultItemTouchHelpCallback.OnItemTouchCallbackListener() {
+        @Override
+        public void onSwiped(int adapterPosition) {
+        }
+
+        @Override
+        public boolean onMove(int srcPosition, int targetPosition) {
+            if (CartManager.ins().cartData != null) {
+//                if (bottomSheetLayout != null) {
+//                    bottomSheetLayout.childIntercepted(false);
+//                }
+                // 更换数据源中的数据Item的位置
+                Collections.swap(CartManager.ins().cartData, srcPosition, targetPosition);
+
+                // 更新UI中的Item的位置，主要是给用户看到交互效果
+                selectAdapter.notifyItemMoved(srcPosition, targetPosition);
+                return true;
+            }
+            return false;
+        }
+
+    };
 }

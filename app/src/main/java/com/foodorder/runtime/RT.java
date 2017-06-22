@@ -27,7 +27,7 @@ public class RT {
 
     public static final String TAG = "RT";
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     private static RT self = null;
 
@@ -126,7 +126,7 @@ public class RT {
         synchronized (this) {
             if (!mIsInit) {
                 try {
-                    DLOG.init(DEBUG);
+                    DLOG.init(true);
                     mkdirs();
                     initDatabase();
                     initOkHttp();

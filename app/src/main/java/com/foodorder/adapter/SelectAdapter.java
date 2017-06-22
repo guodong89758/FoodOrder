@@ -2,6 +2,7 @@ package com.foodorder.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
     private List<Good> dataList;
     private NumberFormat nf;
     private LayoutInflater mInflater;
+    private ItemTouchHelper itemTouchHelper;
 
     public SelectAdapter(Context context, List<Good> dataList) {
         this.mContext = context;
@@ -30,6 +32,10 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
         nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
         mInflater = LayoutInflater.from(mContext);
+    }
+
+    public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
+        this.itemTouchHelper = itemTouchHelper;
     }
 
     @Override
@@ -64,7 +70,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
         return dataList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private Good item;
         private TextView tvCost, tvCount, tvName, tvCode;
         private ImageButton tvAdd, tvMinus;
@@ -79,6 +85,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
             tvAdd = (ImageButton) itemView.findViewById(R.id.tvAdd);
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -110,6 +117,15 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
             tvCost.setText(nf.format(item.getCount() * item.getPrice()));
             tvCount.setText(String.valueOf(item.getCount()));
         }
+
+
+        @Override
+        public boolean onLongClick(View v) {
+            if(itemView == v){
+                itemTouchHelper.startDrag(this);
+            }
+            return false;
+        }
     }
 
     private OnItemClickListener clickListener;
@@ -121,4 +137,5 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.clickListener = listener;
     }
+
 }
