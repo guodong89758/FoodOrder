@@ -21,6 +21,7 @@ public class API_Food {
     public static final String POST_ORDER = "post_order_json";//提交订单
     public static final String PRINT_ORDER = "print_order";//打印订单
     public static final String REMIND_ORDER = "remind_order";//催单
+    public static final String HANG_ORDER = "hang_order";//挂起
 
 
     private API_Food() {
@@ -131,6 +132,22 @@ public class API_Food {
             params.put("posts", posts);
         }
         NetworkInterface.ins().connected(HttpMethod.GET, REMIND_ORDER, tag, params, callback);
+    }
+
+    /**
+     * 挂起
+     *
+     * @param tag
+     * @param id_order
+     * @param callback
+     */
+    public void hangOrder(String tag, String id_order, String posts, ResponseCallback callback) {
+        HttpParams params = new HttpParams();
+        params.put("id_order", id_order);
+        if (!TextUtils.isEmpty(posts)) {
+            params.put("posts", posts);
+        }
+        NetworkInterface.ins().connected(HttpMethod.GET, HANG_ORDER, tag, params, callback);
     }
 
 }

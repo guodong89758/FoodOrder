@@ -304,6 +304,19 @@ public class PrinterManager {
         }
     }
 
+    public void hangOrder(String order_id, String posts) {
+        API_Food.ins().hangOrder(AppKey.HTTP_TAG, order_id, posts, new JsonResponseCallback() {
+            @Override
+            public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
+                if (errcode == 200) {
+                    EventManager.ins().sendEvent(EventTag.ORDER_LIST_REFRESH, 0, 0, null);
+                }
+                ToastUtil.showToast(errmsg);
+                return false;
+            }
+        });
+    }
+
     public void remindOrder(String order_id, String posts) {
         API_Food.ins().remindOrder(AppKey.HTTP_TAG, order_id, posts, new JsonResponseCallback() {
             @Override
@@ -379,6 +392,23 @@ public class PrinterManager {
                         ToastUtil.showBottomToast(printerList.get(0).getName());
                     } else {
                         printOrder(order, order.getId_order(), "");
+                    }
+                }
+
+            }
+        });
+        dialog.setButton3(new OrderActionDialog.DialogButtonOnClickListener() {
+            @Override
+            public void onClick(View button, OrderActionDialog dialog, Order order) {
+                dialog.dismiss();
+                if (printerList.size() > 1) {
+                    showPrinterDialog(context, AppKey.PRINTER_DAYIN, order, order.getId_order());
+                } else {
+                    if (printerList.size() == 1) {
+                        hangOrder(order.getId_order(), postList.get(0).getName());
+                        ToastUtil.showBottomToast(printerList.get(0).getName());
+                    } else {
+                        hangOrder(order.getId_order(), "");
                     }
                 }
 

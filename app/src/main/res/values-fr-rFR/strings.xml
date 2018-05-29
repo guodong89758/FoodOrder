@@ -80,6 +80,7 @@
     <string name="order_action_title">Actions</string>
     <string name="order_action_1">Suivant</string>
     <string name="order_action_2">Imprimer</string>
+    <string name="order_action_3">suspend</string>
     <string name="order_eatin_search_hint">N° de table est obligatoire</string>
     <string name="order_pack_search_hint">N° de la commande est obligatoire</string>
     <string name="order_add_good">Rajouter</string>
