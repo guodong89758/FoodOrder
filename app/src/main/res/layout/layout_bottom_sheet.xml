@@ -52,12 +52,14 @@
         android:id="@+id/ll_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/selectRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
             android:clipToPadding="false"
             android:paddingBottom="20dp">
 
