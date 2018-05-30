@@ -11,6 +11,7 @@ import com.foodorder.base.BaseActivity;
 import com.foodorder.contant.AppKey;
 import com.foodorder.contant.EventTag;
 import com.foodorder.fragment.OrderInfoFragment1;
+import com.foodorder.fragment.OrderInfoFragment2;
 import com.foodorder.runtime.event.EventListener;
 import com.foodorder.runtime.event.EventManager;
 import com.lzy.okhttputils.OkHttpUtils;
@@ -46,8 +47,8 @@ public class OrderInfoActivity extends BaseActivity {
         id_order = getIntent().getStringExtra(AppKey.ORDER_ID);
 
         orderAdapter = new OrderAdapter(getSupportFragmentManager());
-        orderAdapter.addFragment(OrderInfoFragment1.newInstance(id_order), getString(R.string.order_tab_1));
-        orderAdapter.addFragment(OrderInfoFragment1.newInstance(id_order), getString(R.string.order_tab_2));
+        orderAdapter.addFragment(OrderInfoFragment1.newInstance(id_order), getString(R.string.order_info_tab_1));
+        orderAdapter.addFragment(OrderInfoFragment2.newInstance(id_order), getString(R.string.order_info_tab_2));
         vp_order.setAdapter(orderAdapter);
         vp_order.setCurrentItem(0);
         tab_layout.setupWithViewPager(vp_order);

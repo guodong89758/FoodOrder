@@ -86,6 +86,8 @@
     <string name="order_add_good">加菜</string>
     <string name="order_id">订单编号:</string>
     <string name="order_time">创建时间:</string>
+    <string name="order_info_tab_1">详情</string>
+    <string name="order_info_tab_2">凭单</string>
 
 
     <!-- error -->

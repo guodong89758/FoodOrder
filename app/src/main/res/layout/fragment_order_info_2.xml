@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.foodorder.fragment.OrderInfoFragment1">
+
+    <ListView
+        android:id="@+id/lv_voucher"
+        style="@style/ListViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/transparent"
+        android:dividerHeight="10dp"
+        tools:listfooter="@layout/order_voucher_footer"
+        tools:listheader="@layout/order_info_header_view2"
+        tools:listitem="@layout/item_order_voucher" />
+
+</FrameLayout>
