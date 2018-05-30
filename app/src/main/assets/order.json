@@ -2,147 +2,86 @@
   "code": 200,
   "message": "order",
   "data": {
-    "id_order": "F6129A5006524633B1DF3547E75C48F7",
-    "persons": 1.0,
-    "number": "WE203905",
-    "id_order_type": "C6C074F491D0494DB6AA9CE643FB2011",
-    "time": "20:39",
-    "total": 68.00,
-    "type": "Emporter",
+    "id_order": "3AEEE2D148204237AAD8EADB130CD4C5",
+    "persons": 2,
+    "number": "45",
+    "id_order_type": "ED156BC607234811B7FB696645DECF6B",
+    "time": "11:08",
+    "total": 42.000,
+    "total_reduction": 0.0,
+    "type": "Sur place",
     "Detail": [
       {
-        "id_order_product": "A54E350FCFBB425796D4CFD8475036AC",
-        "id_product": "7DFD276BA602453394C07EF1BF715E46",
-        "product_reference": "ALC2",
-        "product_name": "ASAHI 50CL",
-        "product_quantity": 1.0,
-        "product_price": 4.167,
-        "tax_rate": 0.200,
-        "product_price_with_tax": 5.00
-      },
-      {
-        "id_order_product": "32E66A7373EB47A6B1FC30392469852C",
-        "id_product": "CEB454372AB542078FE15ADCB9A0B6BF",
-        "product_reference": "SUS9",
-        "product_name": "Sushi saumon ",
-        "product_quantity": 1.0,
-        "product_price": 3.636,
-        "tax_rate": 0.100,
-        "product_price_with_tax": 4.00
-      },
-      {
-        "id_order_product": "D8298E007B7B4CEAB2C7DA0D3325E35C",
-        "id_product": "3D811083F660437D9FB430DB250CF76D",
+        "id_order_product": "2FBD5F9B47884270A29CABD8919BB77C",
+        "id_product": "C5B7307B5E334C6EA29BDA6841525C0E",
         "product_reference": "M2",
-        "product_name": "FORMULE 2 2brochette , 4 sushi (servi avec 1riz+1choux)",
-        "product_quantity": 1.0,
-        "product_price": 20.000,
-        "tax_rate": 0.100,
-        "product_price_with_tax": 22.00,
-        "Formula_Items": [
-          {
-            "id_order_product_formula_item": "5357D0DC10034A218B349A28C1AE60F5",
-            "id_order_product": "D8298E007B7B4CEAB2C7DA0D3325E35C",
-            "id_product_formula_item": "89EFF9ADEFEA4D4B868F4B643E5F92F1",
-            "product_name": "Riz nature",
-            "zh": {
-              "name": "原味白饭"
-            },
-            "quantity": 1
-          },
-          {
-            "id_order_product_formula_item": "67D87C066DF0400D9B8E370D11EA2C99",
-            "id_order_product": "D8298E007B7B4CEAB2C7DA0D3325E35C",
-            "id_product_formula_item": "E253E0CFDCD843ABB83CDE883C9D5BFA",
-            "product_name": "Sushi thon ",
-            "zh": {
-              "name": "金枪鱼寿司2粒"
-            },
-            "quantity": 1
-          },
-          {
-            "id_order_product_formula_item": "85BB7E27C9E34A9A902A78D9118CF618",
-            "id_order_product": "D8298E007B7B4CEAB2C7DA0D3325E35C",
-            "id_product_formula_item": "DA7202886F844E938E787DA97C56CA9B",
-            "product_name": "SALADE CHOUX crevettes mangue",
-            "zh": {
-              "name": "芒果虾沙拉"
-            },
-            "quantity": 1
-          },
-          {
-            "id_order_product_formula_item": "A521FFBF5BB3439DB4CC757A49D75152",
-            "id_order_product": "D8298E007B7B4CEAB2C7DA0D3325E35C",
-            "id_product_formula_item": "9F47CD8F6B304673B772A2DA0266CCD7",
-            "product_name": "BROCHETTE kushiyaki saumon",
-            "zh": {
-              "name": "三文鱼串烧"
-            },
-            "quantity": 1
-          }
-        ]
+        "product_name": "M2 MENU MIDI 2",
+        "zh": {
+          "name": "M2 MENU MIDI 2"
+        },
+        "KOR": {
+          "name": "M2 MENU MIDI 2"
+        },
+        "image": "C:\\Users\\user\\Dropbox\\WeShopWithNF\\WeShopWithNF\\bin\\Debug/img/",
+        "product_quantity": 1.00,
+        "product_price": 12.000000,
+        "reduction": "-0 %",
+        "tax_rate": 0.100000,
+        "product_price_with_tax": 12.000000
       },
       {
-        "id_order_product": "8307DAFA8F1E4DBDBE4C5261D8F23BFB",
-        "id_product": "3D811083F660437D9FB430DB250CF76D",
-        "product_reference": "M2",
-        "product_name": "FORMULE 2 2brochette , 4 sushi (servi avec 1riz+1choux)",
-        "product_quantity": 1.0,
-        "product_price": 20.000,
-        "tax_rate": 0.100,
-        "product_price_with_tax": 22.00,
-        "Formula_Items": [
-          {
-            "id_order_product_formula_item": "2F4BE5D9038F4C47A44BD0EEBFEC10CF",
-            "id_order_product": "8307DAFA8F1E4DBDBE4C5261D8F23BFB",
-            "id_product_formula_item": "E253E0CFDCD843ABB83CDE883C9D5BFA",
-            "product_name": "Sushi thon ",
-            "zh": {
-              "name": "金枪鱼寿司2粒"
-            },
-            "quantity": 1
-          },
-          {
-            "id_order_product_formula_item": "33786783C3434F78B849ECB0EC210FAB",
-            "id_order_product": "8307DAFA8F1E4DBDBE4C5261D8F23BFB",
-            "id_product_formula_item": "9F47CD8F6B304673B772A2DA0266CCD7",
-            "product_name": "BROCHETTE kushiyaki saumon",
-            "zh": {
-              "name": "三文鱼串烧"
-            },
-            "quantity": 1
-          },
-          {
-            "id_order_product_formula_item": "DCF107AD771B4A34A9A8256262ABFA86",
-            "id_order_product": "8307DAFA8F1E4DBDBE4C5261D8F23BFB",
-            "id_product_formula_item": "89EFF9ADEFEA4D4B868F4B643E5F92F1",
-            "product_name": "Riz nature",
-            "zh": {
-              "name": "原味白饭"
-            },
-            "quantity": 1
-          },
-          {
-            "id_order_product_formula_item": "F228D047D2974455B87D4B205D0C075E",
-            "id_order_product": "8307DAFA8F1E4DBDBE4C5261D8F23BFB",
-            "id_product_formula_item": "DA7202886F844E938E787DA97C56CA9B",
-            "product_name": "SALADE CHOUX crevettes mangue",
-            "zh": {
-              "name": "芒果虾沙拉"
-            },
-            "quantity": 1
-          }
-        ]
+        "id_order_product": "D6CC174F263A499FA1FAFF3F0FB41D50",
+        "id_product": "4A077AB3D2DB4E6C9D0A99ADD20E0C64",
+        "product_reference": "M1",
+        "product_name": "M1 MENU MIDI 1",
+        "zh": {
+          "name": "M1 MENU MIDI 1"
+        },
+        "KOR": {
+          "name": "M1 MENU MIDI 1"
+        },
+        "image": "C:\\Users\\user\\Dropbox\\WeShopWithNF\\WeShopWithNF\\bin\\Debug/img/",
+        "product_quantity": 1.00,
+        "product_price": 12.000000,
+        "reduction": "-0 %",
+        "tax_rate": 0.100000,
+        "product_price_with_tax": 12.000000
       },
       {
-        "id_order_product": "471E2507A6B741379A45C70EFDA25C63",
-        "id_product": "8D59AD2BEB8A497FBE5C234612F3E272",
-        "product_reference": "M4",
-        "product_name": "FORMULE 4 15roll saumon,crevette,concombre,avocat (servi avec 1riz+1choux)",
-        "product_quantity": 1.0,
-        "product_price": 20.000,
-        "tax_rate": 0.100,
-        "product_price_with_tax": 22.00
+        "id_order_product": "B18346F73B0F432FA3845E3A87F593DB",
+        "id_product": "35C6FE881B8A4A3E9C0124BDAB8A5FDF",
+        "product_reference": "M3R",
+        "product_name": "M3R MENU MIDI 3",
+        "zh": {
+          "name": "M3R MENU MIDI 3"
+        },
+        "KOR": {
+          "name": "M3R MENU MIDI 3"
+        },
+        "image": "C:\\Users\\user\\Dropbox\\WeShopWithNF\\WeShopWithNF\\bin\\Debug/img/",
+        "product_quantity": 1.00,
+        "product_price": 10.500000,
+        "reduction": "-0 %",
+        "tax_rate": 0.100000,
+        "product_price_with_tax": 10.500000
+      },
+      {
+        "id_order_product": "82676DD210C642F8A84DA7544124061A",
+        "id_product": "1409A902E6C54B77818AFD3D7D08D847",
+        "product_reference": "M4R",
+        "product_name": "M4R MENU MIDI 4",
+        "zh": {
+          "name": "M4R MENU MIDI 4"
+        },
+        "KOR": {
+          "name": "M4R MENU MIDI 4"
+        },
+        "image": "C:\\Users\\user\\Dropbox\\WeShopWithNF\\WeShopWithNF\\bin\\Debug/img/",
+        "product_quantity": 1.00,
+        "product_price": 7.500000,
+        "reduction": "-0 %",
+        "tax_rate": 0.100000,
+        "product_price_with_tax": 7.500000
       }
     ]
   }

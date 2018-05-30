@@ -21,7 +21,12 @@ public class AppInitParse {
         if (data == null) {
             return;
         }
-
+        String address = data.optString("Address");
+        String postCode = data.optString("Postcode");
+        String city = data.optString("City");
+        UserManager.getInstance().setAddress(address);
+        UserManager.getInstance().setPostCode(postCode);
+        UserManager.getInstance().setCity(city);
         //用户信息
         JSONArray userArray = data.optJSONArray("Users");
         if (userArray != null && userArray.length() > 0) {

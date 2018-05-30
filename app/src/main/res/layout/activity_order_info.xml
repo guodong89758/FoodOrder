@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.foodorder.activity.OrderInfoActivity">
 
     <RelativeLayout
@@ -23,56 +25,31 @@
             android:text="@string/order_info_title" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_bottom"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/cart_bottom_height"
-        android:layout_alignParentBottom="true"
-        android:background="@color/cart_layout_bg"
-        android:clickable="true"
-        android:onClick="onClick">
+        android:layout_height="@dimen/title_height_size"
+        app:tabBackground="@color/white"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/blue_color"
+        app:tabIndicatorHeight="3dp"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/black_90"
+        app:tabTextAppearance="@style/TabTextAppearance"
+        app:tabTextColor="@color/black_40" />
 
-        <TextView
-            android:id="@+id/tv_total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="￥ 0"
-            android:textColor="#fff"
-            android:textSize="@dimen/cart_bottom_cost_text_size" />
-
-        <Button
-            android:id="@+id/btn_add"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:background="@color/cart_send_btn_bg"
-            android:clickable="true"
-            android:gravity="center"
-            android:onClick="onClick"
-            android:singleLine="true"
-            android:textAllCaps="false"
-            android:text="@string/order_add_good"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:visibility="visible" />
-
-    </RelativeLayout>
-
-    <FrameLayout
+    <View
+        android:id="@+id/line_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/rl_bottom"
-        android:layout_below="@id/rl_title">
+        android:layout_height="1px"
+        android:layout_below="@+id/tab_layout"
+        android:background="@color/black_40"
+        android:visibility="visible" />
 
-        <ListView
-            android:id="@+id/lv_good"
-            style="@style/ListViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@color/black_10"
-            android:dividerHeight="1px" />
-    </FrameLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-</RelativeLayout>
+</LinearLayout>
