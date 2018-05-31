@@ -11,9 +11,12 @@ public class UserManager {
     private volatile static UserManager instance;
 
     private List<String> userList;
+    private String name;
     private String address;
     private String postCode;
     private String city;
+    private String username;
+    private String password;
 
     private UserManager() {
         userList = new ArrayList<>();
@@ -38,6 +41,14 @@ public class UserManager {
         userList.add(username);
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -60,5 +71,21 @@ public class UserManager {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

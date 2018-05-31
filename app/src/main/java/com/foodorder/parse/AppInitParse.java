@@ -21,9 +21,11 @@ public class AppInitParse {
         if (data == null) {
             return;
         }
+        String companyName = data.optString("Name");
         String address = data.optString("Address");
         String postCode = data.optString("Postcode");
         String city = data.optString("City");
+        UserManager.getInstance().setName(companyName);
         UserManager.getInstance().setAddress(address);
         UserManager.getInstance().setPostCode(postCode);
         UserManager.getInstance().setCity(city);

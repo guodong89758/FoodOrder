@@ -87,6 +87,19 @@
     <string name="order_id">订单编号:</string>
     <string name="order_time">创建时间:</string>
 
+    <string name="order_info_tab_1">详情</string>
+    <string name="order_info_tab_2">凭单</string>
+    <string name="order_info_account">账户:</string>
+    <string name="order_info_date">时间:</string>
+    <string name="order_info_table">桌号人数:</string>
+    <string name="order_info_item_quantity">数量</string>
+    <string name="order_info_item_name">名称</string>
+    <string name="order_info_item_price">单价</string>
+    <string name="order_info_item_reduction">减价</string>
+    <string name="order_info_item_total">总价</string>
+    <string name="order_info_reduction">整体减价:</string>
+    <string name="order_info_total">总价:</string>
+    <string name="order_info_line">点菜行数:</string>
 
     <!-- error -->
     <string name="error_http_request">网络不给力</string>

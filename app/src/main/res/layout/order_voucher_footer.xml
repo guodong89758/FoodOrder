@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="REMISE TOTAL:"
+                android:text="@string/order_info_reduction"
                 android:textColor="@color/black_80"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="REMISE TOTAL:"
+                android:text="@string/order_info_total"
                 android:textColor="@color/black_80"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -75,7 +75,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre de lignes:"
+                android:text="@string/order_info_line"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/item_name_text_size"
                 android:textStyle="bold" />

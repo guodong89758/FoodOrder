@@ -9,20 +9,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
 import com.foodorder.activity.GoodListPadActivity;
-import com.foodorder.adapter.OrderGoodAdapter;
+import com.foodorder.adapter.OrderVoucherAdapter;
 import com.foodorder.base.BaseFragment;
 import com.foodorder.contant.AppKey;
 import com.foodorder.db.bean.Good;
+import com.foodorder.entry.OrderInfo;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
+import com.foodorder.logic.UserManager;
 import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.server.api.API_Food;
@@ -52,16 +52,14 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
 
     private static final String TAG = "OrderInfoFragment2";
     private ListView lv_voucher;
-    private OrderGoodAdapter goodAdapter;
-    private List<Good> goodData;
-    private View headView;
-    private LinearLayout ll_number, ll_person;
-    private TextView tv_order_num, tv_time, tv_number, tv_person_count, tv_total;
-    private Button btn_add;
+    private OrderVoucherAdapter goodAdapter;
+    private List<OrderInfo> goodData;
+    private View headView, footerView;
+    private TextView tv_company, tv_address, tv_city, tv_account, tv_time, tv_table, tv_total_discount, tv_total_money, tv_good_count;
     private EmptyLayout emptyLayout;
     private NumberFormat nf;
     private String id_order, time, persons, number;
-    private double total;
+    private double total, total_reduction;
     private String type;
 
     public static OrderInfoFragment2 newInstance(String id_order) {
@@ -83,18 +81,20 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_order_info_2, container, false);
         lv_voucher = (ListView) rootView.findViewById(R.id.lv_voucher);
-        tv_total = (TextView) rootView.findViewById(R.id.tv_total);
-        btn_add = (Button) rootView.findViewById(R.id.btn_add);
-        headView = LayoutInflater.from(getActivity()).inflate(R.layout.order_info_header_view, null);
-        ll_number = (LinearLayout) headView.findViewById(R.id.ll_number);
-        ll_person = (LinearLayout) headView.findViewById(R.id.ll_person);
-        tv_order_num = (TextView) headView.findViewById(R.id.tv_order_num);
+        headView = LayoutInflater.from(getActivity()).inflate(R.layout.order_info_header_view2, null);
+        footerView = LayoutInflater.from(getActivity()).inflate(R.layout.order_voucher_footer, null);
+        tv_company = headView.findViewById(R.id.tv_company);
+        tv_address = headView.findViewById(R.id.tv_address);
+        tv_city = headView.findViewById(R.id.tv_city);
+        tv_account = (TextView) headView.findViewById(R.id.tv_account);
         tv_time = (TextView) headView.findViewById(R.id.tv_time);
-        tv_number = (TextView) headView.findViewById(R.id.tv_number);
-        tv_person_count = (TextView) headView.findViewById(R.id.tv_person_count);
+        tv_table = (TextView) headView.findViewById(R.id.tv_table);
+        tv_total_discount = (TextView) footerView.findViewById(R.id.tv_total_discount);
+        tv_total_money = (TextView) footerView.findViewById(R.id.tv_total_money);
+        tv_good_count = (TextView) footerView.findViewById(R.id.tv_good_count);
         lv_voucher.addHeaderView(headView, null, false);
+        lv_voucher.addFooterView(footerView, null, false);
 
-        btn_add.setOnClickListener(this);
         lv_voucher.setOnItemClickListener(this);
 
         nf = NumberFormat.getCurrencyInstance(RT.locale);
@@ -145,21 +145,18 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
                 @Override
                 public void onCompleted() {
                     emptyLayout.showContent();
-                    goodAdapter = new OrderGoodAdapter(getActivity());
+                    goodAdapter = new OrderVoucherAdapter(getActivity());
                     goodAdapter.setData(goodData);
                     lv_voucher.setAdapter(goodAdapter);
-                    tv_order_num.setText(number);
+                    tv_company.setText(UserManager.getInstance().getName());
+                    tv_address.setText(UserManager.getInstance().getAddress());
+                    tv_city.setText(UserManager.getInstance().getCity());
+                    tv_account.setText(UserManager.getInstance().getUsername() + " " + UserManager.getInstance().getPassword());
+                    tv_table.setText(number + "，" + persons);
                     tv_time.setText(time);
-                    if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
-                        ll_number.setVisibility(View.GONE);
-                        ll_person.setVisibility(View.GONE);
-                    } else {
-                        ll_number.setVisibility(View.VISIBLE);
-                        ll_person.setVisibility(View.VISIBLE);
-                        tv_number.setText(number);
-                        tv_person_count.setText(persons);
-                    }
-                    tv_total.setText(nf.format(total));
+                    tv_total_discount.setText(nf.format(total_reduction));
+                    tv_total_money.setText(nf.format(total));
+                    tv_good_count.setText("" + goodData.size());
                 }
 
                 @Override
@@ -227,21 +224,18 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
             if (errcode == 200 && json != null) {
                 emptyLayout.showContent();
                 parseJson(json);
-                goodAdapter = new OrderGoodAdapter(getActivity());
+                goodAdapter = new OrderVoucherAdapter(getActivity());
                 goodAdapter.setData(goodData);
                 lv_voucher.setAdapter(goodAdapter);
-                tv_order_num.setText(number);
+                tv_company.setText(UserManager.getInstance().getName());
+                tv_address.setText(UserManager.getInstance().getAddress());
+                tv_city.setText(UserManager.getInstance().getCity());
+                tv_account.setText(UserManager.getInstance().getUsername() + " " + UserManager.getInstance().getPassword());
+                tv_table.setText(number + "，" + persons);
                 tv_time.setText(time);
-                if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
-                    ll_number.setVisibility(View.GONE);
-                    ll_person.setVisibility(View.GONE);
-                } else {
-                    ll_number.setVisibility(View.VISIBLE);
-                    ll_person.setVisibility(View.VISIBLE);
-                    tv_number.setText(number);
-                    tv_person_count.setText(persons);
-                }
-                tv_total.setText(nf.format(total));
+                tv_total_discount.setText(nf.format(total_reduction));
+                tv_total_money.setText(nf.format(total));
+                tv_good_count.setText("" + goodData.size());
             } else {
                 ToastUtil.showToast(errmsg);
                 emptyLayout.showError();
@@ -263,11 +257,12 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
         this.type = data.optString("type");
         this.number = data.optString("number");
         this.total = data.optDouble("total", 0);
+        this.total_reduction = data.optDouble("total_reduction", 0);
         JSONArray detailArray = data.optJSONArray("Detail");
         if (detailArray != null && detailArray.length() > 0) {
             for (int i = 0; i < detailArray.length(); i++) {
-                Good good = new Good(detailArray.optJSONObject(i));
-                goodData.add(good);
+                OrderInfo info = new OrderInfo(detailArray.optJSONObject(i));
+                goodData.add(info);
             }
         }
 

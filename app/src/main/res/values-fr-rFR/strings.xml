@@ -87,6 +87,19 @@
     <string name="order_id">No:</string>
     <string name="order_time">creation:</string>
 
+    <string name="order_info_tab_1">Detial</string>
+    <string name="order_info_tab_2">Voucher</string>
+    <string name="order_info_account">Caissier:</string>
+    <string name="order_info_date">Date:</string>
+    <string name="order_info_table">Table:</string>
+    <string name="order_info_item_quantity">Q</string>
+    <string name="order_info_item_name">DESIGNATION</string>
+    <string name="order_info_item_price">PU</string>
+    <string name="order_info_item_reduction">-</string>
+    <string name="order_info_item_total">MONT</string>
+    <string name="order_info_reduction">REMISE TOTAL:</string>
+    <string name="order_info_total">TOTAL TTC:</string>
+    <string name="order_info_line">Nombre de lignes:</string>
 
     <!-- error -->
     <string name="error_http_request">Problème de réseau</string>

@@ -127,8 +127,10 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
         String language = PreferenceHelper.ins().getStringShareData(AppKey.LANGUAGE, PhoneUtil.isZh() ? "zh" : "fr");
         if (language.equals("zh")) {
             rb_zh.setChecked(true);
+            RT.locale = Locale.SIMPLIFIED_CHINESE;
         } else {
             rb_fr.setChecked(true);
+            RT.locale = Locale.FRANCE;
         }
 
         if (UserManager.getInstance().getUserList().size() == 1) {
@@ -160,8 +162,8 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
         switch (v.getId()) {
             case R.id.btn_login:
                 SoftKeyboardUtil.hideSoftKeyboard(et_password);
-                String username = tv_username.getText().toString();
-                String password = et_password.getText().toString();
+                final String username = tv_username.getText().toString();
+                final String password = et_password.getText().toString();
                 String bluetooth = tv_bluetootch.getText().toString();
                 if (TextUtils.isEmpty(username)) {
                     ToastUtil.showToast(getString(R.string.login_username_empty));
@@ -173,6 +175,8 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                 }
 
                 if (RT.DEBUG) {
+                    UserManager.getInstance().setUsername(username);
+                    UserManager.getInstance().setPassword(password);
                     startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
                     finish();
                 } else {
@@ -184,6 +188,8 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
                         @Override
                         public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                             if (errcode == 200) {
+                                UserManager.getInstance().setUsername(username);
+                                UserManager.getInstance().setPassword(password);
                                 startActivity(new Intent(LoginActivity.this, OrdersActivity.class));
                                 finish();
                                 ToastUtil.showToast(getString(R.string.login_success));
@@ -258,18 +264,21 @@ public class LoginActivity extends BaseActivity implements LoginUserPop.OnUserSe
         switch (language) {
             case "fr":
                 config.locale = Locale.FRANCE;
+                RT.locale = Locale.FRANCE;
                 resources.updateConfiguration(config, dm);
                 PreferenceHelper.ins().storeShareStringData(AppKey.LANGUAGE, "fr");
                 PreferenceHelper.ins().commit();
                 break;
             case "zh":
                 config.locale = Locale.SIMPLIFIED_CHINESE;
+                RT.locale = Locale.SIMPLIFIED_CHINESE;
                 resources.updateConfiguration(config, dm);
                 PreferenceHelper.ins().storeShareStringData(AppKey.LANGUAGE, "zh");
                 PreferenceHelper.ins().commit();
                 break;
             default:
                 config.locale = Locale.SIMPLIFIED_CHINESE;
+                RT.locale = Locale.SIMPLIFIED_CHINESE;
                 resources.updateConfiguration(config, dm);
                 break;
         }
