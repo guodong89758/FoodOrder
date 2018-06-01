@@ -22,4 +22,9 @@ public class CustomItemTouchHelper extends ItemTouchHelper {
     public Callback getCallback() {
         return mCallback;
     }
+
+    public int getActionState() {
+        return mActionState;
+    }
+
 }

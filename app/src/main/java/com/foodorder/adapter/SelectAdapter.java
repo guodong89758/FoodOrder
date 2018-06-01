@@ -14,6 +14,7 @@ import com.foodorder.db.bean.Good;
 import com.foodorder.logic.CartManager;
 import com.foodorder.runtime.RT;
 import com.foodorder.util.PhoneUtil;
+import com.foodorder.widget.DefaultItemTouchHelper;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -36,6 +37,10 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
     public void setItemTouchHelper(ItemTouchHelper itemTouchHelper) {
         this.itemTouchHelper = itemTouchHelper;
+    }
+
+    public DefaultItemTouchHelper getItemTouchHelper() {
+        return (DefaultItemTouchHelper) itemTouchHelper;
     }
 
     @Override
@@ -121,7 +126,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
 
         @Override
         public boolean onLongClick(View v) {
-            if(itemView == v){
+            if (itemView == v) {
                 itemTouchHelper.startDrag(this);
             }
             return false;

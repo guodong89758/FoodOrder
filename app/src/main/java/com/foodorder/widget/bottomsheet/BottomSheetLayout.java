@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Property;
 import android.view.Gravity;
@@ -27,6 +28,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.foodorder.R;
+import com.foodorder.adapter.SelectAdapter;
+import com.foodorder.widget.DefaultItemTouchHelper;
 
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -292,8 +295,19 @@ public class BottomSheetLayout extends FrameLayout {
     public boolean onInterceptTouchEvent(@NonNull MotionEvent ev) {
         if (getSheetView() != null) {
             LinearLayout ll_list = (LinearLayout) getSheetView().findViewById(R.id.ll_list);
-            if (isInsideView(ev, ll_list)) {
-                return super.onInterceptTouchEvent(ev);
+            if (ll_list != null) {
+                RecyclerView recyclerView = ll_list.findViewById(R.id.selectRecyclerView);
+                if (recyclerView.getAdapter() != null && recyclerView.getAdapter() instanceof SelectAdapter) {
+                    DefaultItemTouchHelper touchHelper = ((SelectAdapter) recyclerView.getAdapter()).getItemTouchHelper();
+                    if (touchHelper != null && touchHelper.isDragState()) {
+                        return super.onInterceptTouchEvent(ev);
+                    }
+                }
+//                if (recyclerView != null && recyclerView.canScrollVertically(-1) && recyclerView.canScrollVertically(1)) {
+//                    if (isInsideView(ev, ll_list)) {
+//                        return super.onInterceptTouchEvent(ev);
+//                    }
+//                }
             }
         }
         boolean downAction = ev.getActionMasked() == MotionEvent.ACTION_DOWN;
@@ -334,9 +348,22 @@ public class BottomSheetLayout extends FrameLayout {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (getSheetView() != null) {
             LinearLayout ll_list = (LinearLayout) getSheetView().findViewById(R.id.ll_list);
-            if (isInsideView(event, ll_list)) {
-                return super.onTouchEvent(event);
+            if (ll_list != null) {
+                RecyclerView recyclerView = ll_list.findViewById(R.id.selectRecyclerView);
+                if (recyclerView.getAdapter() != null && recyclerView.getAdapter() instanceof SelectAdapter) {
+                    DefaultItemTouchHelper touchHelper = ((SelectAdapter) recyclerView.getAdapter()).getItemTouchHelper();
+
+                    if (touchHelper != null && touchHelper.isDragState()) {
+                        event.offsetLocation(isTablet ? getX() - sheetStartX : 0, sheetTranslation - getHeight());
+                        getSheetView().dispatchTouchEvent(event);
+                        return super.onTouchEvent(event);
+                    }
+                }
+//                    if (isInsideView(event, ll_list)) {
+//                        return super.onTouchEvent(event);
+//                    }
             }
+
         }
         if (!isSheetShowing()) {
             return false;

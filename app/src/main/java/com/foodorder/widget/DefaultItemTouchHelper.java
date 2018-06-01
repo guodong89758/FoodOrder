@@ -17,6 +17,7 @@ package com.foodorder.widget;
 
 
 import android.support.v7.widget.helper.CustomItemTouchHelper;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class DefaultItemTouchHelper extends CustomItemTouchHelper {
 
@@ -26,6 +27,19 @@ public class DefaultItemTouchHelper extends CustomItemTouchHelper {
         super(new DefaultItemTouchHelpCallback(onItemTouchCallbackListener));
         itemTouchHelpCallback = (DefaultItemTouchHelpCallback) getCallback();
     }
+
+    /**
+     * 当Item被长按的时候是否可以被拖拽
+     *
+     * @return
+     */
+    public boolean isDragState() {
+        if (getActionState() == ItemTouchHelper.ACTION_STATE_DRAG) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * 设置是否可以被拖拽
