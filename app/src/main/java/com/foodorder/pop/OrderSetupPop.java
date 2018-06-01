@@ -36,7 +36,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
     private ImageButton ib_close;
     private EditText et_num;
     private TextView tv_minus, tv_count, tv_add;
-    private LinearLayout ll_number;
+    private LinearLayout ll_number, ll_person;
     private Button btn_ok;
     private int count = 1;
     private OnOrderSetupListener listener;
@@ -64,6 +64,7 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
         tv_add = (TextView) view.findViewById(R.id.tv_add);
         btn_ok = (Button) view.findViewById(R.id.btn_ok);
         ll_number = (LinearLayout) view.findViewById(R.id.ll_number);
+        ll_person = (LinearLayout) view.findViewById(R.id.ll_person);
 
         String digits = "0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         et_num.setKeyListener(DigitsKeyListener.getInstance(digits));
@@ -76,9 +77,18 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
         tv_add.setOnClickListener(this);
 
         if (CartManager.ins().isPack) {
-            ll_number.setVisibility(View.GONE);
+            ll_number.setVisibility(View.VISIBLE);
+            ll_person.setVisibility(View.GONE);
+            et_num.requestFocus();
+            new WeakHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    SoftKeyboardUtil.showSoftKeyboard(et_num);
+                }
+            }, 500);
         } else {
             ll_number.setVisibility(View.VISIBLE);
+            ll_person.setVisibility(View.VISIBLE);
             et_num.requestFocus();
             new WeakHandler().postDelayed(new Runnable() {
                 @Override
@@ -102,7 +112,8 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
                 break;
             case R.id.btn_ok:
                 String number = et_num.getText().toString().trim().toUpperCase();
-                if (!CartManager.ins().isPack && TextUtils.isEmpty(number)) {
+//                if (!CartManager.ins().isPack && TextUtils.isEmpty(number)) {
+                if (TextUtils.isEmpty(number)) {
                     ToastUtil.showToast(getString(R.string.good_taihao_empty));
                     return;
                 }
@@ -116,6 +127,9 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
 
                 SoftKeyboardUtil.hideSoftKeyboard(et_num);
                 String persons = tv_count.getText().toString().trim();
+                if (TextUtils.isEmpty(persons)) {
+                    persons = "0";
+                }
                 if (listener != null) {
                     listener.orderSetup(number, persons);
                 }
