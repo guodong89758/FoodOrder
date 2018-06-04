@@ -19,11 +19,17 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.foodorder.R;
+import com.foodorder.contant.AppKey;
+import com.foodorder.db.OrderDao;
+import com.foodorder.db.bean.Order;
 import com.foodorder.dialog.LoadingDialog;
 import com.foodorder.logic.CartManager;
+import com.foodorder.runtime.RT;
 import com.foodorder.runtime.WeakHandler;
 import com.foodorder.util.SoftKeyboardUtil;
 import com.foodorder.util.ToastUtil;
+
+import java.util.List;
 
 import static com.foodorder.runtime.RT.getString;
 
@@ -115,6 +121,16 @@ public class OrderSetupPop extends PopupWindow implements View.OnClickListener {
 //                if (!CartManager.ins().isPack && TextUtils.isEmpty(number)) {
                 if (TextUtils.isEmpty(number)) {
                     ToastUtil.showToast(getString(R.string.good_taihao_empty));
+                    return;
+                }
+                List<Order> orderData = null;
+                if (CartManager.ins().isPack) {
+                    orderData = RT.ins().getDaoSession().getOrderDao().queryBuilder().where(OrderDao.Properties.Type.eq(AppKey.ORDER_TYPE_EMPORTER), OrderDao.Properties.Number.eq(number)).build().list();
+                } else {
+                    orderData = RT.ins().getDaoSession().getOrderDao().queryBuilder().where(OrderDao.Properties.Type.eq(AppKey.ORDER_TYPE_SURPLACE), OrderDao.Properties.Number.eq(number)).build().list();
+                }
+                if (orderData != null && orderData.size() > 0) {
+                    ToastUtil.showToast(getString(R.string.good_taihao_repeat));
                     return;
                 }
 //                if(!CartManager.ins().isPack){
