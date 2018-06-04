@@ -54,8 +54,8 @@ public class OrderActionDialog extends Dialog implements View.OnClickListener {
         this.tv_hang.setOnClickListener(this);
     }
 
-    public static interface DialogButtonOnClickListener {
-        public void onClick(View button, OrderActionDialog dialog, Order order);
+    public interface DialogButtonOnClickListener {
+        void onClick(View button, OrderActionDialog dialog, Order order);
     }
 
     @Override

@@ -141,12 +141,9 @@ public class API_Food {
      * @param id_order
      * @param callback
      */
-    public void hangOrder(String tag, String id_order, String posts, ResponseCallback callback) {
+    public void hangOrder(String tag, String id_order, ResponseCallback callback) {
         HttpParams params = new HttpParams();
         params.put("id_order", id_order);
-        if (!TextUtils.isEmpty(posts)) {
-            params.put("posts", posts);
-        }
         NetworkInterface.ins().connected(HttpMethod.GET, HANG_ORDER, tag, params, callback);
     }
 

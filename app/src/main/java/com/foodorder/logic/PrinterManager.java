@@ -91,7 +91,7 @@ public class PrinterManager {
     }
 
     public void destory(Activity activity) {
-        if(binder == null || !isConnect){
+        if (binder == null || !isConnect) {
             return;
         }
         binder.disconnectCurrentPort(new UiExecute() {
@@ -211,7 +211,7 @@ public class PrinterManager {
 //        } else {
 //            ToastUtil.showBottomToast(RT.getString(R.string.bluetootch_connect_failed));
 //        }
-        if(!isConnect){
+        if (!isConnect) {
             return;
         }
         DataForSendToPrinterTSC.setCharsetName("gbk");//不设置，默认为gbk
@@ -304,8 +304,8 @@ public class PrinterManager {
         }
     }
 
-    public void hangOrder(String order_id, String posts) {
-        API_Food.ins().hangOrder(AppKey.HTTP_TAG, order_id, posts, new JsonResponseCallback() {
+    public void hangOrder(String order_id) {
+        API_Food.ins().hangOrder(AppKey.HTTP_TAG, order_id, new JsonResponseCallback() {
             @Override
             public boolean onJsonResponse(JSONObject json, int errcode, String errmsg, int id, boolean fromcache) {
                 if (errcode == 200) {
@@ -401,17 +401,7 @@ public class PrinterManager {
             @Override
             public void onClick(View button, OrderActionDialog dialog, Order order) {
                 dialog.dismiss();
-                if (printerList.size() > 1) {
-                    showPrinterDialog(context, AppKey.PRINTER_DAYIN, order, order.getId_order());
-                } else {
-                    if (printerList.size() == 1) {
-                        hangOrder(order.getId_order(), postList.get(0).getName());
-                        ToastUtil.showBottomToast(printerList.get(0).getName());
-                    } else {
-                        hangOrder(order.getId_order(), "");
-                    }
-                }
-
+                hangOrder(order.getId_order());
             }
         });
         dialog.show();

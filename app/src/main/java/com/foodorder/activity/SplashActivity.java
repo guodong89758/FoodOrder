@@ -72,7 +72,7 @@ public class SplashActivity extends BaseActivity {
             Observable.create(new Observable.OnSubscribe<Object>() {
                 @Override
                 public void call(Subscriber<? super Object> subscriber) {
-                    String menu_json = StringUtil.getJson(SplashActivity.this, "menu.json");
+                    String menu_json = StringUtil.getJson(SplashActivity.this, "menu2.json");
                     DLOG.json(menu_json);
                     JSONObject json = null;
                     try {
