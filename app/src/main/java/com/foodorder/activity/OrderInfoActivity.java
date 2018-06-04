@@ -1,7 +1,9 @@
 package com.foodorder.activity;
 
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -19,6 +21,8 @@ import com.lzy.okhttputils.OkHttpUtils;
 public class OrderInfoActivity extends BaseActivity {
     private static final String TAG = "OrderInfoActivity";
     private ImageButton ib_back;
+    private Toolbar toolbar;
+    private AppBarLayout appbar;
     private TabLayout tab_layout;
     private ViewPager vp_order;
     private OrderAdapter orderAdapter;
@@ -31,10 +35,15 @@ public class OrderInfoActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        appbar = findViewById(R.id.appbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         ib_back = (ImageButton) findViewById(R.id.ib_back);
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
         vp_order = (ViewPager) findViewById(R.id.vp_order);
 
+        appbar.setExpanded(false);
+
+        setSupportActionBar(toolbar);
         tab_layout.setTabMode(TabLayout.MODE_FIXED);
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
 

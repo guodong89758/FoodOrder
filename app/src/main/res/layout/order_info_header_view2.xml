@@ -7,6 +7,7 @@
     tools:context="com.foodorder.activity.OrderInfoActivity">
 
     <LinearLayout
+        android:id="@+id/ll_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -48,14 +49,6 @@
             android:textSize="@dimen/item_name_text_size"
             tools:text="8 AV HENRI BARBUSSE 93000 BOBIGNY France" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Note Vente"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/item_name_text_size"
-            android:textStyle="bold" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -134,7 +127,25 @@
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/black_80"
                 android:textSize="@dimen/item_name_text_size"
-                tools:text="3,2" />
+                tools:text="3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/order_info_person"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/item_name_text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/black_80"
+                android:textSize="@dimen/item_name_text_size"
+                tools:text="2" />
 
         </LinearLayout>
 

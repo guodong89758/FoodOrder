@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.foodorder.R;
@@ -18,12 +18,10 @@ import com.foodorder.activity.GoodListPadActivity;
 import com.foodorder.adapter.OrderVoucherAdapter;
 import com.foodorder.base.BaseFragment;
 import com.foodorder.contant.AppKey;
-import com.foodorder.db.bean.Good;
 import com.foodorder.entry.OrderInfo;
 import com.foodorder.log.DLOG;
 import com.foodorder.logic.CartManager;
 import com.foodorder.logic.UserManager;
-import com.foodorder.pop.FormulaPop;
 import com.foodorder.runtime.RT;
 import com.foodorder.server.api.API_Food;
 import com.foodorder.server.callback.JsonResponseCallback;
@@ -31,6 +29,7 @@ import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.EmptyLayout;
+import com.foodorder.widget.recycler.WrapRecyclerView;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONArray;
@@ -48,14 +47,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class OrderInfoFragment2 extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class OrderInfoFragment2 extends BaseFragment implements View.OnClickListener {
 
     private static final String TAG = "OrderInfoFragment2";
-    private ListView lv_voucher;
+    private WrapRecyclerView rv_voucher;
     private OrderVoucherAdapter goodAdapter;
     private List<OrderInfo> goodData;
     private View headView, footerView;
-    private TextView tv_company, tv_address, tv_city, tv_account, tv_time, tv_table, tv_total_discount, tv_total_money, tv_good_count;
+    private TextView tv_company, tv_address, tv_city, tv_account, tv_time, tv_table, tv_person, tv_total_discount, tv_total_money, tv_good_count;
+    private LinearLayout ll_discount, ll_head, ll_foot;
     private EmptyLayout emptyLayout;
     private NumberFormat nf;
     private String id_order, time, persons, number;
@@ -80,7 +80,7 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_order_info_2, container, false);
-        lv_voucher = (ListView) rootView.findViewById(R.id.lv_voucher);
+        rv_voucher = rootView.findViewById(R.id.rv_voucher);
         headView = LayoutInflater.from(getActivity()).inflate(R.layout.order_info_header_view2, null);
         footerView = LayoutInflater.from(getActivity()).inflate(R.layout.order_voucher_footer, null);
         tv_company = headView.findViewById(R.id.tv_company);
@@ -89,18 +89,30 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
         tv_account = (TextView) headView.findViewById(R.id.tv_account);
         tv_time = (TextView) headView.findViewById(R.id.tv_time);
         tv_table = (TextView) headView.findViewById(R.id.tv_table);
+        tv_person = (TextView) headView.findViewById(R.id.tv_person);
+        ll_head = headView.findViewById(R.id.ll_head);
         tv_total_discount = (TextView) footerView.findViewById(R.id.tv_total_discount);
         tv_total_money = (TextView) footerView.findViewById(R.id.tv_total_money);
         tv_good_count = (TextView) footerView.findViewById(R.id.tv_good_count);
-        lv_voucher.addHeaderView(headView, null, false);
-        lv_voucher.addFooterView(footerView, null, false);
+        ll_discount = footerView.findViewById(R.id.ll_discount);
+        ll_foot = footerView.findViewById(R.id.ll_foot);
 
-        lv_voucher.setOnItemClickListener(this);
+        LinearLayout.LayoutParams head_params = (LinearLayout.LayoutParams) ll_head.getLayoutParams();
+        head_params.width = RT.getScreenWidth();
+        LinearLayout.LayoutParams foot_params = (LinearLayout.LayoutParams) ll_foot.getLayoutParams();
+        foot_params.width = RT.getScreenWidth();
+
+        rv_voucher.addHeaderView(headView);
+        rv_voucher.addFootView(footerView);
+
+        rv_voucher.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//        rv_voucher.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(getResources().getColor(R.color.black_10)).size(1).build());
+//        rv_good.setHasFixedSize(true);
 
         nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
 
-        emptyLayout = new EmptyLayout(getActivity(), lv_voucher);
+        emptyLayout = new EmptyLayout(getActivity(), rv_voucher);
         emptyLayout.showLoading();
         emptyLayout.setErrorButtonShow(true);
         emptyLayout.setEmptyButtonShow(true);
@@ -145,16 +157,21 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
                 @Override
                 public void onCompleted() {
                     emptyLayout.showContent();
-                    goodAdapter = new OrderVoucherAdapter(getActivity());
-                    goodAdapter.setData(goodData);
-                    lv_voucher.setAdapter(goodAdapter);
+                    goodAdapter = new OrderVoucherAdapter(getActivity(), goodData);
+                    rv_voucher.setAdapter(goodAdapter);
                     tv_company.setText(UserManager.getInstance().getName());
                     tv_address.setText(UserManager.getInstance().getAddress());
                     tv_city.setText(UserManager.getInstance().getCity());
                     tv_account.setText(UserManager.getInstance().getUsername() + " " + UserManager.getInstance().getPassword());
-                    tv_table.setText(number + "，" + persons);
+                    tv_table.setText(number + "");
+                    tv_person.setText(persons + "");
                     tv_time.setText(time);
-                    tv_total_discount.setText(nf.format(total_reduction));
+                    if (total_reduction == 0.0) {
+                        ll_discount.setVisibility(View.GONE);
+                    } else {
+                        ll_discount.setVisibility(View.VISIBLE);
+                        tv_total_discount.setText(nf.format(total_reduction));
+                    }
                     tv_total_money.setText(nf.format(total));
                     tv_good_count.setText("" + goodData.size());
                 }
@@ -206,17 +223,6 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Good good = (Good) parent.getAdapter().getItem(position);
-        if (good == null) {
-            return;
-        }
-        if (good.getFormulaList() != null && good.getFormulaList().size() > 0) {
-            FormulaPop pop = new FormulaPop(getActivity(), good, FormulaPop.TYPE_ORDER);
-            pop.showPopup();
-        }
-    }
 
     JsonResponseCallback infoCallback = new JsonResponseCallback() {
         @Override
@@ -224,9 +230,8 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
             if (errcode == 200 && json != null) {
                 emptyLayout.showContent();
                 parseJson(json);
-                goodAdapter = new OrderVoucherAdapter(getActivity());
-                goodAdapter.setData(goodData);
-                lv_voucher.setAdapter(goodAdapter);
+                goodAdapter = new OrderVoucherAdapter(getActivity(), goodData);
+                rv_voucher.setAdapter(goodAdapter);
                 tv_company.setText(UserManager.getInstance().getName());
                 tv_address.setText(UserManager.getInstance().getAddress());
                 tv_city.setText(UserManager.getInstance().getCity());
@@ -267,4 +272,5 @@ public class OrderInfoFragment2 extends BaseFragment implements View.OnClickList
         }
 
     }
+
 }

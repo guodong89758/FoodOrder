@@ -21,7 +21,7 @@ public class API_Food {
     public static final String POST_ORDER = "post_order_json";//提交订单
     public static final String PRINT_ORDER = "print_order";//打印订单
     public static final String REMIND_ORDER = "remind_order";//催单
-    public static final String HANG_ORDER = "hang_order";//挂起
+    public static final String HANG_ORDER = "suspend_order";//挂起
 
 
     private API_Food() {

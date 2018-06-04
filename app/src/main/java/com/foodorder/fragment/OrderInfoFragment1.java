@@ -5,13 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.foodorder.R;
@@ -31,6 +30,9 @@ import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.StringUtil;
 import com.foodorder.util.ToastUtil;
 import com.foodorder.widget.EmptyLayout;
+import com.foodorder.widget.HorizontalDividerItemDecoration;
+import com.foodorder.widget.recycler.BaseRecyclerAdapter;
+import com.foodorder.widget.recycler.WrapRecyclerView;
 import com.lzy.okhttputils.OkHttpUtils;
 
 import org.json.JSONArray;
@@ -48,10 +50,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class OrderInfoFragment1 extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class OrderInfoFragment1 extends BaseFragment implements View.OnClickListener, BaseRecyclerAdapter.OnItemClickListener {
 
     private static final String TAG = "OrderInfoFragment1";
-    private ListView lv_good;
+    private WrapRecyclerView rv_good;
     private OrderGoodAdapter goodAdapter;
     private List<Good> goodData;
     private View headView;
@@ -82,7 +84,7 @@ public class OrderInfoFragment1 extends BaseFragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_order_info_1, container, false);
-        lv_good = (ListView) rootView.findViewById(R.id.lv_good);
+        rv_good = rootView.findViewById(R.id.rv_good);
         tv_total = (TextView) rootView.findViewById(R.id.tv_total);
         btn_add = (Button) rootView.findViewById(R.id.btn_add);
         headView = LayoutInflater.from(getActivity()).inflate(R.layout.order_info_header_view, null);
@@ -92,15 +94,18 @@ public class OrderInfoFragment1 extends BaseFragment implements View.OnClickList
         tv_time = (TextView) headView.findViewById(R.id.tv_time);
         tv_number = (TextView) headView.findViewById(R.id.tv_number);
         tv_person_count = (TextView) headView.findViewById(R.id.tv_person_count);
-        lv_good.addHeaderView(headView, null, false);
+        rv_good.addHeaderView(headView);
+
+        rv_good.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        rv_good.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).color(getResources().getColor(R.color.black_10)).size(1).build());
+//        rv_good.setHasFixedSize(true);
 
         btn_add.setOnClickListener(this);
-        lv_good.setOnItemClickListener(this);
 
         nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
 
-        emptyLayout = new EmptyLayout(getActivity(), lv_good);
+        emptyLayout = new EmptyLayout(getActivity(), rv_good);
         emptyLayout.showLoading();
         emptyLayout.setErrorButtonShow(true);
         emptyLayout.setEmptyButtonShow(true);
@@ -145,9 +150,9 @@ public class OrderInfoFragment1 extends BaseFragment implements View.OnClickList
                 @Override
                 public void onCompleted() {
                     emptyLayout.showContent();
-                    goodAdapter = new OrderGoodAdapter(getActivity());
-                    goodAdapter.setData(goodData);
-                    lv_good.setAdapter(goodAdapter);
+                    goodAdapter = new OrderGoodAdapter(getActivity(), goodData);
+                    goodAdapter.setOnItemClickListener(OrderInfoFragment1.this);
+                    rv_good.setAdapter(goodAdapter);
                     tv_order_num.setText(number);
                     tv_time.setText(time);
                     if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
@@ -210,8 +215,8 @@ public class OrderInfoFragment1 extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Good good = (Good) parent.getAdapter().getItem(position);
+    public void onItemClick(View view, int position, long id) {
+        Good good = goodData.get(position);
         if (good == null) {
             return;
         }
@@ -227,9 +232,9 @@ public class OrderInfoFragment1 extends BaseFragment implements View.OnClickList
             if (errcode == 200 && json != null) {
                 emptyLayout.showContent();
                 parseJson(json);
-                goodAdapter = new OrderGoodAdapter(getActivity());
-                goodAdapter.setData(goodData);
-                lv_good.setAdapter(goodAdapter);
+                goodAdapter = new OrderGoodAdapter(getActivity(), goodData);
+                goodAdapter.setOnItemClickListener(OrderInfoFragment1.this);
+                rv_good.setAdapter(goodAdapter);
                 tv_order_num.setText(number);
                 tv_time.setText(time);
                 if (type.equals(AppKey.ORDER_TYPE_EMPORTER)) {
@@ -272,4 +277,5 @@ public class OrderInfoFragment1 extends BaseFragment implements View.OnClickList
         }
 
     }
+
 }

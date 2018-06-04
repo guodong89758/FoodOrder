@@ -17,6 +17,7 @@ public class OrderInfo implements Serializable {
     private String reduction;
     private double tax_rate;
     private double product_price_with_tax;
+    private double product_total;
 
     public OrderInfo() {
     }
@@ -109,6 +110,14 @@ public class OrderInfo implements Serializable {
         this.product_price_with_tax = product_price_with_tax;
     }
 
+    public double getProduct_total() {
+        return product_total;
+    }
+
+    public void setProduct_total(double product_total) {
+        this.product_total = product_total;
+    }
+
     public OrderInfo(JSONObject json) {
         if (json == null) {
             return;
@@ -127,5 +136,6 @@ public class OrderInfo implements Serializable {
         this.reduction = json.optString("reduction");
         this.tax_rate = json.optDouble("tax_rate");
         this.product_price_with_tax = json.optDouble("product_price_with_tax");
+        this.product_total = json.optDouble("product_total");
     }
 }

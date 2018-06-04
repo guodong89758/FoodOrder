@@ -91,7 +91,8 @@
     <string name="order_info_tab_2">凭单</string>
     <string name="order_info_account">账户:</string>
     <string name="order_info_date">时间:</string>
-    <string name="order_info_table">桌号人数:</string>
+    <string name="order_info_table">桌号:</string>
+    <string name="order_info_person">人数:</string>
     <string name="order_info_item_quantity">数量</string>
     <string name="order_info_item_name">名称</string>
     <string name="order_info_item_price">单价</string>

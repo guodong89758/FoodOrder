@@ -12,44 +12,48 @@ import com.foodorder.db.bean.Good;
 import com.foodorder.runtime.RT;
 import com.foodorder.util.BitmapLoader;
 import com.foodorder.util.PhoneUtil;
+import com.foodorder.widget.recycler.BaseRecyclerAdapter;
 
 import java.text.NumberFormat;
+import java.util.List;
 
 /**
- * Created by guodong on 16/10/11.
+ * Created by guodong on 16/9/24.
  */
 
-public class OrderGoodAdapter extends FOAdapter<Good> {
-    private NumberFormat nf;
+public class OrderGoodAdapter extends BaseRecyclerAdapter<BaseRecyclerAdapter.BaseRecyclerViewHolder, Good> {
     private Context mContext;
+    private NumberFormat nf;
 
-    public OrderGoodAdapter(Context mContext) {
+    public OrderGoodAdapter(Context mContext, List<Good> mDataList) {
+        super(mDataList);
         this.mContext = mContext;
         nf = NumberFormat.getCurrencyInstance(RT.locale);
         nf.setMaximumFractionDigits(RT.PRICE_NUM);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        OrderGoodAdapter.ItemViewHolder holder = null;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_good, parent, false);
-            holder = new OrderGoodAdapter.ItemViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (OrderGoodAdapter.ItemViewHolder) convertView.getTag();
-        }
-        Good item = data.get(position);
-        holder.bindData(item);
-        return convertView;
+    public BaseRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new OrderGoodViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_order_good, null));
     }
 
-    class ItemViewHolder {
-        private ImageView img;
-        private TextView name, price, tv_code, tvCount;
-        private Good item;
+    @Override
+    public void onBindViewHolder(BaseRecyclerViewHolder holder, int position, Good data) {
+        if (data == null) {
+            return;
+        }
+        OrderGoodViewHolder mHolder = (OrderGoodViewHolder) holder;
+        mHolder.bindData(data, nf);
 
-        public ItemViewHolder(View itemView) {
+    }
+
+    public static class OrderGoodViewHolder extends BaseRecyclerViewHolder {
+        ImageView img;
+        TextView name, price, tv_code, tvCount;
+        Good item;
+
+        public OrderGoodViewHolder(View itemView) {
+            super(itemView);
             img = (ImageView) itemView.findViewById(R.id.img);
             name = (TextView) itemView.findViewById(R.id.tvName);
             price = (TextView) itemView.findViewById(R.id.tvPrice);
@@ -57,7 +61,7 @@ public class OrderGoodAdapter extends FOAdapter<Good> {
             tvCount = (TextView) itemView.findViewById(R.id.count);
         }
 
-        public void bindData(Good item) {
+        public void bindData(Good item, NumberFormat nf) {
             this.item = item;
             BitmapLoader.ins().loadImage(item.getImage_url(), R.drawable.ic_def_image, img);
             String good_name = "";
@@ -72,7 +76,5 @@ public class OrderGoodAdapter extends FOAdapter<Good> {
             price.setText(nf.format(item.getPrice()));
 
         }
-
     }
-
 }
