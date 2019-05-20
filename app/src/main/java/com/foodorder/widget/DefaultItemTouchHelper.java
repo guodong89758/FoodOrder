@@ -34,7 +34,7 @@ public class DefaultItemTouchHelper extends CustomItemTouchHelper {
      * @return
      */
     public boolean isDragState() {
-        if (getActionState() == ItemTouchHelper.ACTION_STATE_DRAG) {
+        if (itemTouchHelpCallback.getActionState() == ItemTouchHelper.ACTION_STATE_DRAG) {
             return true;
         }
         return false;

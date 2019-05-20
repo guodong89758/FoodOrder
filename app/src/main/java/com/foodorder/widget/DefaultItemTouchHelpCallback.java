@@ -15,6 +15,7 @@
  */
 package com.foodorder.widget;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,8 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
      * 是否可以被滑动
      */
     private boolean isCanSwipe = false;
+
+    private int mActionState;
 
     public DefaultItemTouchHelpCallback(OnItemTouchCallbackListener onItemTouchCallbackListener) {
         this.onItemTouchCallbackListener = onItemTouchCallbackListener;
@@ -144,6 +147,16 @@ public class DefaultItemTouchHelpCallback extends ItemTouchHelper.Callback {
         if (onItemTouchCallbackListener != null) {
             onItemTouchCallbackListener.onSwiped(viewHolder.getAdapterPosition());
         }
+    }
+
+    @Override
+    public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+        super.onSelectedChanged(viewHolder, actionState);
+        this.mActionState = actionState;
+    }
+
+    public int getActionState() {
+        return mActionState;
     }
 
     public interface OnItemTouchCallbackListener {
