@@ -110,4 +110,9 @@
     <!-- 打印机 -->
     <string name="printer_title">打印机</string>
 
+    <!-- 数量设置 -->
+    <string name="dialog_good_num_title">设置数量</string>
+    <string name="dialog_good_num">数量</string>
+    <string name="dialog_good_num_empty">数量不能为空</string>
+
 </resources>

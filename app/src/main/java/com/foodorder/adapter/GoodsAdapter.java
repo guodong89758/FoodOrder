@@ -2,6 +2,7 @@ package com.foodorder.adapter;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.foodorder.R;
 import com.foodorder.activity.GoodListActivity;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
+import com.foodorder.dialog.SetupNumDialog;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.runtime.RT;
@@ -109,7 +111,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
         return convertView;
     }
 
-    class ItemViewHolder implements View.OnClickListener {
+    class ItemViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private SwipeMenuLayout swipe_layout;
         private LinearLayout ll_content;
         private ImageView img;
@@ -130,6 +132,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             tv_specification = (TextView) itemView.findViewById(R.id.tv_specification);
             btn_delete = (Button) itemView.findViewById(R.id.btn_delete);
 
+            ll_content.setOnLongClickListener(this);
             ll_content.setOnClickListener(this);
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
@@ -240,6 +243,49 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
                 default:
                     break;
             }
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, item);
+                } else if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
+                }
+            } else {
+                showNumDialog(mContext, item);
+            }
+            return true;
+        }
+
+        private void setGoodNum(int num) {
+            if (num > 0) {
+                swipe_layout.setSwipeEnable(true);
+            }
+            int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
+            if (count < 1) {
+                tvCount.setVisibility(View.VISIBLE);
+            }
+            CartManager.ins().clearGood(item, false);
+            for (int i = 0; i < num; i++) {
+                CartManager.ins().add(item, false);
+            }
+            tvCount.setText(String.valueOf(item.getCount()) + "x");
+        }
+
+        private void showNumDialog(final Context context, Good good) {
+            if (good == null) {
+                return;
+            }
+            SetupNumDialog dialog = new SetupNumDialog(context, good.getCount());
+            dialog.setOnSetupNumListener(new SetupNumDialog.OnSetupNumListener() {
+                @Override
+                public void onGetNum(int num) {
+                    setGoodNum(num);
+                }
+            });
+            dialog.show();
         }
     }
 

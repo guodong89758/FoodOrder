@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/DialogLayout"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/popup_title_height"
+        android:background="@color/blue_color">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:singleLine="true"
+            android:text="@string/dialog_good_num_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/popup_title_text_size" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_number"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_good_num"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/popup_title_text_size" />
+
+        <EditText
+            android:id="@+id/et_num"
+            android:layout_width="@dimen/popup_order_setup_et_width"
+            android:layout_height="@dimen/popup_order_setup_et_height"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_search_input_blue"
+            android:gravity="center"
+            android:singleLine="true"
+            android:inputType="number"
+            android:textColor="@color/black_80"
+            android:textColorHint="@color/black_60"
+            android:textCursorDrawable="@drawable/text_cursor_drawable"
+            android:textSize="@dimen/popup_title_text_size" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line_1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_10" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/popup_ok_button_height"
+            android:layout_weight="1.0"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:text="@string/action_cancel"
+            android:textColor="@color/black_60"
+            android:textSize="@dimen/popup_ok_button_text_size" />
+
+        <View
+            android:id="@+id/line_2"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/black_10" />
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/popup_ok_button_height"
+            android:layout_weight="1.0"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:text="@string/action_ok"
+            android:textColor="@color/black_60"
+            android:textSize="@dimen/popup_ok_button_text_size" />
+    </LinearLayout>
+
+</LinearLayout>

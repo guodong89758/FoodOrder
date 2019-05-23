@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
+import com.foodorder.dialog.SetupNumDialog;
 import com.foodorder.logic.CartManager;
 import com.foodorder.pop.AttributePop;
 import com.foodorder.runtime.RT;
@@ -106,7 +107,7 @@ public class GoodsPadAdapter extends BaseAdapter implements StickyGridHeadersSim
         return convertView;
     }
 
-    class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         SwipeMenuLayout swipe_layout;
         LinearLayout ll_content;
@@ -129,6 +130,7 @@ public class GoodsPadAdapter extends BaseAdapter implements StickyGridHeadersSim
             AbsListView.LayoutParams params = (AbsListView.LayoutParams) itemView.getLayoutParams();
             params.width = (RT.getScreenWidth() - PhoneUtil.dipToPixel(100, mContext)) / 3;
 
+            ll_content.setOnLongClickListener(this);
             ll_content.setOnClickListener(this);
             btn_delete.setOnClickListener(this);
         }
@@ -193,32 +195,75 @@ public class GoodsPadAdapter extends BaseAdapter implements StickyGridHeadersSim
             }
         }
 
-        private AnimatorSet createAnimator(View view) {
-            ObjectAnimator num_anim_x = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 0.5f);
-            num_anim_x.setDuration(50);
-            ObjectAnimator num_anim_y = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 0.5f);
-            num_anim_y.setDuration(50);
-            ObjectAnimator num_anim_x1 = ObjectAnimator.ofFloat(view, "scaleX", 0.5f, 1.0f);
-            num_anim_x1.setInterpolator(new AnticipateOvershootInterpolator());
-            num_anim_x1.setDuration(50);
-            ObjectAnimator num_anim_y1 = ObjectAnimator.ofFloat(view, "scaleY", 0.5f, 1.0f);
-            num_anim_y1.setInterpolator(new AnticipateOvershootInterpolator());
-            num_anim_y1.setDuration(50);
-            ObjectAnimator num_anim_x2 = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 1.1f);
-            num_anim_x2.setInterpolator(new CycleInterpolator(1f));
-            num_anim_x2.setDuration(50);
-            ObjectAnimator num_anim_y2 = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 1.1f);
-            num_anim_y2.setInterpolator(new CycleInterpolator(1f));
-            num_anim_y2.setDuration(50);
-
-            AnimatorSet animator = new AnimatorSet();
-            animator.play(num_anim_x).with(num_anim_y);
-            animator.play(num_anim_y).before(num_anim_x1);
-            animator.play(num_anim_x1).with(num_anim_y1);
-            animator.play(num_anim_y1).before(num_anim_x2);
-            animator.play(num_anim_x2).with(num_anim_y2);
-            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            return animator;
+        @Override
+        public boolean onLongClick(View v) {
+            if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, item);
+                } else if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
+                }
+            } else {
+                showNumDialog(mContext, item);
+            }
+            return true;
         }
+
+        private void setGoodNum(int num) {
+            if (num > 0) {
+                swipe_layout.setSwipeEnable(true);
+            }
+            int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
+            if (count < 1) {
+                tvCount.setVisibility(View.VISIBLE);
+            }
+            CartManager.ins().clearGood(item, false);
+            for (int i = 0; i < num; i++) {
+                CartManager.ins().add(item, false);
+            }
+            tvCount.setText(String.valueOf(item.getCount()) + "x");
+        }
+
+        private void showNumDialog(final Context context, Good good) {
+            if (good == null) {
+                return;
+            }
+            SetupNumDialog dialog = new SetupNumDialog(context, good.getCount());
+            dialog.setOnSetupNumListener(new SetupNumDialog.OnSetupNumListener() {
+                @Override
+                public void onGetNum(int num) {
+                    setGoodNum(num);
+                }
+            });
+            dialog.show();
+        }
+    }
+
+    private AnimatorSet createAnimator(View view) {
+        ObjectAnimator num_anim_x = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 0.5f);
+        num_anim_x.setDuration(50);
+        ObjectAnimator num_anim_y = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 0.5f);
+        num_anim_y.setDuration(50);
+        ObjectAnimator num_anim_x1 = ObjectAnimator.ofFloat(view, "scaleX", 0.5f, 1.0f);
+        num_anim_x1.setInterpolator(new AnticipateOvershootInterpolator());
+        num_anim_x1.setDuration(50);
+        ObjectAnimator num_anim_y1 = ObjectAnimator.ofFloat(view, "scaleY", 0.5f, 1.0f);
+        num_anim_y1.setInterpolator(new AnticipateOvershootInterpolator());
+        num_anim_y1.setDuration(50);
+        ObjectAnimator num_anim_x2 = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 1.1f);
+        num_anim_x2.setInterpolator(new CycleInterpolator(1f));
+        num_anim_x2.setDuration(50);
+        ObjectAnimator num_anim_y2 = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, 1.1f);
+        num_anim_y2.setInterpolator(new CycleInterpolator(1f));
+        num_anim_y2.setDuration(50);
+
+        AnimatorSet animator = new AnimatorSet();
+        animator.play(num_anim_x).with(num_anim_y);
+        animator.play(num_anim_y).before(num_anim_x1);
+        animator.play(num_anim_x1).with(num_anim_y1);
+        animator.play(num_anim_y1).before(num_anim_x2);
+        animator.play(num_anim_x2).with(num_anim_y2);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        return animator;
     }
 }
