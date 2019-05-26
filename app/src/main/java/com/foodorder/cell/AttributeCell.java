@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.foodorder.R;
 import com.foodorder.db.bean.Attribute;
 import com.foodorder.db.bean.Good;
+import com.foodorder.dialog.SetupNumDialog;
 import com.foodorder.util.PhoneUtil;
 import com.foodorder.util.ToastUtil;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by guodong on 16/9/24.
  */
 
-public class AttributeCell extends LinearLayout implements ListCell, View.OnClickListener {
+public class AttributeCell extends LinearLayout implements ListCell, View.OnClickListener, View.OnLongClickListener {
     private RelativeLayout rl_content;
     private TextView tv_name, tv_count;
     private ImageButton tv_add, tv_minus;
@@ -42,6 +43,7 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
         tv_minus = (ImageButton) findViewById(R.id.tv_minus);
         tv_count = (TextView) findViewById(R.id.tv_count);
 
+        rl_content.setOnLongClickListener(this);
         rl_content.setOnClickListener(this);
         tv_add.setOnClickListener(this);
         tv_minus.setOnClickListener(this);
@@ -75,6 +77,12 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
                 remove();
                 break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        showNumDialog(getContext(), attr);
+        return true;
     }
 
     public void setGood(Good good) {
@@ -112,5 +120,49 @@ public class AttributeCell extends LinearLayout implements ListCell, View.OnClic
             temp.setSel_count(temp.getSel_count() - 1);
         }
 
+    }
+
+    private void setAttributeNum(int num) {
+        if (attr.getCount() == num) {
+            return;
+        }
+        if (num < attr.getCount()) {
+            int tempCount = attr.getCount() - num;
+            attr.setCount(num);
+            attr.setCount(num);
+            tv_count.setText(String.valueOf(attr.getCount()));
+            List<Attribute> attrData = good.getAttributeList();
+            for (int i = 0; i < attrData.size(); i++) {
+                Attribute temp = attrData.get(i);
+                temp.setSel_count(temp.getSel_count() - tempCount);
+            }
+            return;
+        }
+        if ((attr.getSel_count() + num) > attr.getMax_choose()) {
+            ToastUtil.showToast(getContext().getResources().getString(R.string.formula_max_count_desc, good.getMax_attributes_choose()));
+            return;
+        }
+        attr.setCount(attr.getCount() + num);
+        tv_count.setText(String.valueOf(attr.getCount()));
+        List<Attribute> attrData = good.getAttributeList();
+        for (int i = 0; i < attrData.size(); i++) {
+            Attribute temp = attrData.get(i);
+            temp.setSel_count(temp.getSel_count() + num);
+        }
+
+    }
+
+    private void showNumDialog(final Context context, Attribute attr) {
+        if (attr == null) {
+            return;
+        }
+        SetupNumDialog dialog = new SetupNumDialog(context, attr.getCount());
+        dialog.setOnSetupNumListener(new SetupNumDialog.OnSetupNumListener() {
+            @Override
+            public void onGetNum(int num) {
+                setAttributeNum(num);
+            }
+        });
+        dialog.show();
     }
 }

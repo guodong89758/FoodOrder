@@ -15,9 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.foodorder.R;
+import com.foodorder.contant.EventTag;
 import com.foodorder.db.bean.Good;
+import com.foodorder.dialog.SetupNumDialog;
 import com.foodorder.logic.CartManager;
+import com.foodorder.pop.AttributePop;
 import com.foodorder.runtime.RT;
+import com.foodorder.runtime.event.EventManager;
 import com.foodorder.util.BitmapLoader;
 import com.foodorder.util.PhoneUtil;
 
@@ -71,7 +75,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
 
     }
 
-    public static class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class GoodViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public ImageView img;
         public TextView name, price, tv_code, tv_specification, tvCount;
         ImageButton tvMinus, tvAdd;
@@ -91,6 +95,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
             tvAdd = (ImageButton) itemView.findViewById(R.id.tvAdd);
             tv_specification = (TextView) itemView.findViewById(R.id.tv_specification);
 
+            itemView.setOnLongClickListener(this);
             tvMinus.setOnClickListener(this);
             tvAdd.setOnClickListener(this);
             tv_specification.setOnClickListener(this);
@@ -177,6 +182,47 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
             }
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+
+            if ((item.getFormulaList() != null && item.getFormulaList().size() > 0) || (item.getAttributeList() != null && item.getAttributeList().size() > 0)) {
+                if (item.getFormulaList() != null && item.getFormulaList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_FORMULA_SHOW, 0, 0, item);
+                } else if (item.getAttributeList() != null && item.getAttributeList().size() > 0) {
+                    EventManager.ins().sendEvent(EventTag.POPUP_ATTRIBUTE_SHOW, 0, AttributePop.TYPE_MENU, item);
+                }
+            } else {
+                showNumDialog(mContext, item);
+            }
+            return true;
+        }
+
+        private void setGoodNum(int num) {
+            int count = CartManager.ins().getSelectedItemCountById(item.getId().intValue());
+            if (count < 1) {
+                tvCount.setVisibility(View.VISIBLE);
+            }
+            CartManager.ins().clearGood(item, false);
+            for (int i = 0; i < num; i++) {
+                CartManager.ins().add(item, true);
+            }
+            tvCount.setText(String.valueOf(item.getCount()) + "x");
+        }
+
+        private void showNumDialog(Context context, Good good) {
+            if (good == null) {
+                return;
+            }
+            SetupNumDialog dialog = new SetupNumDialog(context, good.getCount());
+            dialog.setOnSetupNumListener(new SetupNumDialog.OnSetupNumListener() {
+                @Override
+                public void onGetNum(int num) {
+                    setGoodNum(num);
+                }
+            });
+            dialog.show();
+        }
+
         private Animation getShowAnimation() {
             AnimationSet set = new AnimationSet(true);
             RotateAnimation rotate = new RotateAnimation(0, 720, RotateAnimation.RELATIVE_TO_SELF, 0.5f, RotateAnimation.RELATIVE_TO_SELF, 0.5f);
@@ -208,6 +254,7 @@ public class GoodSearchAdapter extends RecyclerView.Adapter<GoodSearchAdapter.Go
             set.setDuration(500);
             return set;
         }
+
     }
 
     private OnItemClickListener clickListener;

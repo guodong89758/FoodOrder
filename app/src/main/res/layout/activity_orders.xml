@@ -29,6 +29,14 @@
                 style="@style/TitleBarStyle">
 
                 <ImageButton
+                    android:id="@+id/ib_add"
+                    android:layout_width="@dimen/title_height_size"
+                    android:layout_height="@dimen/title_height_size"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_quick_add" />
+
+                <ImageButton
                     android:id="@+id/ib_search"
                     android:layout_width="@dimen/title_height_size"
                     android:layout_height="@dimen/title_height_size"
@@ -50,14 +58,14 @@
             android:layout_height="@dimen/title_height_size"
             android:layout_below="@+id/rl_title"
             app:tabBackground="@color/white"
+            app:tabGravity="fill"
             app:tabIndicatorColor="@color/blue_color"
             app:tabIndicatorHeight="3dp"
-            app:tabMode="fixed"
-            app:tabGravity="fill"
             app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/black_90"
             app:tabTextAppearance="@style/TabTextAppearance"
-            app:tabTextColor="@color/black_40"/>
+            app:tabTextColor="@color/black_40" />
 
         <View
             android:id="@+id/line_view"
@@ -80,9 +88,10 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:padding="15dp"
         android:src="@drawable/ic_add_white"
+        app:fabCustomSize="60dp"
         app:layout_behavior="com.foodorder.widget.ScrollAwareFABBehaviorDepend" />
 </android.support.design.widget.CoordinatorLayout>

@@ -27,7 +27,7 @@ import com.foodorder.util.ToastUtil;
 public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private static final int ENABLE_BLUETOOTH = 1;
     private Toolbar toolbar;
-    private ImageButton ib_search;
+    private ImageButton ib_add, ib_search;
     private TabLayout tab_layout;
     private ViewPager vp_order;
     private FloatingActionButton fab_menu;
@@ -48,6 +48,7 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
     @Override
     public void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ib_add = (ImageButton) findViewById(R.id.ib_add);
         ib_search = (ImageButton) findViewById(R.id.ib_search);
         tab_layout = (TabLayout) findViewById(R.id.tab_layout);
         vp_order = (ViewPager) findViewById(R.id.vp_order);
@@ -56,6 +57,7 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
         setSupportActionBar(toolbar);
         tab_layout.setTabMode(TabLayout.MODE_FIXED);
         tab_layout.setTabGravity(TabLayout.GRAVITY_FILL);
+        ib_add.setOnClickListener(this);
         ib_search.setOnClickListener(this);
         fab_menu.setOnClickListener(this);
 
@@ -78,6 +80,24 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ib_add:
+                if (vp_order.getCurrentItem() == 0) {
+                    CartManager.ins().isPack = false;
+                } else {
+                    CartManager.ins().isPack = true;
+                }
+                OrderSetupPop setupPop = new OrderSetupPop(OrdersActivity.this);
+                setupPop.showPopup();
+                setupPop.setOnOrderSetupListener(new OrderSetupPop.OnOrderSetupListener() {
+                    @Override
+                    public void orderSetup(String number, String persons) {
+                        Intent intent = new Intent(OrdersActivity.this, GoodSearchActivity.class);
+                        intent.putExtra(AppKey.ORDER_NUMBER, number);
+                        intent.putExtra(AppKey.ORDER_PERSON, persons);
+                        startActivity(intent);
+                    }
+                });
+                break;
             case R.id.ib_search:
                 if (vp_order.getCurrentItem() == 0) {
                     startActivity(new Intent(this, OrderEatinSearchActivity.class));
@@ -91,9 +111,9 @@ public class OrdersActivity extends BaseActivity implements ViewPager.OnPageChan
                 } else {
                     CartManager.ins().isPack = true;
                 }
-                OrderSetupPop setupPop = new OrderSetupPop(OrdersActivity.this);
-                setupPop.showPopup();
-                setupPop.setOnOrderSetupListener(new OrderSetupPop.OnOrderSetupListener() {
+                OrderSetupPop setupPop1 = new OrderSetupPop(OrdersActivity.this);
+                setupPop1.showPopup();
+                setupPop1.setOnOrderSetupListener(new OrderSetupPop.OnOrderSetupListener() {
                     @Override
                     public void orderSetup(String number, String persons) {
                         Intent intent = null;

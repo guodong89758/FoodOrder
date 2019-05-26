@@ -274,7 +274,7 @@ public class GoodsAdapter extends BaseAdapter implements StickyListHeadersAdapte
             tvCount.setText(String.valueOf(item.getCount()) + "x");
         }
 
-        private void showNumDialog(final Context context, Good good) {
+        private void showNumDialog(Context context, Good good) {
             if (good == null) {
                 return;
             }
