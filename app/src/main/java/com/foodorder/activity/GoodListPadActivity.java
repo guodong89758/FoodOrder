@@ -189,6 +189,10 @@ public class GoodListPadActivity extends BaseActivity implements BaseRecyclerAda
 
                         myAdapter = new GoodsPadAdapter(GoodListPadActivity.this, goodList);
                         gv_good.setAdapter(myAdapter);
+
+                        if (CartManager.ins().cartList.size() > 0) {
+                            update(false);
+                        }
                     }
 
                     @Override

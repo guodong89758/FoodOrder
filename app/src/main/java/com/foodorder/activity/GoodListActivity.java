@@ -198,6 +198,9 @@ public class GoodListActivity extends BaseActivity implements BaseRecyclerAdapte
 
                         myAdapter = new GoodsAdapter(goodList, GoodListActivity.this);
                         listView.setAdapter(myAdapter);
+                        if (CartManager.ins().cartList.size() > 0) {
+                            update(false);
+                        }
                     }
 
                     @Override
